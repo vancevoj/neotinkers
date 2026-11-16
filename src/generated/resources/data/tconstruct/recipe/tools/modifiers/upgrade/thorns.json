@@ -1,0 +1,21 @@
+{
+  "type": "tconstruct:incremental_modifier",
+  "allow_crystal": true,
+  "amount_per_item": 1,
+  "input": "minecraft:cactus",
+  "level": {
+    "max": 3
+  },
+  "needed_per_level": 25,
+  "result": "tconstruct:thorns",
+  "slots": {
+    "upgrades": 1
+  },
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:modifiable/armor/worn",
+      "#tconstruct:modifiable/shields"
+    ]
+  }
+}

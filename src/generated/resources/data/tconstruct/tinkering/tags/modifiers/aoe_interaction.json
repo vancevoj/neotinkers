@@ -1,0 +1,10 @@
+{
+  "values": [
+    "tconstruct:pathing",
+    "tconstruct:stripping",
+    "tconstruct:tilling",
+    "tconstruct:brushing",
+    "tconstruct:splashing",
+    "tconstruct:harvest"
+  ]
+}

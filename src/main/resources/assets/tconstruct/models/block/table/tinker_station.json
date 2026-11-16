@@ -1,0 +1,13 @@
+{
+  "loader": "mantle:retextured",
+  "parent": "tconstruct:block/table/table",
+  "textures": {
+    "particle": "tconstruct:block/table/tinker_station_top",
+    "top": "tconstruct:block/table/tinker_station_top",
+    "side": "tconstruct:block/table/side",
+    "leg": "tconstruct:block/table/side",
+    "bottom": "tconstruct:block/table/bottom",
+    "legBottom": "tconstruct:block/table/bottom"
+  },
+  "retextured": [ "leg", "legBottom" ]
+}

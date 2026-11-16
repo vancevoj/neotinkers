@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "E": "minecraft:egg",
+    "M": "tconstruct:ichor_bucket",
+    "S": "#c:dusts/glowstone",
+    "W": "minecraft:warped_roots"
+  },
+  "pattern": [
+    "WWW",
+    "SES",
+    "MMM"
+  ],
+  "result": {
+    "id": "tconstruct:ichor_cake"
+  }
+}

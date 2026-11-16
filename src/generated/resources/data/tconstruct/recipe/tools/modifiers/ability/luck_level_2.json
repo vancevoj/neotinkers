@@ -1,0 +1,31 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": false,
+  "inputs": [
+    {
+      "ingredient": "#c:ingots/gold"
+    },
+    {
+      "ingredient": "minecraft:golden_carrot"
+    },
+    {
+      "ingredient": "#c:ingots/gold"
+    },
+    {
+      "ingredient": "#c:ender_pearls"
+    },
+    {
+      "ingredient": "#c:ender_pearls"
+    }
+  ],
+  "level": 2,
+  "result": "tconstruct:luck",
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:modifiable/melee/weapon",
+      "#tconstruct:modifiable/harvest",
+      "#tconstruct:modifiable/ranged/launcher"
+    ]
+  }
+}

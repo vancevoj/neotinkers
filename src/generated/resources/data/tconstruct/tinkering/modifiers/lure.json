@@ -1,0 +1,11 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:stat_boost",
+      "each_level": 1.0,
+      "operation": "add",
+      "stat": "tconstruct:lure"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "title": "Water",
+  "text": "Water is not the most useful fluid, but can protect you from fire in hot environments.",
+  "block": [
+    "Breaks blocks broken by water"
+  ]
+}

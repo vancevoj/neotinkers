@@ -1,0 +1,159 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:inverted",
+            "term": {
+              "type": "minecraft:damage_source_properties",
+              "predicate": {
+                "source_entity": {
+                  "minecraft:entity_type": "minecraft:frog"
+                }
+              }
+            }
+          },
+          {
+            "type": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "minecraft:type_specific/cube_mob": {
+                "size": 1
+              }
+            }
+          }
+        ]
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:inverted",
+            "term": {
+              "type": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "minecraft:nbt": "{metal:1b}"
+              }
+            }
+          },
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2,
+                "min": 0
+              }
+            },
+            {
+              "type": "minecraft:enchanted_count_increase",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting"
+            }
+          ],
+          "name": "tconstruct:sky_slime_ball"
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "minecraft:nbt": "{metal:1b}"
+            }
+          },
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2,
+                "min": 0
+              }
+            },
+            {
+              "type": "minecraft:enchanted_count_increase",
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 0.0
+              },
+              "enchantment": "minecraft:looting"
+            }
+          ],
+          "name": "tconstruct:steel_shard"
+        }
+      ],
+      "rolls": 1
+    },
+    {
+      "condition": {
+        "type": "minecraft:all_of",
+        "terms": [
+          {
+            "type": "minecraft:damage_source_properties",
+            "predicate": {
+              "source_entity": {
+                "minecraft:entity_type": "minecraft:frog"
+              }
+            }
+          },
+          {
+            "type": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "minecraft:type_specific/cube_mob": {
+                "size": 1
+              }
+            }
+          }
+        ]
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:inverted",
+            "term": {
+              "type": "minecraft:entity_properties",
+              "entity": "this",
+              "predicate": {
+                "minecraft:nbt": "{metal:1b}"
+              }
+            }
+          },
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": 1
+          },
+          "name": "tconstruct:sky_slime_ball"
+        },
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "minecraft:nbt": "{metal:1b}"
+            }
+          },
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": 1
+          },
+          "name": "tconstruct:steel_shard"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "tconstruct:entities/sky_slime"
+}

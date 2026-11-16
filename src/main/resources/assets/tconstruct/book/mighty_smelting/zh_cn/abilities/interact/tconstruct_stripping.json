@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:stripping",
+  "text": [
+    {
+      "text": "等会，不是脱衣服啊？啧！"
+    }
+  ],
+  "effects": [
+    "工具可以为原木去皮",
+    "单个等级",
+    "需要1个能力槽"
+  ]
+}

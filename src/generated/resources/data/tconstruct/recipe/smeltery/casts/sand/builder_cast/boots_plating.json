@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:item_part_builder",
+  "pattern": "tconstruct:boots_plating",
+  "pattern_item": "#tconstruct:casts/sand",
+  "result": "tconstruct:boots_plating_sand_cast",
+  "title_key": "tconstruct:sand_cast"
+}

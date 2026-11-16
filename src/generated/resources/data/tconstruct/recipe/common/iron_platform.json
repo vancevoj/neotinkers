@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": "#c:ingots/iron",
+    ".": "#c:nuggets/iron"
+  },
+  "pattern": [
+    "#.#",
+    ". .",
+    "#.#"
+  ],
+  "result": {
+    "count": 4,
+    "id": "tconstruct:iron_platform"
+  }
+}

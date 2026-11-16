@@ -1,0 +1,42 @@
+{
+  "icon": {
+    "components": {
+      "tconstruct:tool_data": {
+        "tic_display": 1,
+        "tic_materials": [
+          "tconstruct:ui_render#head",
+          "tconstruct:ui_render#handle",
+          "tconstruct:ui_render#extra",
+          "tconstruct:ui_render#large",
+          "tconstruct:ui_render#extra_large"
+        ]
+      }
+    },
+    "item": "tconstruct:arrow"
+  },
+  "input_slots": [
+    {
+      "filter": "tconstruct:arrow_head",
+      "icon": "tconstruct:arrow_head",
+      "translation_key": "item.tconstruct.arrow_head",
+      "x": 53,
+      "y": 22
+    },
+    {
+      "filter": "tconstruct:arrow_shaft",
+      "icon": "tconstruct:arrow_shaft",
+      "translation_key": "item.tconstruct.arrow_shaft",
+      "x": 33,
+      "y": 42
+    },
+    {
+      "filter": "tconstruct:fletching",
+      "icon": "tconstruct:fletching",
+      "translation_key": "item.tconstruct.fletching",
+      "x": 15,
+      "y": 60
+    }
+  ],
+  "sortIndex": 7,
+  "translation_key": "item.tconstruct.arrow"
+}

@@ -1,0 +1,17 @@
+{
+  "modifier_id": "tconstruct:melting",
+  "text": [
+    {
+      "text": "Kallama ocağı yeterince taşınabilir değil mi? Aracını elde kullanan kallama ocağına dönüştürmeyi dene! "
+    },
+    {
+      "text": "Aracı boşaltmak için onu tutarken tanka sağ tıklayın.", "paragraph": true
+    }
+  ],
+  "effects": [
+    "Saldırılan yaratıkları aracın tankına ergit",
+    "Olasıysa düşen eşyalarda ergitilir",
+    "Araç tanka veya kallama ocağı akıtacına boşaltılabilir",
+    "1 yetenek yuvası gerekir, tek seviye"
+  ]
+}

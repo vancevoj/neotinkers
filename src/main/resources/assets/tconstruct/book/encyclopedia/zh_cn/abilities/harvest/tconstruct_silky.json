@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:silky",
+  "text": [
+    {
+	"text": "令挖掘的方块掉落自身。加持在剑、劈刀、镰刀或匕首上时，额外赋予它们修剪生物的 能力。"
+    }
+  ],
+  "more_text_space": true,
+  "effects": [
+    "最高1级",
+    "需要1个能力槽"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:quiver_inventory",
+      "limit": {
+        "flat": 32
+      },
+      "pattern": "tconstruct:tipped_arrow",
+      "slots": {
+        "each_level": 3
+      }
+    },
+    {
+      "type": "tconstruct:trick_quiver"
+    },
+    {
+      "type": "tconstruct:inventory_menu",
+      "on_key": "any"
+    }
+  ],
+  "priority": 70
+}

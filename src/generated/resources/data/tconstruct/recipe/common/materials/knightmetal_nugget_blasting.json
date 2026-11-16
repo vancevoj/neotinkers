@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "cookingtime": 25,
+  "experience": 0.2,
+  "ingredient": "#c:raw_nuggets/knightmetal",
+  "result": {
+    "id": "tconstruct:knightmetal_nugget"
+  }
+}

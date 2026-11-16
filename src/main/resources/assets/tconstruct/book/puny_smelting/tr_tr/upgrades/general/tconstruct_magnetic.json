@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:magnetic",
+  "text": [
+    {
+      "text": "Kuvvet bu araçla güçlüdür."
+    }
+  ],
+  "effects": [
+    "Yaratıklara saldırmak veya bir şeyleri çıkarmak eşyaları sana doğru getirir",
+    "Zırhda, edilgin olarak etkindir",
+    "Çoklu seviyeler, manyetik gücü her seviyede artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

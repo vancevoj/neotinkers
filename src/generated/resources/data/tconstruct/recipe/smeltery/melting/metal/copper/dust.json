@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:dusts/copper"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:dusts/copper",
+  "result": {
+    "amount": 90,
+    "tag": "c:molten_copper"
+  },
+  "temperature": 500,
+  "time": 37
+}

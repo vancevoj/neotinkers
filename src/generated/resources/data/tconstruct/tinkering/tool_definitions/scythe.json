@@ -1,0 +1,125 @@
+{
+  "modules": [
+    {
+      "type": "tconstruct:part_stats",
+      "parts": [
+        "tconstruct:broad_blade",
+        {
+          "item": "tconstruct:tough_handle",
+          "scale": 0.5
+        },
+        "tconstruct:tough_binding",
+        {
+          "item": "tconstruct:tough_handle",
+          "scale": 0.5
+        }
+      ],
+      "primary_part": 0
+    },
+    {
+      "type": "tconstruct:default_materials",
+      "materials": [
+        {
+          "type": "tconstruct:random",
+          "tier": 1
+        },
+        {
+          "type": "tconstruct:random",
+          "tier": 1
+        },
+        {
+          "type": "tconstruct:random",
+          "tier": 1
+        },
+        {
+          "type": "tconstruct:random",
+          "tier": 1
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:base_stats",
+      "stats": {
+        "tconstruct:attack_damage": 1.0,
+        "tconstruct:attack_speed": 0.7
+      }
+    },
+    {
+      "type": "tconstruct:multiply_stats",
+      "multipliers": {
+        "tconstruct:durability": 2.5,
+        "tconstruct:mining_speed": 0.45
+      }
+    },
+    {
+      "type": "tconstruct:modifier_slots",
+      "slots": {
+        "abilities": 1,
+        "upgrades": 2
+      }
+    },
+    {
+      "type": "tconstruct:traits",
+      "traits": [
+        {
+          "level": 1,
+          "name": "tconstruct:tilling"
+        },
+        {
+          "level": 2,
+          "name": "tconstruct:silky_shears"
+        },
+        {
+          "level": 1,
+          "name": "tconstruct:harvest"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:is_effective",
+      "predicate_type": "mantle:tag",
+      "tag": "tconstruct:mineable/scythe"
+    },
+    {
+      "type": "tconstruct:mining_speed_modifier",
+      "modifier": 0.3,
+      "predicate_type": "mantle:tag",
+      "tag": "minecraft:wool"
+    },
+    {
+      "type": "tconstruct:mining_speed_modifier",
+      "blocks": [
+        "minecraft:vine",
+        "minecraft:glow_lichen"
+      ],
+      "modifier": 0.1,
+      "predicate_type": "mantle:set"
+    },
+    {
+      "type": "tconstruct:box_aoe",
+      "bonus": {
+        "depth": 2,
+        "height": 1,
+        "width": 1
+      },
+      "expansion_direction": "tconstruct:side_hit",
+      "expansions": [
+        {
+          "height": 1,
+          "width": 1
+        },
+        {
+          "depth": 2
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:circle_melee",
+      "diameter": 2.0
+    },
+    {
+      "type": "tconstruct:fixed_material_name",
+      "index": 0
+    }
+  ]
+}

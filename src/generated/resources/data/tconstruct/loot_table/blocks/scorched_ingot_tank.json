@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "minecraft:copy_name",
+              "source": "block_entity"
+            },
+            {
+              "type": "minecraft:copy_custom_data",
+              "ops": [
+                {
+                  "op": "replace",
+                  "source": "tank",
+                  "target": "tank"
+                }
+              ],
+              "source": "block_entity"
+            }
+          ],
+          "name": "tconstruct:scorched_ingot_tank"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "tconstruct:blocks/scorched_ingot_tank"
+}

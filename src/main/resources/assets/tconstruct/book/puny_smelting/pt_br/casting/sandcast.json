@@ -1,0 +1,12 @@
+{
+  "title": "Moldes de Areia",
+  "text": [
+    {
+      "text": "Para moldar sua peça de ferramenta: primeiro, crie um molde de areia em branco e use o botão de interação para colocá-lo em uma mesa de fundição. Em seguida, crie uma peça de ferramenta no montador de peças e use-a sobre o molde de areia em branco. Depois, use novamente para remover a peça do molde. Agora você pode despejar metal fundido na mesa e retirar sua peça quando ela esfriar. O molde de areia é consumido no processo."
+    },
+    {
+      "text": "Moldes de areia não em branco voltam ao estado em branco ao serem recolhidos.",
+      "paragraph": true
+    }
+  ]
+}

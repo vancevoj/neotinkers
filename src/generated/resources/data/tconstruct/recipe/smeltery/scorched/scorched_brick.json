@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "cookingtime": 200,
+  "experience": 0.3,
+  "ingredient": "tconstruct:nether_grout",
+  "result": {
+    "id": "tconstruct:scorched_brick"
+  }
+}

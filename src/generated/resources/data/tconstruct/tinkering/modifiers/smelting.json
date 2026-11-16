@@ -1,0 +1,20 @@
+{
+  "level_display": "tconstruct:single_level",
+  "modules": [
+    {
+      "type": "tconstruct:inventory_menu",
+      "on_key": "shift"
+    },
+    {
+      "type": "tconstruct:smelting",
+      "multiplier": 10.0,
+      "output_pattern": "tconstruct:result",
+      "pattern": "tconstruct:fire",
+      "recipe_type": "minecraft:smelting",
+      "slots": {
+        "each_level": 1
+      }
+    }
+  ],
+  "priority": 110
+}

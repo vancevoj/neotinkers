@@ -1,0 +1,10 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": "tconstruct:enderman_head",
+  "result": {
+    "amount": 500,
+    "tag": "c:ender"
+  },
+  "temperature": 477,
+  "time": 116
+}

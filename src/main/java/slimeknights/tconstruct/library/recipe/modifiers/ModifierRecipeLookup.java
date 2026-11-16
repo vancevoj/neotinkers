@@ -1,0 +1,159 @@
+package slimeknights.tconstruct.library.recipe.modifiers;
+
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
+import net.minecraft.world.item.ItemStack;
+import slimeknights.tconstruct.common.recipe.RecipeCacheInvalidator;
+import slimeknights.tconstruct.common.recipe.RecipeCacheInvalidator.DuelSidedListener;
+import slimeknights.tconstruct.library.modifiers.Modifier;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.ModifierId;
+import slimeknights.tconstruct.library.modifiers.util.LazyModifier;
+import slimeknights.tconstruct.library.tools.SlotType;
+import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Stream;
+
+/**
+ * Logic to check various modifier recipe based properties.
+ * Filled by recipe constructors; since 26.3 the server parses recipes in parallel, so registration is synchronized and the maps are thread safe.
+ * Iterating a synchronized multimap view requires its lock, so the getters copy the values under the lock.
+ */
+public class ModifierRecipeLookup {
+  /** Map of salvage recipes for each modifier. Insertion ordered so {@link #getSalvage(ItemStack, IToolStackView, ModifierId, int)} picks the first by recipe ID */
+  private static final Multimap<ModifierId,ModifierSalvage> SALVAGE = Multimaps.synchronizedSetMultimap(LinkedHashMultimap.create());
+  /** Order of {@link #SALVAGE} once all recipes registered. The server parses recipes in parallel, which would make the first match vary per reload */
+  private static final Comparator<ModifierSalvage> SALVAGE_ORDER = Comparator.comparing(ModifierSalvage::getId, RecipeCacheInvalidator.RECIPE_ID_ORDER);
+
+  /** Map of slot type to modifiers added via that slot, better for fetching lists */
+  private static final Multimap<SlotType,LazyModifier> RECIPE_MODIFIERS = Multimaps.synchronizedSetMultimap(HashMultimap.create());
+  /** Map of slot type to modifier IDs added via that slot, better for lookup */
+  private static final Multimap<SlotType,ModifierId> RECIPE_MODIFIER_IDS = Multimaps.synchronizedSetMultimap(HashMultimap.create());
+  /** List of modifiers to show in JEI */
+  private static volatile List<ModifierEntry> RECIPE_MODIFIER_LIST = null;
+
+  /** Listener for clearing the caches on recipe reload */
+  private static final DuelSidedListener LISTENER = RecipeCacheInvalidator.addDuelSidedListener(() -> {
+    SALVAGE.clear();
+    RECIPE_MODIFIERS.clear();
+    RECIPE_MODIFIER_IDS.clear();
+    RECIPE_MODIFIER_LIST = null;
+  }, () -> {
+    // recipe list complete, re-add the salvage recipes by recipe ID so the first match is the same every reload
+    synchronized (SALVAGE) {
+      List<ModifierSalvage> salvages = new ArrayList<>(SALVAGE.values());
+      salvages.sort(SALVAGE_ORDER);
+      SALVAGE.clear();
+      for (ModifierSalvage salvage : salvages) {
+        SALVAGE.put(salvage.getModifier(), salvage);
+      }
+    }
+  });
+
+
+  /* Salvage */
+
+  /**
+   * Stores a salvage recipe
+   * @param salvage  Salvage recipe
+   */
+  public static synchronized void addSalvage(ModifierSalvage salvage) {
+    if (RecipeCacheInvalidator.skipRegistration()) {
+      return;
+    }
+    LISTENER.checkClear();
+    SALVAGE.put(salvage.getModifier(), salvage);
+  }
+
+  /**
+   * Gets a salvage recipe
+   * @param tool            Tool stack, primarily used for tag checks, but may do weird things
+   * @param modifier        Modifier instance
+   * @param modifierLevel   Modifier level
+   * @return  Salvage recipe, or null if no salvage is found
+   */
+  @Nullable
+  public static ModifierSalvage getSalvage(ItemStack stack, IToolStackView tool, ModifierId modifier, int modifierLevel) {
+    List<ModifierSalvage> salvages;
+    synchronized (SALVAGE) {
+      salvages = List.copyOf(SALVAGE.get(modifier));
+    }
+    for (ModifierSalvage salvage : salvages) {
+      if (salvage.matches(stack, tool, modifierLevel)) {
+        return salvage;
+      }
+    }
+    return null;
+  }
+
+
+  /* Recipe modifiers */
+  
+  /**
+   * Adds a modifier requirement, typically called by the recipe
+   * @param slotType  Slot type for the modifier, use null for slotless
+   * @param modifier  Modifier in that slot
+   */
+  public static synchronized void addRecipeModifier(@Nullable SlotType slotType, LazyModifier modifier) {
+    if (RecipeCacheInvalidator.skipRegistration()) {
+      return;
+    }
+    LISTENER.checkClear();
+    RECIPE_MODIFIERS.put(slotType, modifier);
+    RECIPE_MODIFIER_IDS.put(slotType, modifier.getId());
+    // a late registration (client sync) invalidates the display list
+    RECIPE_MODIFIER_LIST = null;
+  }
+
+  /** Copies all recipe modifiers under the map lock */
+  private static List<LazyModifier> copyRecipeModifiers() {
+    synchronized (RECIPE_MODIFIERS) {
+      return List.copyOf(RECIPE_MODIFIERS.values());
+    }
+  }
+
+  /** Gets a stream of all modifiers obtainable via recipes */
+  public static Stream<Modifier> getAllRecipeModifiers() {
+    return copyRecipeModifiers().stream().map(LazyModifier::get).distinct();
+  }
+
+  /** Gets a list of modifier entries for display in JEI, basically the same as creating your own, but the result is cached */
+  public static List<ModifierEntry> getRecipeModifierList() {
+    // do not cache an empty list during game start, recipes have not yet loaded
+    if (RECIPE_MODIFIERS.isEmpty()) {
+      return Collections.emptyList();
+    }
+    List<ModifierEntry> list = RECIPE_MODIFIER_LIST;
+    if (list == null) {
+      list = copyRecipeModifiers().stream().distinct().sorted(Comparator.comparing(LazyModifier::getId)).map(mod -> new ModifierEntry(mod, 1)).toList();
+      RECIPE_MODIFIER_LIST = list;
+    }
+    return list;
+  }
+
+  /** Gets a stream of all modifiers obtainable via the given slot type */
+  public static Stream<Modifier> getRecipeModifiers(@Nullable SlotType slotType) {
+    List<LazyModifier> modifiers;
+    synchronized (RECIPE_MODIFIERS) {
+      modifiers = List.copyOf(RECIPE_MODIFIERS.get(slotType));
+    }
+    return modifiers.stream().map(LazyModifier::get);
+  }
+
+  /** Checks if the given modifier ID is a recipe modifier */
+  public static boolean isRecipeModifier(ModifierId modifier) {
+    return RECIPE_MODIFIER_IDS.containsValue(modifier);
+  }
+
+  /** Checks if the given modifier ID is a recipe modifier */
+  public static boolean isRecipeModifier(@Nullable SlotType slotType, ModifierId modifier) {
+    return RECIPE_MODIFIER_IDS.containsEntry(slotType, modifier);
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_combination_filled",
+      "match": [
+        "c:ores/quartz",
+        "c:ore_rates/dense"
+      ]
+    }
+  ],
+  "type": "tconstruct:ore_melting",
+  "byproducts": [
+    {
+      "amount": 270,
+      "rate": "metal",
+      "tag": "c:molten_iron"
+    }
+  ],
+  "ingredient": {
+    "neoforge:ingredient_type": "neoforge:intersection",
+    "children": [
+      "#c:ores/quartz",
+      "#c:ore_rates/dense"
+    ]
+  },
+  "rate": "gem",
+  "result": {
+    "amount": 300,
+    "fluid": "tconstruct:molten_quartz"
+  },
+  "temperature": 637,
+  "time": 246
+}

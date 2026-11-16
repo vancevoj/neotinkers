@@ -1,0 +1,10 @@
+{
+  "perStat": {
+    "tconstruct:armor": [
+      {
+        "level": 1,
+        "name": "tconstruct:blast_protection"
+      }
+    ]
+  }
+}

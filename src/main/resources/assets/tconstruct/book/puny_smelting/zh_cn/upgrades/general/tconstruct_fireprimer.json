@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:fireprimer",
+  "text": [
+    {
+      "text": "“一切都好。”"
+    }
+  ],
+  "effects": [
+    "可在更大范围内点火",
+    "单个等级",
+    "需要1个升级槽"
+  ]
+}

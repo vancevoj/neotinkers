@@ -1,0 +1,8 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:smashing"
+    }
+  ]
+}

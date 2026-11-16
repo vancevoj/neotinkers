@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_dye",
+  "dye": "#minecraft:dyes",
+  "group": "tconstruct:tinkers_chest_dye",
+  "result": {
+    "id": "tconstruct:tinkers_chest"
+  },
+  "target": "tconstruct:tinkers_chest"
+}

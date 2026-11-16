@@ -1,0 +1,32 @@
+{
+  "level_display": "tconstruct:no_levels",
+  "modules": [
+    {
+      "type": "tconstruct:tool_action_transform",
+      "require_ground": false,
+      "sound": "minecraft:item.axe.strip",
+      "tool_action": "axe_strip"
+    },
+    {
+      "type": "tconstruct:tool_action_transform",
+      "event_id": 3005,
+      "require_ground": false,
+      "sound": "minecraft:item.axe.scrape",
+      "tool_action": "axe_scrape"
+    },
+    {
+      "type": "tconstruct:tool_action_transform",
+      "event_id": 3004,
+      "require_ground": false,
+      "sound": "minecraft:item.axe.wax_off",
+      "tool_action": "axe_wax_off"
+    },
+    {
+      "type": "tconstruct:show_offhand",
+      "mode": "disallow_broken"
+    },
+    {
+      "type": "tconstruct:show_interaction_source"
+    }
+  ]
+}

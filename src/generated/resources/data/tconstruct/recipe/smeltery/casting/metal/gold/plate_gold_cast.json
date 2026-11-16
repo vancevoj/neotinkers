@@ -1,0 +1,18 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:plates/gold"
+    }
+  ],
+  "type": "tconstruct:casting_table",
+  "cast": "#tconstruct:casts/multi_use/plate",
+  "cooling_time": 57,
+  "fluid": {
+    "amount": 90,
+    "tag": "c:molten_gold"
+  },
+  "result": {
+    "tag": "c:plates/gold"
+  }
+}

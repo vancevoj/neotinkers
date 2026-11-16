@@ -1,0 +1,59 @@
+package slimeknights.tconstruct.library.recipe.casting;
+
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import slimeknights.mantle.data.loadable.common.IngredientLoadable;
+import slimeknights.mantle.data.loadable.field.ContextKey;
+import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.recipe.IMultiRecipe;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
+import slimeknights.mantle.recipe.helper.ItemOutput;
+import slimeknights.mantle.recipe.helper.LoadableRecipeSerializer;
+import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
+import slimeknights.mantle.recipe.ingredient.FluidIngredient;
+
+import java.util.List;
+
+/** Recipe which duplicates the input cast using a fluid */
+public class CastDuplicationRecipe extends ItemCastingRecipe implements IMultiRecipe<IDisplayableCastingRecipe> {
+  public static final RecordLoadable<CastDuplicationRecipe> LOADER = RecordLoadable.create(
+    LoadableRecipeSerializer.TYPED_SERIALIZER.requiredField(), ContextKey.ID.requiredField(),
+    LoadableRecipeSerializer.RECIPE_GROUP,
+    IngredientLoadable.DISALLOW_EMPTY.requiredField("cast", CastDuplicationRecipe::getCast),
+    FLUID_FIELD, COOLING_TIME_FIELD,
+    CastDuplicationRecipe::new);
+
+  public CastDuplicationRecipe(TypeAwareRecipeSerializer<?> serializer, Identifier id, String group, Ingredient cast, FluidIngredient fluid, int coolingTime) {
+    super(serializer, id, group, cast, fluid, ItemOutput.EMPTY, coolingTime, false, false);
+  }
+
+  @Override
+  public ItemStack assemble(ICastingContainer inv, HolderLookup.Provider access) {
+    return inv.getStack().copy();
+  }
+
+  @Override
+  public ItemStack getResultItem(HolderLookup.Provider access) {
+    List<ItemStack> items = IngredientHelper.getStacks(getCast());
+    return items.isEmpty() ? ItemStack.EMPTY : items.get(0);
+  }
+
+  /* JEI */
+  private List<IDisplayableCastingRecipe> displayRecipes = null;
+
+  @Override
+  public List<IDisplayableCastingRecipe> getRecipes(RegistryAccess access) {
+    if (displayRecipes == null) {
+      List<ItemStack> casts = IngredientHelper.getStacks(getCast());
+      displayRecipes = List.of(DisplayCastingRecipe.from(this)
+        .casts(casts).results(casts).linkCastToOutput()
+        .fluids(fluid.getFluids())
+        .coolingTime(coolingTime)
+        .build());
+    }
+    return displayRecipes;
+  }
+}

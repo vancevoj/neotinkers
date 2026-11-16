@@ -1,0 +1,58 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:ores/tungsten"
+    }
+  ],
+  "type": "mantle:add_entry",
+  "condition": {
+    "type": "minecraft:all_of",
+    "terms": [
+      {
+        "type": "mantle:block_tag",
+        "tag": "c:ores/tungsten"
+      },
+      {
+        "type": "mantle:tag_filled",
+        "tag": "c:nuggets/tungsten"
+      },
+      {
+        "type": "tconstruct:has_modifier",
+        "modifier": "tconstruct:lustrous"
+      }
+    ]
+  },
+  "entry": {
+    "type": "mantle:tag_preference",
+    "tag": "c:nuggets/tungsten"
+  },
+  "modifier": [
+    {
+      "type": "minecraft:set_count",
+      "count": {
+        "type": "minecraft:uniform",
+        "max": 4,
+        "min": 2
+      }
+    },
+    {
+      "type": "tconstruct:modifier_bonus",
+      "formula": "minecraft:ore_drops",
+      "include_base": false,
+      "modifier": "tconstruct:lustrous"
+    },
+    {
+      "type": "minecraft:explosion_decay"
+    }
+  ],
+  "post_conditions": [
+    {
+      "type": "mantle:inverted",
+      "condition": {
+        "type": "mantle:contains_item",
+        "ingredient": "#c:ores/tungsten"
+      }
+    }
+  ]
+}

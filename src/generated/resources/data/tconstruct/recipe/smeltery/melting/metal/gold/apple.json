@@ -1,0 +1,10 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": "minecraft:golden_apple",
+  "result": {
+    "amount": 720,
+    "tag": "c:molten_gold"
+  },
+  "temperature": 700,
+  "time": 161
+}

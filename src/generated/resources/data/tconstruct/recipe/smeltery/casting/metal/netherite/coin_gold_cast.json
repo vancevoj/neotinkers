@@ -1,0 +1,18 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:coins/netherite"
+    }
+  ],
+  "type": "tconstruct:casting_table",
+  "cast": "#tconstruct:casts/multi_use/coin",
+  "cooling_time": 42,
+  "fluid": {
+    "amount": 30,
+    "tag": "c:molten_netherite"
+  },
+  "result": {
+    "tag": "c:coins/netherite"
+  }
+}

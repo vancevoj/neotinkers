@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:ingots/bronze"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:ingots/bronze",
+  "result": {
+    "amount": 90,
+    "tag": "c:molten_bronze"
+  },
+  "temperature": 700,
+  "time": 57
+}

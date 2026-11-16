@@ -1,0 +1,28 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "check_trait_level": true,
+  "inputs": [
+    {
+      "ingredient": "tconstruct:sky_slime_vine"
+    },
+    {
+      "ingredient": "#c:ingots/slimesteel"
+    },
+    {
+      "ingredient": "tconstruct:sky_slime_vine"
+    },
+    {
+      "ingredient": "#tconstruct:slimy_logs"
+    },
+    {
+      "ingredient": "#tconstruct:slimy_logs"
+    }
+  ],
+  "level": 1,
+  "result": "tconstruct:slimeball",
+  "slots": {
+    "abilities": 1
+  },
+  "tools": "#tconstruct:modifiable/staffs"
+}

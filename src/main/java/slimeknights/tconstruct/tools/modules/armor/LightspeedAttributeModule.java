@@ -1,0 +1,154 @@
+package slimeknights.tconstruct.tools.modules.armor;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.phys.Vec3;
+import slimeknights.mantle.client.TooltipKey;
+import slimeknights.mantle.data.loadable.Loadables;
+import slimeknights.mantle.data.loadable.primitive.FloatLoadable;
+import slimeknights.mantle.data.loadable.primitive.IntLoadable;
+import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.library.json.TinkerLoadables;
+import slimeknights.tconstruct.library.json.variable.entity.EntityLightVariable;
+import slimeknights.tconstruct.library.modifiers.Modifier;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.hook.armor.ArmorWalkModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.armor.EquipmentChangeModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.display.TooltipModifierHook;
+import slimeknights.tconstruct.library.modifiers.modules.ModifierModule;
+import slimeknights.tconstruct.library.modifiers.modules.behavior.AttributeUniqueField;
+import slimeknights.tconstruct.library.module.HookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
+import slimeknights.tconstruct.library.tools.context.EquipmentChangeContext;
+import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
+import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
+
+import javax.annotation.Nullable;
+import java.util.List;
+
+/** Module implementing the movement speed side of lightspeed */
+public record LightspeedAttributeModule(String unique, Identifier id, Attribute attribute, Operation operation, @Nullable LightLayer lightLayer, int minLight, float amount, float damageChance) implements ModifierModule, ArmorWalkModifierHook, EquipmentChangeModifierHook, TooltipModifierHook {
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<LightspeedAttributeModule>defaultHooks(ModifierHooks.BOOT_WALK, ModifierHooks.EQUIPMENT_CHANGE, ModifierHooks.TOOLTIP);
+  public static final RecordLoadable<LightspeedAttributeModule> LOADER = RecordLoadable.create(
+    new AttributeUniqueField<>(LightspeedAttributeModule::unique),
+    Loadables.ATTRIBUTE.requiredField("attribute", LightspeedAttributeModule::attribute),
+    TinkerLoadables.OPERATION.requiredField("operation", LightspeedAttributeModule::operation),
+    TinkerLoadables.LIGHT_LAYER.nullableField("light_layer", LightspeedAttributeModule::lightLayer),
+    IntLoadable.range(0, 14).requiredField("min_light", LightspeedAttributeModule::minLight),
+    FloatLoadable.ANY.requiredField("per_level", LightspeedAttributeModule::amount),
+    FloatLoadable.FROM_ZERO.requiredField("damage_chance", LightspeedAttributeModule::damageChance),
+    (unique, attribute, operation, lightLayer, minLight, amount, damageChance) -> new LightspeedAttributeModule(unique, attribute, operation, lightLayer, minLight, amount, damageChance));
+
+  /** Convenience constructor: derives the Identifier id from the unique string (e.g. "tconstruct.modifier.lightspeed" -> "tconstruct:modifier/lightspeed") */
+  public LightspeedAttributeModule(String unique, Attribute attribute, Operation operation, LightLayer lightLayer, int minLight, float amount, float damageChance) {
+    // The unique string is formatted as "namespace.modifier.path"; convert to a valid Identifier.
+    // In a record's non-canonical constructor the first statement must be a this(...) delegation, so derive the id inline.
+    this(unique, deriveId(unique), attribute, operation, lightLayer, minLight, amount, damageChance);
+  }
+
+  /** Derives a Identifier id from a unique string formatted as "namespace.modifier.path" */
+  private static Identifier deriveId(String unique) {
+    int dot = unique.indexOf('.');
+    return dot > 0
+      ? Identifier.fromNamespaceAndPath(unique.substring(0, dot), unique.substring(dot + 1).replace('.', '/'))
+      : Identifier.withDefaultNamespace(unique);
+  }
+
+  @Override
+  public RecordLoadable<LightspeedAttributeModule> getLoader() {
+    return LOADER;
+  }
+
+  @Override
+  public List<ModuleHook<?>> getDefaultHooks() {
+    return DEFAULT_HOOKS;
+  }
+
+  /** Gets the light at the given position */
+  private int getLight(Level level, BlockPos pos) {
+    return EntityLightVariable.getLightLevel(level, lightLayer, pos);
+  }
+
+  @Override
+  public void onWalk(IToolStackView tool, ModifierEntry modifier, LivingEntity living, BlockPos prevPos, BlockPos newPos) {
+    // no point trying if not on the ground
+    Level level = living.level();
+    if (tool.isBroken() || !living.onGround() || level.isClientSide()) {
+      return;
+    }
+    // must have speed
+    AttributeInstance attrInst = living.getAttribute(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(this.attribute));
+    if (attrInst == null) {
+      return;
+    }
+    // start by removing the attribute, we are likely going to give it a new number
+    if (attrInst.getModifier(id) != null) {
+      attrInst.removeModifier(id);
+    }
+
+    // not above air
+    Vec3 vecPos = living.position();
+    BlockPos pos = BlockPos.containing(vecPos.x, vecPos.y + 0.5f, vecPos.z);
+    int light = getLight(level, pos);
+    if (light > minLight) {
+      int scaledLight = light - minLight;
+      attrInst.addTransientModifier(new AttributeModifier(id, scaledLight * amount * modifier.getEffectiveLevel(), operation));
+
+      // damage boots
+      if (level.getRandom().nextFloat() < (damageChance * scaledLight)) {
+        ToolDamageUtil.damageAnimated(tool, 1, living, EquipmentSlot.FEET, modifier.getId());
+      }
+    }
+  }
+
+  @Override
+  public void onUnequip(IToolStackView tool, ModifierEntry modifier, EquipmentChangeContext context) {
+    // remove boost when boots are removed
+    LivingEntity livingEntity = context.getEntity();
+    if (context.getChangedSlot() == EquipmentSlot.FEET) {
+      IToolStackView newTool = context.getReplacementTool();
+      // damaging the tool will trigger this hook, so ensure the new tool has the same level
+      if (newTool == null || newTool.isBroken() || newTool.getModifier(modifier.getId()).getEffectiveLevel() != modifier.getEffectiveLevel()) {
+        AttributeInstance attrInst = livingEntity.getAttribute(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(this.attribute));
+        if (attrInst != null && attrInst.getModifier(id) != null) {
+          attrInst.removeModifier(id);
+        }
+      }
+    }
+  }
+
+  @Override
+  public void addTooltip(IToolStackView tool, ModifierEntry entry, @Nullable Player player, List<Component> tooltip, TooltipKey key, TooltipFlag tooltipFlag) {
+    if (!tool.hasTag(TinkerTags.Items.BOOTS)) {
+      return;
+    }
+    int light = 15;
+    if (player != null && key == TooltipKey.SHIFT) {
+      light = getLight(player.level(), player.blockPosition());
+    }
+    float boost = amount * (light - minLight) * entry.getEffectiveLevel();
+    if (boost > 0) {
+      if (operation == Operation.ADD_VALUE) {
+        // multiplies addition boost by 10 and displays as a percent as the players base movement speed is 0.1 and is in unknown units
+        // percentages make sense
+        boost *= 10;
+      }
+      Modifier modifier = entry.getModifier();
+      TooltipModifierHook.addPercentBoost(modifier, modifier.getDisplayName(), boost, tooltip);
+    }
+  }
+}

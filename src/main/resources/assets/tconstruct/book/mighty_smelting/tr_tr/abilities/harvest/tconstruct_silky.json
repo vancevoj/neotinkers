@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:silky",
+  "text": [
+    {
+      "text": "Güzel rahatlatıcı bir değiştirici."
+    }
+  ],
+  "effects": [
+    "Kazılan bloklar kendilerini düşürürler",
+    "Tek seviye",
+    "1 yetenek yuvası gerekir"
+  ]
+}

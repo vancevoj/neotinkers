@@ -1,0 +1,10 @@
+{
+  "title": "Dökümevi",
+  "subText": "Dökemevi kadar çok düşlemsel bir şey yoktur.",
+  "hidden": ["structurereq", "fgui2"],
+  "operations": [
+    { "before": "features",       "action": "add_group", "data": "Ayrıntılar" },
+    { "before": "scorched_tanks", "action": "column_break" },
+    { "before": "scorched_tanks", "action": "add_group", "data": "Bloklar" }
+  ]
+}

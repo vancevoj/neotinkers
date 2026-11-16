@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:protection",
+  "text": [
+    {
+      "text": "经过这么多年。我现在什么都不缺了。"
+    }
+  ],
+  "effects": [
+    "增强对所有伤害的保护",
+    "单个等级",
+    "每级需要1个能力槽"
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:attribute",
+      "attribute": "minecraft:max_health",
+      "each_level": 2.0,
+      "operation": "add_value",
+      "slots": [
+        "mainhand",
+        "offhand",
+        "feet",
+        "legs",
+        "chest",
+        "head",
+        "body",
+        "saddle"
+      ],
+      "tooltip_style": "boost"
+    },
+    {
+      "type": "tconstruct:update_health",
+      "slots": [
+        "feet",
+        "legs",
+        "chest",
+        "head"
+      ]
+    },
+    {
+      "type": "tconstruct:update_health",
+      "bonus": {
+        "each_level": 2.0
+      },
+      "slots": [
+        "mainhand",
+        "offhand"
+      ]
+    }
+  ]
+}

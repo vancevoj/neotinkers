@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:coins/constantan"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:coins/constantan",
+  "result": {
+    "amount": 30,
+    "tag": "c:molten_constantan"
+  },
+  "temperature": 920,
+  "time": 43
+}

@@ -1,0 +1,17 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "colors": [
+    {
+      "color": "FF664C33"
+    }
+  ],
+  "connection": {
+    "textures": {
+      "all": "cornerless_full"
+    }
+  },
+  "loader": "mantle:connected",
+  "textures": {
+    "all": "tconstruct:block/clear_stained_glass"
+  }
+}

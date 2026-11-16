@@ -1,0 +1,17 @@
+{
+  "modifier_id": "tconstruct:glowing",
+  "text": [
+    {
+      "text": "消耗5点耐久度，在目标位置放置荧光球。荧光球持续发光直到破坏。工具交互或发 射弹射物均能触发此能力，发射的弹射物 会被消耗。"
+    },
+    {
+      "text": "可以配合“交换”能力或特定流体效果生效，此工具置于副手槽，或副手槽为空时，可 以放置荧光球。", "paragraph": true
+    }
+  ],
+  "more_text_space": true,
+  "tool_filter": "tconstruct:modifiable/interactable",
+  "effects": [
+    "最高1级",
+    "需要1个能力槽"
+  ]
+}

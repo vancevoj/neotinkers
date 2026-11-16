@@ -1,0 +1,15 @@
+{
+  "type": "tconstruct:incremental_modifier",
+  "allow_crystal": false,
+  "amount_per_item": 9,
+  "input": "#c:storage_blocks/lapis",
+  "level": {
+    "max": 5
+  },
+  "needed_per_level": 45,
+  "result": "tconstruct:killager",
+  "slots": {
+    "upgrades": 1
+  },
+  "tools": "#tconstruct:modifiable/melee"
+}

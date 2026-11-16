@@ -1,0 +1,17 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:armors/leggings/electrum"
+    }
+  ],
+  "type": "tconstruct:damagable_melting",
+  "ingredient": "#c:armors/leggings/electrum",
+  "result": {
+    "amount": 630,
+    "tag": "c:molten_electrum",
+    "unit_size": 10
+  },
+  "temperature": 760,
+  "time": 156
+}

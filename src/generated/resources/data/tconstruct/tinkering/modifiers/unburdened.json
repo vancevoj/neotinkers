@@ -1,0 +1,28 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:stat_boost",
+      "each_level": 0.1,
+      "operation": "add",
+      "stat": "tconstruct:use_item_speed"
+    },
+    {
+      "type": "tconstruct:attribute",
+      "attribute": "tconstruct:player.use_item_speed",
+      "each_level": 0.1,
+      "operation": "add_value",
+      "slots": [
+        "feet",
+        "legs",
+        "chest",
+        "head"
+      ],
+      "tool": {
+        "type": "mantle:tag",
+        "tag": "tconstruct:modifiable/armor/worn"
+      },
+      "tooltip_style": "percent"
+    }
+  ]
+}

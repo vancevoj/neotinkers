@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "tconstruct:modifiable/embellishment/slime"
+    }
+  ],
+  "type": "tconstruct:swappable_modifier",
+  "allow_crystal": false,
+  "inputs": [
+    {
+      "ingredient": "tconstruct:earth_congealed_slime"
+    },
+    {
+      "ingredient": "minecraft:slime_ball"
+    },
+    {
+      "ingredient": "tconstruct:earth_congealed_slime"
+    }
+  ],
+  "result": {
+    "name": "tconstruct:embellishment",
+    "value": "tconstruct:earthslime"
+  },
+  "tools": "#tconstruct:modifiable/embellishment/slime",
+  "variant_formatter": "tconstruct:material"
+}

@@ -1,0 +1,76 @@
+{
+  "modules": [
+    {
+      "type": "tconstruct:material_stats",
+      "primary_part": 0,
+      "stat_types": [
+        "tconstruct:head",
+        "tconstruct:limb",
+        "tconstruct:bowstring"
+      ]
+    },
+    {
+      "type": "tconstruct:default_materials",
+      "materials": [
+        {
+          "type": "tconstruct:random",
+          "allow_hidden": true
+        },
+        {
+          "type": "tconstruct:random",
+          "allow_hidden": true
+        },
+        {
+          "type": "tconstruct:random",
+          "allow_hidden": true
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:material_traits",
+      "hooks": [
+        "tconstruct:rebalanced_trait"
+      ],
+      "material_index": 1,
+      "stat_type": "tconstruct:limb"
+    },
+    {
+      "type": "tconstruct:base_stats",
+      "stats": {
+        "tconstruct:attack_speed": 1.2
+      }
+    },
+    {
+      "type": "tconstruct:modifier_slots",
+      "slots": {
+        "abilities": 1,
+        "upgrades": 3
+      }
+    },
+    {
+      "type": "tconstruct:traits",
+      "traits": [
+        {
+          "level": 1,
+          "name": "tconstruct:war_charge"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:tool_actions",
+      "tool_actions": [
+        "pickaxe_dig"
+      ]
+    },
+    {
+      "type": "tconstruct:is_effective",
+      "predicate_type": "mantle:tag",
+      "tag": "minecraft:mineable/pickaxe"
+    },
+    {
+      "type": "tconstruct:circle_aoe",
+      "3D": false,
+      "diameter": 1
+    }
+  ]
+}

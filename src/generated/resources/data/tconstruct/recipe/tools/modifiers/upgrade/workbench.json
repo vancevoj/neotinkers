@@ -1,0 +1,19 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "check_trait_level": true,
+  "inputs": [
+    {
+      "ingredient": "minecraft:leather"
+    },
+    {
+      "ingredient": "minecraft:crafting_table"
+    },
+    {
+      "ingredient": "minecraft:leather"
+    }
+  ],
+  "level": 1,
+  "result": "tconstruct:workbench",
+  "tools": "#tconstruct:modifiable/armor/leggings"
+}

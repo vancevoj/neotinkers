@@ -1,0 +1,15 @@
+{
+  "tool": "tconstruct:ender_staff",
+  "text": [
+    { "text": "Enderslime Staff is a high reach and power staff variant. " }
+  ],
+  "properties": [
+    "1520 Durability",
+    "3 Projectile Power",
+    "0.5 Accuracy",
+    "3 Upgrade Slots",
+    "1 Defense Slot",
+    "2 Ability Slots",
+    "Reach II"
+  ]
+}

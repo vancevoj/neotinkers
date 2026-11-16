@@ -1,0 +1,28 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:restrict_projectile_angle"
+    },
+    {
+      "type": "tconstruct:stat_boost",
+      "each_level": 0.1,
+      "operation": "add",
+      "stat": "tconstruct:velocity",
+      "tool": {
+        "type": "mantle:tag",
+        "tag": "tconstruct:modifiable/ranged"
+      }
+    },
+    {
+      "type": "tconstruct:stat_boost",
+      "each_level": 0.75,
+      "operation": "add",
+      "stat": "tconstruct:projectile_damage",
+      "tool": {
+        "type": "mantle:tag",
+        "tag": "tconstruct:modifiable/ammo"
+      }
+    }
+  ]
+}

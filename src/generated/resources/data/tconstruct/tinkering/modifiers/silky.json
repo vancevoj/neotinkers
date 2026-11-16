@@ -1,0 +1,29 @@
+{
+  "level_display": "tconstruct:no_levels",
+  "modules": [
+    {
+      "type": "tconstruct:constant_enchantment",
+      "level": 1,
+      "name": "minecraft:silk_touch",
+      "tool": {
+        "type": "mantle:tag",
+        "tag": "tconstruct:modifiable/harvest"
+      }
+    },
+    {
+      "type": "tconstruct:armor_harvest_enchantment",
+      "level": 1,
+      "name": "minecraft:silk_touch",
+      "slots": [
+        "feet",
+        "legs",
+        "chest",
+        "head"
+      ],
+      "tool": {
+        "type": "mantle:tag",
+        "tag": "tconstruct:modifiable/armor/worn"
+      }
+    }
+  ]
+}

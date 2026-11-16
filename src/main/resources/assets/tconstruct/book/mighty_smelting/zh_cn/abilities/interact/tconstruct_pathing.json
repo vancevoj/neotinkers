@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:pathing",
+  "text": [
+    {
+      "text": "没有金砖路，我也能用土径走天下。"
+    }
+  ],
+  "tool_filter": "tconstruct:modifiable/interactable",
+  "effects": [
+    "工具可以制造土径",
+    "单个等级",
+    "需要1个能力槽"
+  ]
+}

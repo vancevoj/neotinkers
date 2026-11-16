@@ -1,0 +1,19 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "neoforge:item/default",
+  "textures": {
+    "tool": "tconstruct:item/tool/flint_and_brick/tool"
+  },
+  "modifier_maps": ["tconstruct:flint_and_brick"],
+  "modifier_roots": [ "tconstruct:item/tool/flint_and_bronze/modifiers/" ],
+  "overrides": [
+    {
+      "predicate": { "tconstruct:charging": 2 },
+      "model": "tconstruct:item/tool/flint_and_brick/blocking"
+    },
+    {
+      "predicate": { "tconstruct:broken": 1 },
+      "model": "tconstruct:item/tool/flint_and_brick/broken"
+    }
+  ]
+}

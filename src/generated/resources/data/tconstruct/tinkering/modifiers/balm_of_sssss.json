@@ -1,0 +1,23 @@
+{
+  "level_display": "tconstruct:single_level",
+  "modules": [
+    {
+      "type": "tconstruct:attribute",
+      "attribute": "tconstruct:generic.bad_effect_duration_multiplier",
+      "each_level": -0.1,
+      "flat": -0.1,
+      "operation": "add_multiplied_base",
+      "slots": [
+        "mainhand",
+        "offhand",
+        "feet",
+        "legs",
+        "chest",
+        "head",
+        "body",
+        "saddle"
+      ],
+      "tooltip_style": "percent"
+    }
+  ]
+}

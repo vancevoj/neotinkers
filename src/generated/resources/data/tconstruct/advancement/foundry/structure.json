@@ -1,0 +1,28 @@
+{
+  "parent": "tconstruct:foundry/alloyer",
+  "criteria": {
+    "open_foundry": {
+      "conditions": {
+        "type": "tconstruct:foundry"
+      },
+      "trigger": "tconstruct:block_container_opened"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.tconstruct.foundry.structure.description"
+    },
+    "icon": {
+      "id": "tconstruct:foundry_controller"
+    },
+    "title": {
+      "translate": "advancements.tconstruct.foundry.structure.title"
+    }
+  },
+  "requirements": [
+    [
+      "open_foundry"
+    ]
+  ]
+}

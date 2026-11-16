@@ -1,0 +1,16 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "tconstruct:item/sky_slime_spawn_egg",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": -12062731
+      },
+      {
+        "type": "minecraft:constant",
+        "value": -5439500
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+[
+  {
+    "name": "group_small",
+    "type": "mantle:text",
+    "data": "tools/small.json",
+    "extraData": { "tconstruct:load_tools": { "tag": "tconstruct:modifiable/small", "path": "tools/small" }}
+  },
+  {
+    "name": "group_large",
+    "type": "mantle:text",
+    "data": "tools/broad.json",
+    "extraData": { "tconstruct:load_tools": { "tag": "tconstruct:modifiable/broad", "path": "tools/broad" }}
+  },
+  {
+    "name": "group_ranged",
+    "type": "mantle:text",
+    "data": "tools/ranged.json",
+    "extraData": { "tconstruct:load_tools": [
+      { "tag": "tconstruct:modifiable/ranged/small", "path": "tools/ranged" },
+      { "tag": "tconstruct:modifiable/ranged/broad", "path": "tools/ranged" },
+      { "tag": "tconstruct:modifiable/ammo",         "path": "tools/ranged" }
+    ]}
+  },
+  {
+    "name": "group_staff",
+    "type": "mantle:text",
+    "data": "tools/staff.json",
+    "extraData": { "tconstruct:load_tools": { "tag": "tconstruct:modifiable/special", "path": "tools/staff", "sort": false }}
+  },
+  {
+    "name": "group_ancient",
+    "type": "mantle:text",
+    "data": "tools/ancient.json",
+    "extraData": { "tconstruct:load_tools": { "tag": "tconstruct:modifiable/ancient", "path": "tools/ancient" }}
+  }
+]

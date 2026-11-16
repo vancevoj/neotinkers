@@ -1,0 +1,29 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_combination_filled",
+      "ignore": "tconstruct:non_singular_ore_rates",
+      "match": "c:ores/nickel"
+    }
+  ],
+  "type": "tconstruct:ore_melting",
+  "byproducts": [
+    {
+      "amount": 180,
+      "rate": "metal",
+      "tag": "c:molten_iron"
+    }
+  ],
+  "ingredient": {
+    "neoforge:ingredient_type": "neoforge:difference",
+    "base": "#c:ores/nickel",
+    "subtracted": "#tconstruct:non_singular_ore_rates"
+  },
+  "rate": "metal",
+  "result": {
+    "amount": 180,
+    "tag": "c:molten_nickel"
+  },
+  "temperature": 950,
+  "time": 162
+}

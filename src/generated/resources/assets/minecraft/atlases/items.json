@@ -1,0 +1,82 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:paletted_permutations",
+      "palette_key": "minecraft:trim_base",
+      "permutations": {
+        "tconstruct_amethyst_bronze": "tconstruct:trim/amethyst_bronze",
+        "tconstruct_cinderslime": "tconstruct:trim/cinderslime",
+        "tconstruct_cobalt": "tconstruct:trim/cobalt",
+        "tconstruct_earthslime": "tconstruct:trim/earthslime",
+        "tconstruct_enderslime": "tconstruct:trim/enderslime",
+        "tconstruct_hepatizon": "tconstruct:trim/hepatizon",
+        "tconstruct_ichor": "tconstruct:trim/ichor",
+        "tconstruct_knightmetal": "tconstruct:trim/knightmetal",
+        "tconstruct_knightslime": "tconstruct:trim/knightslime",
+        "tconstruct_manyullyn": "tconstruct:trim/manyullyn",
+        "tconstruct_pig_iron": "tconstruct:trim/pig_iron",
+        "tconstruct_queens_slime": "tconstruct:trim/queens_slime",
+        "tconstruct_rose_gold": "tconstruct:trim/rose_gold",
+        "tconstruct_skyslime": "tconstruct:trim/skyslime",
+        "tconstruct_slimesteel": "tconstruct:trim/slimesteel",
+        "tconstruct_steel": "tconstruct:trim/steel"
+      },
+      "textures": [
+        "minecraft:trims/items/helmet_trim",
+        "minecraft:trims/items/chestplate_trim",
+        "minecraft:trims/items/leggings_trim",
+        "minecraft:trims/items/boots_trim",
+        "tconstruct:item/tool/armor/travelers/goggles/trim",
+        "tconstruct:item/tool/armor/slime/wings/trim"
+      ]
+    },
+    {
+      "type": "minecraft:paletted_permutations",
+      "palette_key": "minecraft:trim_base",
+      "permutations": {
+        "amethyst": "minecraft:trim/amethyst",
+        "copper": "minecraft:trim/copper",
+        "diamond": "minecraft:trim/diamond",
+        "emerald": "minecraft:trim/emerald",
+        "gold": "minecraft:trim/gold",
+        "iron": "minecraft:trim/iron",
+        "lapis": "minecraft:trim/lapis",
+        "netherite": "minecraft:trim/netherite",
+        "quartz": "minecraft:trim/quartz",
+        "redstone": "minecraft:trim/redstone",
+        "resin": "minecraft:trim/resin"
+      },
+      "textures": [
+        "tconstruct:item/tool/armor/travelers/goggles/trim",
+        "tconstruct:item/tool/armor/slime/wings/trim"
+      ]
+    },
+    {
+      "type": "tconstruct:shield_banner_to_modifier",
+      "crop_height": 20,
+      "crop_width": 10,
+      "crop_x": 2,
+      "crop_y": 2,
+      "destination_prefix": "tconstruct:item/tool/armor/plate/shield/banner_large/",
+      "offset_x": 11,
+      "offset_y": 8,
+      "output_size": 32
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "minecraft:trims/items/helmet_trim"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "minecraft:trims/items/chestplate_trim"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "minecraft:trims/items/leggings_trim"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "minecraft:trims/items/boots_trim"
+    }
+  ]
+}

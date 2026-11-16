@@ -1,0 +1,17 @@
+{
+  "modifier_id": "tconstruct:experienced",
+  "text": [
+    {
+      "text": "每级使击杀生物与破坏方块所获得的经验值增加50%。"
+    },
+    {
+      "text": "在盔甲上时，每级使任意工具的经验值加成增加25%。",
+      "paragraph": true
+    }
+  ],
+  "more_text_space": true,
+  "effects": [
+    "最高5级",
+    "每级需要1个升级槽"
+  ]
+}

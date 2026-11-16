@@ -1,0 +1,17 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:storage_blocks/bronze"
+    }
+  ],
+  "type": "tconstruct:material",
+  "ingredient": "#c:storage_blocks/bronze",
+  "leftover": {
+    "count": 1,
+    "tag": "c:ingots/bronze"
+  },
+  "material": "tconstruct:bronze",
+  "needed": 1,
+  "value": 9
+}

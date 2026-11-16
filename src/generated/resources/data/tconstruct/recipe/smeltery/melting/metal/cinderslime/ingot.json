@@ -1,0 +1,10 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": "#c:ingots/cinderslime",
+  "result": {
+    "amount": 90,
+    "fluid": "tconstruct:molten_cinderslime"
+  },
+  "temperature": 1050,
+  "time": 68
+}

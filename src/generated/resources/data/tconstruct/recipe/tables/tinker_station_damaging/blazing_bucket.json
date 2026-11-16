@@ -1,0 +1,5 @@
+{
+  "type": "tconstruct:tinker_station_damaging",
+  "damage_amount": 2500,
+  "ingredient": "tconstruct:blazing_blood_bucket"
+}

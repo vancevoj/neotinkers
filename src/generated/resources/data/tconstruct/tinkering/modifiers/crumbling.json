@@ -1,0 +1,15 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:conditional_mining_speed",
+      "blocks": {
+        "type": "mantle:inverted",
+        "inverted_type": "mantle:requires_tool"
+      },
+      "each_level": 1.0,
+      "percent": false,
+      "require_effective": false
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "type": "tconstruct:damagable_melting",
+  "ingredient": "minecraft:iron_helmet",
+  "result": {
+    "amount": 450,
+    "tag": "c:molten_iron",
+    "unit_size": 10
+  },
+  "temperature": 800,
+  "time": 134
+}

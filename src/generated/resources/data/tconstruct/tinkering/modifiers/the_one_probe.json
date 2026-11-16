@@ -1,0 +1,12 @@
+{
+  "condition": {
+    "type": "neoforge:mod_loaded",
+    "modid": "theoneprobe"
+  },
+  "level_display": "tconstruct:no_levels",
+  "modules": [
+    {
+      "type": "tconstruct:the_one_probe"
+    }
+  ]
+}

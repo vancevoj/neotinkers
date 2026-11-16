@@ -1,0 +1,18 @@
+{
+  "tool": "tconstruct:travelers_boots",
+  "text": [
+    { "text": "Essas botas foram feitas para caminhar, e é exatamente isso que elas vão fazer." },
+    {
+      "text": "Todo aventureiro precisa de um bom par de botas estilosas e personalizáveis para começar sua jornada.", "paragraph": true
+    }
+  ],
+  "properties": [
+    "Menos Armadura",
+    "Menos Durabilidade",
+    "2 Slots de Melhoria",
+    "2 Slots de Defesa",
+    "1 Slot de Habilidade",
+    "1 Atributo de Material",
+    "Isolante & Curada"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:freezing",
+  "text": [
+    {
+      "text": "艾莎会嫉妒的。"
+    }
+  ],
+  "tool_filter": "tconstruct:modifiable/armor",
+  "effects": [
+    "受击有概率冰冻攻击者",
+    "多个等级，每级进一步 提升冰冻概率",
+    "每级需要1个升级槽"
+  ]
+}

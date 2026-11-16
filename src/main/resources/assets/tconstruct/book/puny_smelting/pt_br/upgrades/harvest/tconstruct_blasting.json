@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:blasting",
+  "text": [
+    {
+      "text": "Esta melhoria pode acabar com você se não for cuidadoso."
+    }
+  ],
+  "effects": [
+    "Minera blocos mais fracos a explosivos rapidamente, como minérios",
+    "Múltiplos níveis, aumenta a velocidade ainda mais a cada nível",
+    "Requer 1 slot de melhoria por nível"
+  ]
+}

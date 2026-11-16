@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "#": "tconstruct:scorched_brick",
+    "B": "#c:gems/quartz"
+  },
+  "pattern": [
+    "B#B",
+    "#B#",
+    "B#B"
+  ],
+  "result": {
+    "id": "tconstruct:scorched_ingot_gauge"
+  }
+}

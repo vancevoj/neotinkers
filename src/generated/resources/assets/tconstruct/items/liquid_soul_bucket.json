@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "tconstruct:fluid_container",
+    "model": "tconstruct:item/liquid_soul_bucket"
+  }
+}

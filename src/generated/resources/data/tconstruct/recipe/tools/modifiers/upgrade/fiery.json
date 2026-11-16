@@ -1,0 +1,24 @@
+{
+  "type": "tconstruct:incremental_modifier",
+  "allow_crystal": true,
+  "amount_per_item": 1,
+  "input": "minecraft:blaze_powder",
+  "level": {
+    "max": 5
+  },
+  "needed_per_level": 25,
+  "result": "tconstruct:fiery",
+  "slots": {
+    "upgrades": 1
+  },
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:modifiable/melee",
+      "#tconstruct:modifiable/ranged/bows",
+      "#tconstruct:modifiable/fishing_rods",
+      "#tconstruct:modifiable/armor/worn",
+      "#tconstruct:modifiable/shields"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "tconstruct:swappable_modifier",
+  "allow_crystal": false,
+  "inputs": [
+    {
+      "ingredient": "minecraft:cactus"
+    },
+    {
+      "ingredient": "tconstruct:pattern"
+    },
+    {
+      "ingredient": "minecraft:cactus"
+    }
+  ],
+  "result": {
+    "name": "tconstruct:embellishment",
+    "value": "tconstruct:cactus"
+  },
+  "tools": "#tconstruct:modifiable/embellishment/wood",
+  "variant_formatter": "tconstruct:material"
+}

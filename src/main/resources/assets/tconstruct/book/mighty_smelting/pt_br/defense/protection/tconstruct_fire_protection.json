@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:fire_protection",
+  "text": [
+    {
+      "text": "Através do fogo e das chamas."
+    }
+  ],
+  "effects": [
+    "Diminui o dano de fogo e o tempo em chamas",
+    "Múltiplos níveis, cada nível reduz ainda mais o dano e o tempo em chamas.",
+    "Requer 1 slot de defesa por nível"
+  ]
+}

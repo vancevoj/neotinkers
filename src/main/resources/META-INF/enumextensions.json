@@ -1,0 +1,58 @@
+{
+  "entries": [
+    {
+      "enum": "net/minecraft/world/item/ItemDisplayContext",
+      "name": "TCONSTRUCT_MELTER",
+      "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
+      "parameters": {
+        "class": "slimeknights/tconstruct/library/TinkerItemDisplayProxies",
+        "field": "MELTER_PROXY"
+      }
+    },
+    {
+      "enum": "net/minecraft/world/item/ItemDisplayContext",
+      "name": "TCONSTRUCT_TABLE",
+      "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
+      "parameters": {
+        "class": "slimeknights/tconstruct/library/TinkerItemDisplayProxies",
+        "field": "TABLE_PROXY"
+      }
+    },
+    {
+      "enum": "net/minecraft/world/item/ItemDisplayContext",
+      "name": "TCONSTRUCT_CASTING_TABLE",
+      "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
+      "parameters": {
+        "class": "slimeknights/tconstruct/library/TinkerItemDisplayProxies",
+        "field": "CASTING_TABLE_PROXY"
+      }
+    },
+    {
+      "enum": "net/minecraft/world/item/ItemDisplayContext",
+      "name": "TCONSTRUCT_CASTING_BASIN",
+      "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
+      "parameters": {
+        "class": "slimeknights/tconstruct/library/TinkerItemDisplayProxies",
+        "field": "CASTING_BASIN_PROXY"
+      }
+    },
+    {
+      "enum": "net/minecraft/world/item/ItemDisplayContext",
+      "name": "TCONSTRUCT_FLUID_CANNON",
+      "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
+      "parameters": {
+        "class": "slimeknights/tconstruct/library/TinkerItemDisplayProxies",
+        "field": "FLUID_CANNON_PROXY"
+      }
+    },
+    {
+      "enum": "net/minecraft/world/item/ItemDisplayContext",
+      "name": "TCONSTRUCT_THROWN",
+      "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
+      "parameters": {
+        "class": "slimeknights/tconstruct/library/TinkerItemDisplayProxies",
+        "field": "THROWN_PROXY"
+      }
+    }
+  ]
+}

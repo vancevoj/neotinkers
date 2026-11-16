@@ -1,0 +1,18 @@
+{
+  "block_effects": [
+    {
+      "type": "tconstruct:potion_cloud",
+      "scale": 0.25
+    }
+  ],
+  "entity_effects": [
+    {
+      "type": "tconstruct:potion",
+      "scale": 0.25
+    }
+  ],
+  "fluid": {
+    "amount": 50,
+    "tag": "c:potion"
+  }
+}

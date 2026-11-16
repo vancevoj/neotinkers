@@ -1,0 +1,42 @@
+{
+  "block_effects": [
+    {
+      "type": "tconstruct:conditional",
+      "block": {
+        "type": "mantle:inverted",
+        "inverted_type": "mantle:or",
+        "predicates": [
+          "mantle:blocks_motion",
+          {
+            "type": "mantle:tag",
+            "tag": "tconstruct:unreplacable_by_liquid"
+          }
+        ]
+      },
+      "effect": {
+        "type": "tconstruct:break_block"
+      }
+    }
+  ],
+  "entity_effects": [
+    {
+      "type": "tconstruct:conditional",
+      "effect": {
+        "type": "tconstruct:damage",
+        "damage": 2.0,
+        "damage_type": {
+          "melee": "tconstruct:water_melee",
+          "ranged": "tconstruct:water_ranged"
+        }
+      },
+      "target": "mantle:water_sensitive"
+    },
+    {
+      "type": "tconstruct:extinguish"
+    }
+  ],
+  "fluid": {
+    "amount": 50,
+    "fluid": "minecraft:water"
+  }
+}

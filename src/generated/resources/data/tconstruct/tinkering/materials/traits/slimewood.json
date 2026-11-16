@@ -1,0 +1,20 @@
+{
+  "default": [
+    {
+      "level": 1,
+      "name": "tconstruct:overgrowth"
+    },
+    {
+      "level": 1,
+      "name": "tconstruct:overslime"
+    }
+  ],
+  "perStat": {
+    "tconstruct:ammo": [
+      {
+        "level": 2,
+        "name": "tconstruct:bounce"
+      }
+    ]
+  }
+}

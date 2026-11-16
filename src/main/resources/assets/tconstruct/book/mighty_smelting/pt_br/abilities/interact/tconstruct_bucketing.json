@@ -1,0 +1,32 @@
+{
+  "modifier_id": "tconstruct:bucketing",
+  "text": [
+    {
+      "text": "§oIsto é um balde.§r"
+    },
+    {
+      "text": "\n"
+    },
+    {
+      "text": "§lMeu Deus.§r"
+    },
+    {
+      "text": "\n"
+    },
+    {
+      "text": "§oTem mais.§r"
+    },
+    {
+      "text": "\n"
+    },
+    {
+      "text": "§lNãooo.§r"
+    }
+  ],
+  "effects": [
+    "Sua ferramenta agora é um balde",
+    "O tamanho do tanque pode ser aumentado com 'Melhoria de Tanque'",
+    "Nível único",
+    "Requer 1 slot de habilidade"
+  ]
+}

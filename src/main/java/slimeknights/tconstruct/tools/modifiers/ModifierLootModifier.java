@@ -1,0 +1,94 @@
+package slimeknights.tconstruct.tools.modifiers;
+
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.Holder;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.neoforge.common.loot.LootModifier;
+import slimeknights.mantle.loot.AbstractLootModifierBuilder.GenericLootModifierBuilder;
+import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.tools.capability.EntityModifierCapability;
+import slimeknights.tconstruct.library.tools.capability.PersistentDataCapability;
+import slimeknights.tconstruct.library.tools.helper.ModifierLootingHandler;
+import slimeknights.tconstruct.library.tools.nbt.DummyToolStack;
+import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
+import slimeknights.tconstruct.library.tools.nbt.ModDataNBT;
+import slimeknights.tconstruct.library.tools.nbt.ModifierNBT;
+import slimeknights.tconstruct.library.tools.nbt.ToolStack;
+
+import javax.annotation.Nonnull;
+import java.util.Optional;
+
+/** Global loot modifier for modifiers */
+public class ModifierLootModifier extends LootModifier {
+  public static final MapCodec<ModifierLootModifier> CODEC = RecordCodecBuilder.mapCodec(inst -> codecStart(inst).apply(inst, ModifierLootModifier::new));
+
+  protected ModifierLootModifier(Optional<Holder<LootItemCondition>> condition, int priority) {
+    super(condition, priority);
+  }
+
+  /** Creates a builder for datagen */
+  public static GenericLootModifierBuilder<ModifierLootModifier> builder() {
+    return new GenericLootModifierBuilder<>(ModifierLootModifier::new);
+  }
+
+  @Nonnull
+  @Override
+  protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
+    // tool is for harvest, the parameter is an item instance now which may not be a stack
+    ItemStack stack = context.getOptional(LootContextParams.TOOL) instanceof ItemStack tool ? tool : null;
+
+    // if null, try killer entity
+    if (stack == null) {
+      // if this loot is due to a projectile fired by one of our tools, then use that projectile as the loot source
+      // prevents weirdness when held tool switches after firing a projectile
+      if (context.getOptional(LootContextParams.DIRECT_ATTACKING_ENTITY) instanceof Projectile projectile) {
+        ModifierNBT modifiers = EntityModifierCapability.getOrEmpty(projectile);
+
+        // no need to build the dummy tool if we lack modifiers
+        if (!modifiers.isEmpty()) {
+          ModDataNBT persistentData = PersistentDataCapability.getOrWarn(projectile);
+          IToolStackView dummyTool = new DummyToolStack(Items.AIR, modifiers, persistentData);
+          for (ModifierEntry entry : modifiers) {
+            entry.getHook(ModifierHooks.PROCESS_LOOT).processLoot(dummyTool, entry, generatedLoot, context);
+          }
+        }
+        // don't run held item hook for projectiles, if you didn't put the modifier on the projectile we shouldn't count it
+        return generatedLoot;
+      }
+
+      // not a projectile causing it, fetch the killer entity directly from loot context
+      // requires a melee damage source, the held tool is not responsible for kills it did not make such as explosions
+      DamageSource damageSource = context.getOptional(LootContextParams.DAMAGE_SOURCE);
+      if (damageSource != null && damageSource.is(TinkerTags.DamageTypes.LOOT_MODIFIER_WHITELIST) && context.getOptional(LootContextParams.ATTACKING_ENTITY) instanceof LivingEntity living) {
+        stack = living.getItemBySlot(ModifierLootingHandler.getLootingSlot(living));
+      }
+    }
+    // hopefully one of the two worked
+    if (stack != null && stack.is(TinkerTags.Items.LOOT_CAPABLE_TOOL)) {
+      ToolStack tool = ToolStack.from(stack);
+      if (!tool.isBroken()) {
+        for (ModifierEntry entry : tool.getModifierList()) {
+          entry.getHook(ModifierHooks.PROCESS_LOOT).processLoot(tool, entry, generatedLoot, context);
+        }
+      }
+    }
+    return generatedLoot;
+  }
+
+  @Override
+  public MapCodec<? extends IGlobalLootModifier> codec() {
+    return CODEC;
+  }
+}

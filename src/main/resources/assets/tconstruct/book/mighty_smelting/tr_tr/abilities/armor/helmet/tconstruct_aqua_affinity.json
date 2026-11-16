@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:aqua_affinity",
+  "text": [
+    {
+      "text": "Sulu sahalara som solunum sıkıntılarıyla savaşan sulandırıcı sandırtım."
+    }
+  ],
+  "effects": [
+    "Su altında çıkarım hızını artırır",
+    "Tek seviye",
+    "1 yetenek yuvası gerekir"
+  ]
+}

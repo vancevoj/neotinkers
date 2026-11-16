@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:wings",
+  "text": [
+    {
+      "text": "在空中跳跃可以滑翔。滑翔时缓慢消耗胸甲耐久度。"
+    }
+  ],
+  "more_text_space": true,
+  "effects": [
+    "最高1级",
+    "需要2个能力槽"
+  ]
+}

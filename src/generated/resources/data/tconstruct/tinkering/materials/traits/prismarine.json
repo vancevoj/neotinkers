@@ -1,0 +1,20 @@
+{
+  "perStat": {
+    "tconstruct:ammo": [
+      {
+        "level": 1,
+        "name": "tconstruct:fins_ammo"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:lure_rod"
+      }
+    ],
+    "tconstruct:shell": [
+      {
+        "level": 1,
+        "name": "tconstruct:thorns_shell"
+      }
+    ]
+  }
+}

@@ -1,0 +1,683 @@
+package slimeknights.tconstruct.smeltery.block.entity;
+
+import lombok.Getter;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.neoforge.fluids.FluidStack;
+import slimeknights.mantle.fluid.FluidTransferHelper;
+import slimeknights.mantle.recipe.helper.RecipeHelper;
+import slimeknights.mantle.util.BlockEntityHelper;
+import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.common.Sounds;
+import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.common.network.TinkerNetwork;
+import slimeknights.tconstruct.library.recipe.TinkerRecipeTypes;
+import slimeknights.tconstruct.library.recipe.casting.ICastingRecipe;
+import slimeknights.tconstruct.library.recipe.molding.MoldingRecipe;
+import slimeknights.tconstruct.shared.block.entity.TableBlockEntity;
+import slimeknights.tconstruct.smeltery.TinkerSmeltery;
+import slimeknights.tconstruct.smeltery.block.AbstractCastingBlock;
+import slimeknights.tconstruct.smeltery.block.entity.inventory.CastingContainerWrapper;
+import slimeknights.tconstruct.smeltery.block.entity.inventory.MoldingContainerWrapper;
+import slimeknights.tconstruct.smeltery.block.entity.inventory.PlayerItemHelper;
+import slimeknights.tconstruct.smeltery.block.entity.inventory.SidedContainerItemHandler;
+import slimeknights.tconstruct.smeltery.block.entity.tank.CastingFluidHandler;
+import slimeknights.tconstruct.smeltery.network.FluidUpdatePacket;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Optional;
+
+public abstract class CastingBlockEntity extends TableBlockEntity implements WorldlyContainer, FluidUpdatePacket.IFluidPacketReceiver {
+  // slots
+  public static final int INPUT = 0;
+  public static final int OUTPUT = 1;
+  // Tag
+  private static final String TAG_TANK = "tank";
+  private static final String TAG_TIMER = "timer";
+  private static final String TAG_RECIPE = "recipe";
+  private static final String TAG_REDSTONE = "redstone";
+  private static final Component NAME = TConstruct.makeTranslation("gui", "casting");
+
+  /** Handles ticking on the serverside */
+  public static final BlockEntityTicker<CastingBlockEntity> SERVER_TICKER = (level, pos, state, self) -> self.serverTick(level, pos);
+  /** Handles ticking on the clientside */
+  public static final BlockEntityTicker<CastingBlockEntity> CLIENT_TICKER = (level, pos, state, self) -> self.clientTick(level, pos);
+
+  /** Special casting fluid tank */
+  @Getter
+  private final CastingFluidHandler tank = new CastingFluidHandler(this);
+
+  /* Casting recipes */
+  /** Recipe type for casting recipes, may be basin or table */
+  private final RecipeType<ICastingRecipe> castingType;
+  /** Inventory for use in casting recipes */
+  private final CastingContainerWrapper castingInventory;
+  /** Current recipe progress */
+  @Getter
+  private int timer;
+  /** Time needed for the recipe to finish */
+  @Getter
+  private int coolingTime = -1;
+  /** Current in progress recipe */
+  private ICastingRecipe currentRecipe;
+  /** ID of the current recipe, tracked separately since 1.21 recipes no longer carry their own ID */
+  @Nullable
+  private Identifier currentRecipeId;
+  /** Name of the current recipe, fetched from Tag. Used since Tag is read before recipe manager access */
+  private Identifier recipeName;
+  /** Cache recipe to reduce time during recipe lookups. Not saved to Tag */
+  private ICastingRecipe lastCastingRecipe;
+  /** ID matching {@link #lastCastingRecipe}, since 1.21 recipes no longer carry their own ID */
+  @Nullable
+  private Identifier lastCastingRecipeId;
+  /** ID of the recipe returned by the most recent {@link #findCastingRecipe()} call */
+  @Nullable
+  private Identifier foundRecipeId;
+  /** Last recipe output for client side display */
+  private ItemStack lastOutput = null;
+  /** If true, this block is allowed to cast without a cast */
+  private final boolean requireCast;
+  /** Items that count as empty in the casting table */
+  @Getter
+  private final TagKey<Item> emptyCastTag;
+
+  /* Molding recipes */
+  /** Recipe type for molding recipes, may be basin or table */
+  private final RecipeType<MoldingRecipe> moldingType;
+  /** Inventory to use for molding recipes */
+  private final MoldingContainerWrapper moldingInventory;
+  /** Cache recipe to reduce time during recipe lookups. Not saved to Tag */
+  private MoldingRecipe lastMoldingRecipe;
+  /** Last redstone state of the block */
+  private boolean lastRedstone = false;
+  /** Last analog signal strength */
+  private int lastAnalogSignal;
+
+  protected CastingBlockEntity(BlockEntityType<?> beType, BlockPos pos, BlockState state, RecipeType<ICastingRecipe> castingType, RecipeType<MoldingRecipe> moldingType, TagKey<Item> emptyCastTag) {
+    super(beType, pos, state, NAME, 2, 1);
+    this.requireCast = state.getBlock() instanceof AbstractCastingBlock casting && casting.isRequireCast();
+    this.emptyCastTag = emptyCastTag;
+    this.itemHandler = new SidedContainerItemHandler(this, Direction.DOWN);
+    this.castingType = castingType;
+    this.moldingType = moldingType;
+    this.castingInventory = new CastingContainerWrapper(this);
+    this.moldingInventory = new MoldingContainerWrapper(itemHandler, INPUT);
+  }
+
+  /**
+   * Called from {@link slimeknights.tconstruct.smeltery.block.AbstractCastingBlock#use(BlockState, Level, BlockPos, Player, InteractionHand, BlockHitResult)}
+   * @param player Player activating the block.
+   */
+  public void interact(Player player, InteractionHand hand) {
+    // skip client side, and skip if the recipe already started
+    if (level == null || level.isClientSide() || (coolingTime >= 0 && timer > 0)) {
+      return;
+    }
+    // first try interacting with the table as a tank. If that fails, run normal item swap logic
+    // normal item swap logic should only run if we lack a fluid though
+    ItemStack held = player.getItemInHand(hand);
+    if (FluidTransferHelper.interactWithContainer(level, worldPosition, tank, player, hand).didTransfer() || !tank.isEmpty()) {
+      return;
+    }
+
+    ItemStack input = getItem(INPUT);
+    ItemStack output = getItem(OUTPUT);
+
+    // all molding recipes require a stack in the input slot and nothing in the output slot
+    if (!input.isEmpty() && output.isEmpty()) {
+      // first, try the players hand item for a recipe
+      moldingInventory.setPattern(held);
+      MoldingRecipe recipe = findMoldingRecipe();
+      if (recipe != null) {
+        // if hand is empty, pick up the result (hand empty will only match recipes with no mold item)
+        ItemStack result = recipe.assemble(moldingInventory, level.registryAccess());
+        result.onCraftedBy(player, 1);
+        if (held.isEmpty()) {
+          setItem(INPUT, ItemStack.EMPTY);
+          player.setItemInHand(hand, result);
+        } else {
+          // if the recipe has a mold, hand item goes on table (if not consumed in crafting)
+          setItem(INPUT, result);
+          if (!recipe.isPatternConsumed()) {
+            setItem(OUTPUT, held.copyWithCount(1));
+            // send a block update for the comparator, needs to be done after the stack is removed
+            level.updateNeighborsAt(this.worldPosition, this.getBlockState().getBlock());
+          }
+          held.shrink(1);
+          player.setItemInHand(hand, held.isEmpty() ? ItemStack.EMPTY : held);
+        }
+        moldingInventory.setPattern(ItemStack.EMPTY);
+        return;
+      } else if (!held.isEmpty()) {
+        // if no recipe was found using the held item, try to find a mold-less recipe to perform
+        // this ensures that if a recipe happens "on pickup" you get consistent behavior, without this it would fall though to pick up normally
+        moldingInventory.setPattern(ItemStack.EMPTY);
+        recipe = findMoldingRecipe();
+        if (recipe != null) {
+          setItem(INPUT, ItemStack.EMPTY);
+          PlayerItemHelper.giveItemToPlayer(player, recipe.assemble(moldingInventory, level.registryAccess()), player.getInventory().getSelectedSlot());
+          return;
+        }
+      }
+      // clear mold stack, prevents storing an unneeded item
+      moldingInventory.setPattern(ItemStack.EMPTY);
+    }
+
+    // recipes failed, so do normal pickup
+    // completely empty -> insert current item into input
+    if (input.isEmpty() && output.isEmpty()) {
+      if (!held.isEmpty()) {
+        ItemStack stack = held.split(stackSizeLimit);
+        player.setItemInHand(hand, held.isEmpty() ? ItemStack.EMPTY : held);
+        setItem(INPUT, stack);
+      }
+    } else {
+      // stack in either slot, take one out
+      // prefer output stack, as often the input is a cast that we want to use again
+      int slot = output.isEmpty() ? INPUT : OUTPUT;
+
+      // Additional info: Only 1 item can be put into the casting block usually, however recipes
+      // can have ItemStacks with stacksize > 1 as output
+      // we therefore spill the whole contents on extraction.
+      ItemStack stack = getItem(slot);
+      PlayerItemHelper.giveItemToPlayer(player, stack, player.getInventory().getSelectedSlot());
+      setItem(slot, ItemStack.EMPTY);
+
+      // send a block update for the comparator, needs to be done after the stack is removed
+      if (slot == OUTPUT) {
+        level.updateNeighborsAt(this.worldPosition, this.getBlockState().getBlock());
+      }
+    }
+  }
+
+  @Override
+  public void setItem(int slot, ItemStack stack) {
+    ItemStack original = getItem(slot);
+    super.setItem(slot, stack);
+    // if the stack changed emptiness, update
+    if (original.isEmpty() != stack.isEmpty()) {
+      updateAnalogSignal();
+    }
+    // update the block property for having an item
+    if (level != null && !level.isClientSide()) {
+      BlockState state = getBlockState();
+      // Push a full block-entity update so the in-world renderer receives the changed item. The
+      // targeted InventorySlotSyncPacket is unreliable for the casting table's sided inventory
+      // wrapper (items placed by hand stayed invisible), so sync the whole BE (saveSynced now
+      // includes the inventory) on any item change.
+      if (!ItemStack.matches(original, stack)) {
+        level.sendBlockUpdated(worldPosition, state, state, Block.UPDATE_CLIENTS);
+      }
+      boolean hasItem = !getItem(INPUT).isEmpty() || !getItem(OUTPUT).isEmpty();
+      if (state.getValue(AbstractCastingBlock.HAS_ITEM) != hasItem) {
+        level.setBlockAndUpdate(worldPosition, state.setValue(AbstractCastingBlock.HAS_ITEM, hasItem));
+      }
+    }
+  }
+
+  /** Called on block update to update the redstone state */
+  public void handleRedstone(boolean hasSignal) {
+    if (lastRedstone != hasSignal) {
+      if (hasSignal) {
+        if (level != null){
+          level.scheduleTick(worldPosition, this.getBlockState().getBlock(), 2);
+        }
+      }
+      lastRedstone = hasSignal;
+    }
+  }
+
+  /** Called after a redstone tick to swap input and output */
+  public void swap() {
+    if (currentRecipe == null) {
+      ItemStack output = getItem(OUTPUT);
+      setItem(OUTPUT, getItem(INPUT));
+      setItem(INPUT, output);
+      if (level != null) {
+        level.playSound(null, getBlockPos(), Sounds.CASTING_CLICKS.getSound(), SoundSource.BLOCKS, 1.0f, 1.0f);
+      }
+    }
+  }
+  
+  @Override
+  @Nonnull
+  public int[] getSlotsForFace(Direction side) {
+    return new int[]{INPUT, OUTPUT};
+  }
+
+  @Override
+  public boolean canPlaceItemThroughFace(int index, ItemStack itemStackIn, @Nullable Direction direction) {
+    return tank.isEmpty() && index == INPUT && !isStackInSlot(OUTPUT);
+  }
+
+  @Override
+  public boolean canTakeItemThroughFace(int index, ItemStack stack, Direction direction) {
+    return tank.isEmpty() && index == OUTPUT;
+  }
+
+  /** Handles cooling the casting recipe */
+  private void serverTick(Level level, BlockPos pos) {
+    // no recipe
+    // TODO: should consider the case where the tank has fluid, but there is no current recipe
+    // would like to avoid doing a recipe lookup every tick, so need some way to handle the case of no recipe found, ideally without fluid voiding
+    if (currentRecipe == null) {
+      return;
+    }
+    // fully filled
+    FluidStack currentFluid = tank.getFluid();
+    if (coolingTime >= 0) {
+      timer++;
+      if (timer >= coolingTime) {
+        if (!currentRecipe.matches(castingInventory, level)) {
+          // if lost our recipe or the recipe needs more fluid then we have, we are done
+          // will come around later for the proper fluid amount
+          currentRecipe = findCastingRecipe();
+          currentRecipeId = foundRecipeId;
+          recipeName = null;
+          if (currentRecipe == null || currentRecipe.getFluidAmount(castingInventory) > currentFluid.getAmount()) {
+            timer = 0;
+            updateAnalogSignal();
+            // TODO: client does not get updated if this happens
+            return;
+          }
+        }
+
+        // actual recipe result
+        boolean consumed = currentRecipe.isConsumed(castingInventory);
+        ItemStack output = currentRecipe.assemble(castingInventory, level.registryAccess());
+        if (currentRecipe.switchSlots() != lastRedstone) {
+          if (!consumed) {
+            setItem(OUTPUT, getItem(INPUT));
+          }
+          setItem(INPUT, output);
+        } else {
+          if (consumed) {
+            setItem(INPUT, ItemStack.EMPTY);
+          }
+          setItem(OUTPUT, output);
+        }
+        // if redstone swapped behavior, add a click sound
+        if (lastRedstone) {
+          level.playSound(null, getBlockPos(), Sounds.CASTING_CLICKS.getSound(), SoundSource.BLOCKS, 1.0f, 1.0f);
+        }
+        level.playSound(null, pos, Sounds.CASTING_COOLS.getSound(), SoundSource.BLOCKS, 0.5f, 4f);
+        reset();
+      } else {
+        updateAnalogSignal();
+      }
+    }
+  }
+
+  /** Handles animating the recipe */
+  private void clientTick(Level level, BlockPos pos) {
+    if (currentRecipe == null) {
+      return;
+    }
+    // fully filled
+    FluidStack currentFluid = tank.getFluid();
+    if (currentFluid.getAmount() >= tank.getCapacity() && !currentFluid.isEmpty()) {
+      timer++;
+      if (level.getRandom().nextFloat() > 0.9f) {
+        level.addParticle(ParticleTypes.SMOKE, pos.getX() + level.getRandom().nextDouble(), pos.getY() + 1.1d, pos.getZ() + level.getRandom().nextDouble(), 0.0D, 0.0D, 0.0D);
+      }
+    }
+  }
+
+  @Nullable
+  private ICastingRecipe findCastingRecipe() {
+    if (level == null) return null;
+    if (this.lastCastingRecipe != null && this.lastCastingRecipe.matches(castingInventory, level)) {
+      this.foundRecipeId = this.lastCastingRecipeId;
+      return this.lastCastingRecipe;
+    }
+    RecipeHolder<ICastingRecipe> holder = RecipeHelper.getRecipeFor(level, this.castingType, castingInventory).orElse(null);
+    if (holder != null) {
+      this.lastCastingRecipe = holder.value();
+      this.lastCastingRecipeId = holder.id().identifier();
+      this.foundRecipeId = holder.id().identifier();
+      return this.lastCastingRecipe;
+    }
+    this.foundRecipeId = null;
+    return null;
+  }
+
+
+  /**
+   * Finds a molding recipe for the given inventory
+   * @return  Recipe, or null if no recipe found
+   */
+  @Nullable
+  private MoldingRecipe findMoldingRecipe() {
+    if (level == null) return null;
+    if (lastMoldingRecipe != null && lastMoldingRecipe.matches(moldingInventory, level)) {
+      return lastMoldingRecipe;
+    }
+    Optional<MoldingRecipe> newRecipe = RecipeHelper.getRecipeFor(level, moldingType, moldingInventory).map(RecipeHolder::value);
+    if (newRecipe.isPresent()) {
+      lastMoldingRecipe = newRecipe.get();
+      return lastMoldingRecipe;
+    }
+    return null;
+  }
+
+
+  /**
+   * Casting recipe found for a new fluid, see {@link #findNewCasting(FluidStack)}
+   * @param recipe       Recipe found
+   * @param id           Recipe ID
+   * @param fromOutput   If true, the item in the output slot is used as the input
+   * @param fluidAmount  Amount of fluid needed for the recipe, used to resize the tank
+   */
+  public record NewCasting(ICastingRecipe recipe, @Nullable Identifier id, boolean fromOutput, int fluidAmount) {}
+
+  /**
+   * Finds the casting recipe to start for the given fluid without starting it. Called from CastingFluidHandler when filling.
+   * @param fluid  Fluid used in casting
+   * @return  Casting to start using {@link #startNewCasting(NewCasting)}, or null if no recipe can start
+   */
+  @Nullable
+  public NewCasting findNewCasting(FluidStack fluid) {
+    if (this.currentRecipe != null || this.recipeName != null) {
+      return null;
+    }
+
+    boolean hasInput = !getItem(INPUT).isEmpty();
+    boolean hasOutput = !getItem(OUTPUT).isEmpty();
+
+    // no space for output, done
+    if (hasInput && hasOutput) {
+      return null;
+    }
+
+    this.castingInventory.setFluid(fluid);
+    // normal casting requires an empty output
+    if (!hasOutput) {
+      // scorched basins require a cast to be present
+      if (!hasInput && requireCast) {
+        return null;
+      }
+      castingInventory.useInput();
+      ICastingRecipe castingRecipe = findCastingRecipe();
+      if (castingRecipe != null) {
+        return new NewCasting(castingRecipe, this.foundRecipeId, false, castingRecipe.getFluidAmount(castingInventory));
+      }
+    } else {
+      // if we have an output and no input, try using that as the input
+      castingInventory.useOutput();
+      ICastingRecipe castingRecipe = findCastingRecipe();
+      if (castingRecipe != null) {
+        return new NewCasting(castingRecipe, this.foundRecipeId, true, castingRecipe.getFluidAmount(castingInventory));
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Starts a casting found by {@link #findNewCasting(FluidStack)}. Called from CastingFluidHandler once the fill commits.
+   * @param casting  Casting to start
+   */
+  public void startNewCasting(NewCasting casting) {
+    // a recipe may have started since the casting was found
+    if (this.currentRecipe != null || this.recipeName != null) {
+      return;
+    }
+    this.currentRecipe = casting.recipe();
+    this.currentRecipeId = casting.id();
+    this.recipeName = null;
+    this.lastOutput = null;
+    if (casting.fromOutput()) {
+      // move output to input slot, prevents removing and ensures item is reduced properly
+      setItem(INPUT, getItem(OUTPUT));
+      setItem(OUTPUT, ItemStack.EMPTY);
+      castingInventory.useInput();
+    }
+  }
+
+  /**
+   * Finds and starts a casting recipe for the given fluid
+   * @param fluid  Fluid used in casting
+   * @return  Amount of fluid needed for recipe, used to resize the tank. 0 if no recipe started
+   */
+  public int initNewCasting(FluidStack fluid) {
+    NewCasting casting = findNewCasting(fluid);
+    if (casting == null) {
+      return 0;
+    }
+    startNewCasting(casting);
+    return casting.fluidAmount();
+  }
+
+  /**
+   * Resets the casting table recipe to the default empty state
+   */
+  public void reset() {
+    timer = 0;
+    currentRecipe = null;
+    currentRecipeId = null;
+    recipeName = null;
+    lastOutput = null;
+    castingInventory.setFluid(FluidStack.EMPTY);
+    tank.reset();
+    onContentsChanged();
+  }
+
+  /** Called when tank contents change */
+  public void onContentsChanged() {
+    // start timer
+    FluidStack fluidStack = tank.getFluid();
+    if (fluidStack.getAmount() >= tank.getCapacity() && currentRecipe != null) {
+      castingInventory.setFluid(fluidStack);
+      coolingTime = Math.max(0, currentRecipe.getCoolingTime(castingInventory));
+    } else {
+      coolingTime = -1;
+    }
+    setChangedFast();
+    // update comparators
+    updateAnalogSignal();
+    // update client
+    Level world = getLevel();
+    if (world != null && !world.isClientSide()) {
+      BlockPos pos = getBlockPos();
+      TinkerNetwork.getInstance().sendToClientsAround(new FluidUpdatePacket(pos, fluidStack), world, pos);
+    }
+  }
+
+  @Override
+  public void updateFluidTo(FluidStack fluid) {
+    if (fluid.isEmpty()) {
+      reset();
+    } else {
+      int capacity = initNewCasting(fluid);
+      if (capacity > 0) {
+        tank.setCapacity(capacity);
+      }
+    }
+    tank.setFluid(fluid);
+    onContentsChanged();
+  }
+
+  @Nullable
+  @Override
+  public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
+    // no GUI
+    return null;
+  }
+
+
+  /* TER display */
+
+  /**
+   * Gets the recipe output for display in the TER
+   * @return  Recipe output
+   */
+  public ItemStack getRecipeOutput() {
+    if (lastOutput == null) {
+      if (currentRecipe == null || level == null) {
+        return ItemStack.EMPTY;
+      }
+      castingInventory.setFluid(tank.getFluid());
+      lastOutput = currentRecipe.assemble(castingInventory, level.registryAccess());
+    }
+    return lastOutput;
+  }
+
+  /** Updates the comparator strength if needed */
+  private void updateAnalogSignal() {
+    if (level == null || !level.isClientSide()) {
+      int newStrength = getAnalogSignal();
+      if (newStrength != lastAnalogSignal) {
+        lastAnalogSignal = newStrength;
+        if (level != null) {
+          level.updateNeighborsAt(getBlockPos(), getBlockState().getBlock());
+        }
+      }
+    }
+  }
+
+  /** Gets the comparator strength */
+  public int getAnalogSignal() {
+    if (isStackInSlot(CastingBlockEntity.OUTPUT)) {
+      return 15;
+    }
+    // 11 - 14 are cooling time from 0 to 99%
+    if (coolingTime > 0) {
+      return 11 + (timer * 4 / coolingTime);
+    }
+    // 2 - 9 are fluid between 0 and 99%
+    int capacity = tank.getCapacity();
+    if (capacity > 0) {
+      return 2 + (tank.getFluid().getAmount() * 9 / capacity);
+    }
+    // 1: has cast
+    if (isStackInSlot(CastingBlockEntity.INPUT)) {
+      return 1;
+    }
+    // 0: empty
+    return 0;
+  }
+
+
+  /* Tag */
+
+  /**
+   * Loads a recipe in from its name and updates the tank capacity
+   * @param level  Nonnull level instance
+   * @param name   Recipe name to load
+   */
+  private void loadRecipe(Level level, Identifier name) {
+    // if the tank is empty, ignore old recipe
+    FluidStack fluid = tank.getFluid();
+    if(!fluid.isEmpty()) {
+      // fetch recipe by name
+      RecipeHelper.getRecipe(level, name, ICastingRecipe.class).ifPresent(recipe -> {
+        this.currentRecipe = recipe;
+        this.currentRecipeId = name;
+        castingInventory.setFluid(fluid);
+        tank.setCapacity(recipe.getFluidAmount(castingInventory));
+        if (fluid.getAmount() >= tank.getCapacity()) {
+          coolingTime = recipe.getCoolingTime(castingInventory);
+        }
+      });
+    }
+  }
+
+  @Override
+  public void setLevel(Level pLevel) {
+    super.setLevel(pLevel);
+    // if we have a recipe name, swap recipe name for recipe instance
+    if (recipeName != null) {
+      loadRecipe(pLevel, recipeName);
+      // only clear the saved name if it actually resolved; loadRecipe no-ops on an empty tank, and
+      // dropping the name there would permanently lose the recipe (no cooling/output preview after reload)
+      if (currentRecipe != null) {
+        recipeName = null;
+      }
+    }
+  }
+
+  @Override
+  protected void saveAdditional(ValueOutput output) {
+    super.saveAdditional(output);
+    output.putBoolean(TAG_REDSTONE, lastRedstone);
+  }
+
+  @Override
+  public void saveSynced(ValueOutput output) {
+    super.saveSynced(output);
+    // the casting block renders its item in-world via the block entity renderer, so the inventory
+    // must be synced to the client. InventoryBlockEntity.saveSynced only syncs the size by default,
+    // which left the cast/mold/input invisible client-side (present server-side, reappears on removal).
+    this.writeInventoryToNBT(output);
+    tank.writeToTag(output.child(TAG_TANK));
+    if (currentRecipe != null || recipeName != null) {
+      output.putInt(TAG_TIMER, timer);
+    }
+    if (currentRecipeId != null) {
+      output.putString(TAG_RECIPE, currentRecipeId.toString());
+    } else if (recipeName != null) {
+      output.putString(TAG_RECIPE, recipeName.toString());
+    }
+  }
+
+  @Override
+  protected void loadAdditional(ValueInput input) {
+    super.loadAdditional(input);
+    tank.readFromTag(input.childOrEmpty(TAG_TANK));
+    timer = input.getIntOr(TAG_TIMER, 0);
+    input.getString(TAG_RECIPE).map(Identifier::tryParse).ifPresent(name -> {
+      // if we have a level, fetch the recipe
+      if (level != null) {
+        loadRecipe(level, name);
+      } else {
+        // otherwise fetch the recipe when the level is set
+        recipeName = name;
+      }
+    });
+    lastRedstone = input.getBooleanOr(TAG_REDSTONE, false);
+  }
+
+  public static class Basin extends CastingBlockEntity {
+    public Basin(BlockPos pos, BlockState state) {
+      super(TinkerSmeltery.basin.get(), pos, state, TinkerRecipeTypes.CASTING_BASIN.get(), TinkerRecipeTypes.MOLDING_BASIN.get(), TinkerTags.Items.BASIN_EMPTY_CASTS);
+    }
+  }
+
+  public static class Table extends CastingBlockEntity {
+    public Table(BlockPos pos, BlockState state) {
+      super(TinkerSmeltery.table.get(), pos, state, TinkerRecipeTypes.CASTING_TABLE.get(), TinkerRecipeTypes.MOLDING_TABLE.get(), TinkerTags.Items.TABLE_EMPTY_CASTS);
+    }
+  }
+
+
+  /* Helpers */
+
+  /** Gets the ticker for a casting entity */
+  @Nullable
+  public static <CAST extends CastingBlockEntity, RET extends BlockEntity> BlockEntityTicker<RET> getTicker(Level level, BlockEntityType<RET> check, BlockEntityType<CAST> casting) {
+    return BlockEntityHelper.castTicker(check, casting, level.isClientSide() ? CLIENT_TICKER : SERVER_TICKER);
+  }
+}

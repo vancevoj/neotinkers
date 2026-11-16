@@ -1,0 +1,26 @@
+{
+  "name": "minecraft:chests/simple_dungeon",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "tconstruct:add_tool_data",
+            "materials": [
+              {
+                "type": "tconstruct:ancient"
+              },
+              {
+                "type": "tconstruct:ancient"
+              }
+            ]
+          },
+          "name": "tconstruct:melting_pan",
+          "weight": 10
+        }
+      ],
+      "name": "main"
+    }
+  ]
+}

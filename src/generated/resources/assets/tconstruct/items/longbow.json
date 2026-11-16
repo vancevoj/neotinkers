@@ -1,0 +1,1756 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "minecraft:range_dispatch",
+      "entries": [
+        {
+          "model": {
+            "type": "minecraft:range_dispatch",
+            "entries": [
+              {
+                "model": {
+                  "type": "tconstruct:tool",
+                  "model": "tconstruct:item/tool/longbow/blocking_3"
+                },
+                "threshold": 2.0
+              }
+            ],
+            "fallback": {
+              "type": "minecraft:range_dispatch",
+              "entries": [
+                {
+                  "model": {
+                    "type": "minecraft:range_dispatch",
+                    "entries": [
+                      {
+                        "model": {
+                          "type": "tconstruct:tool",
+                          "model": "tconstruct:item/tool/longbow/blocking_2"
+                        },
+                        "threshold": 2.0
+                      }
+                    ],
+                    "fallback": {
+                      "type": "minecraft:range_dispatch",
+                      "entries": [
+                        {
+                          "model": {
+                            "type": "minecraft:range_dispatch",
+                            "entries": [
+                              {
+                                "model": {
+                                  "type": "tconstruct:tool",
+                                  "model": "tconstruct:item/tool/longbow/blocking_1"
+                                },
+                                "threshold": 2.0
+                              }
+                            ],
+                            "fallback": {
+                              "type": "minecraft:range_dispatch",
+                              "entries": [
+                                {
+                                  "model": {
+                                    "type": "tconstruct:tool",
+                                    "model": "tconstruct:item/tool/longbow/blocking"
+                                  },
+                                  "threshold": 2.0
+                                }
+                              ],
+                              "fallback": {
+                                "type": "minecraft:range_dispatch",
+                                "entries": [
+                                  {
+                                    "model": {
+                                      "type": "minecraft:range_dispatch",
+                                      "entries": [
+                                        {
+                                          "model": {
+                                            "type": "tconstruct:tool",
+                                            "model": "tconstruct:item/tool/longbow/pulling_3"
+                                          },
+                                          "threshold": 1.0
+                                        }
+                                      ],
+                                      "fallback": {
+                                        "type": "minecraft:range_dispatch",
+                                        "entries": [
+                                          {
+                                            "model": {
+                                              "type": "minecraft:range_dispatch",
+                                              "entries": [
+                                                {
+                                                  "model": {
+                                                    "type": "tconstruct:tool",
+                                                    "model": "tconstruct:item/tool/longbow/pulling_2"
+                                                  },
+                                                  "threshold": 1.0
+                                                }
+                                              ],
+                                              "fallback": {
+                                                "type": "minecraft:range_dispatch",
+                                                "entries": [
+                                                  {
+                                                    "model": {
+                                                      "type": "minecraft:range_dispatch",
+                                                      "entries": [
+                                                        {
+                                                          "model": {
+                                                            "type": "tconstruct:tool",
+                                                            "model": "tconstruct:item/tool/longbow/pulling_1"
+                                                          },
+                                                          "threshold": 1.0
+                                                        }
+                                                      ],
+                                                      "fallback": {
+                                                        "type": "tconstruct:tool",
+                                                        "model": "tconstruct:item/longbow"
+                                                      },
+                                                      "property": "tconstruct:charging"
+                                                    },
+                                                    "threshold": 0.05
+                                                  }
+                                                ],
+                                                "fallback": {
+                                                  "type": "tconstruct:tool",
+                                                  "model": "tconstruct:item/longbow"
+                                                },
+                                                "property": "tconstruct:charge"
+                                              },
+                                              "property": "tconstruct:charging"
+                                            },
+                                            "threshold": 0.6
+                                          }
+                                        ],
+                                        "fallback": {
+                                          "type": "minecraft:range_dispatch",
+                                          "entries": [
+                                            {
+                                              "model": {
+                                                "type": "minecraft:range_dispatch",
+                                                "entries": [
+                                                  {
+                                                    "model": {
+                                                      "type": "tconstruct:tool",
+                                                      "model": "tconstruct:item/tool/longbow/pulling_1"
+                                                    },
+                                                    "threshold": 1.0
+                                                  }
+                                                ],
+                                                "fallback": {
+                                                  "type": "tconstruct:tool",
+                                                  "model": "tconstruct:item/longbow"
+                                                },
+                                                "property": "tconstruct:charging"
+                                              },
+                                              "threshold": 0.05
+                                            }
+                                          ],
+                                          "fallback": {
+                                            "type": "tconstruct:tool",
+                                            "model": "tconstruct:item/longbow"
+                                          },
+                                          "property": "tconstruct:charge"
+                                        },
+                                        "property": "tconstruct:charge"
+                                      },
+                                      "property": "tconstruct:charging"
+                                    },
+                                    "threshold": 1.0
+                                  }
+                                ],
+                                "fallback": {
+                                  "type": "minecraft:range_dispatch",
+                                  "entries": [
+                                    {
+                                      "model": {
+                                        "type": "minecraft:range_dispatch",
+                                        "entries": [
+                                          {
+                                            "model": {
+                                              "type": "tconstruct:tool",
+                                              "model": "tconstruct:item/tool/longbow/pulling_2"
+                                            },
+                                            "threshold": 1.0
+                                          }
+                                        ],
+                                        "fallback": {
+                                          "type": "minecraft:range_dispatch",
+                                          "entries": [
+                                            {
+                                              "model": {
+                                                "type": "minecraft:range_dispatch",
+                                                "entries": [
+                                                  {
+                                                    "model": {
+                                                      "type": "tconstruct:tool",
+                                                      "model": "tconstruct:item/tool/longbow/pulling_1"
+                                                    },
+                                                    "threshold": 1.0
+                                                  }
+                                                ],
+                                                "fallback": {
+                                                  "type": "tconstruct:tool",
+                                                  "model": "tconstruct:item/longbow"
+                                                },
+                                                "property": "tconstruct:charging"
+                                              },
+                                              "threshold": 0.05
+                                            }
+                                          ],
+                                          "fallback": {
+                                            "type": "tconstruct:tool",
+                                            "model": "tconstruct:item/longbow"
+                                          },
+                                          "property": "tconstruct:charge"
+                                        },
+                                        "property": "tconstruct:charging"
+                                      },
+                                      "threshold": 0.6
+                                    }
+                                  ],
+                                  "fallback": {
+                                    "type": "minecraft:range_dispatch",
+                                    "entries": [
+                                      {
+                                        "model": {
+                                          "type": "minecraft:range_dispatch",
+                                          "entries": [
+                                            {
+                                              "model": {
+                                                "type": "tconstruct:tool",
+                                                "model": "tconstruct:item/tool/longbow/pulling_1"
+                                              },
+                                              "threshold": 1.0
+                                            }
+                                          ],
+                                          "fallback": {
+                                            "type": "tconstruct:tool",
+                                            "model": "tconstruct:item/longbow"
+                                          },
+                                          "property": "tconstruct:charging"
+                                        },
+                                        "threshold": 0.05
+                                      }
+                                    ],
+                                    "fallback": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/longbow"
+                                    },
+                                    "property": "tconstruct:charge"
+                                  },
+                                  "property": "tconstruct:charge"
+                                },
+                                "property": "tconstruct:charge"
+                              },
+                              "property": "tconstruct:charging"
+                            },
+                            "property": "tconstruct:charging"
+                          },
+                          "threshold": 0.05
+                        }
+                      ],
+                      "fallback": {
+                        "type": "minecraft:range_dispatch",
+                        "entries": [
+                          {
+                            "model": {
+                              "type": "tconstruct:tool",
+                              "model": "tconstruct:item/tool/longbow/blocking"
+                            },
+                            "threshold": 2.0
+                          }
+                        ],
+                        "fallback": {
+                          "type": "minecraft:range_dispatch",
+                          "entries": [
+                            {
+                              "model": {
+                                "type": "minecraft:range_dispatch",
+                                "entries": [
+                                  {
+                                    "model": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/tool/longbow/pulling_3"
+                                    },
+                                    "threshold": 1.0
+                                  }
+                                ],
+                                "fallback": {
+                                  "type": "minecraft:range_dispatch",
+                                  "entries": [
+                                    {
+                                      "model": {
+                                        "type": "minecraft:range_dispatch",
+                                        "entries": [
+                                          {
+                                            "model": {
+                                              "type": "tconstruct:tool",
+                                              "model": "tconstruct:item/tool/longbow/pulling_2"
+                                            },
+                                            "threshold": 1.0
+                                          }
+                                        ],
+                                        "fallback": {
+                                          "type": "minecraft:range_dispatch",
+                                          "entries": [
+                                            {
+                                              "model": {
+                                                "type": "minecraft:range_dispatch",
+                                                "entries": [
+                                                  {
+                                                    "model": {
+                                                      "type": "tconstruct:tool",
+                                                      "model": "tconstruct:item/tool/longbow/pulling_1"
+                                                    },
+                                                    "threshold": 1.0
+                                                  }
+                                                ],
+                                                "fallback": {
+                                                  "type": "tconstruct:tool",
+                                                  "model": "tconstruct:item/longbow"
+                                                },
+                                                "property": "tconstruct:charging"
+                                              },
+                                              "threshold": 0.05
+                                            }
+                                          ],
+                                          "fallback": {
+                                            "type": "tconstruct:tool",
+                                            "model": "tconstruct:item/longbow"
+                                          },
+                                          "property": "tconstruct:charge"
+                                        },
+                                        "property": "tconstruct:charging"
+                                      },
+                                      "threshold": 0.6
+                                    }
+                                  ],
+                                  "fallback": {
+                                    "type": "minecraft:range_dispatch",
+                                    "entries": [
+                                      {
+                                        "model": {
+                                          "type": "minecraft:range_dispatch",
+                                          "entries": [
+                                            {
+                                              "model": {
+                                                "type": "tconstruct:tool",
+                                                "model": "tconstruct:item/tool/longbow/pulling_1"
+                                              },
+                                              "threshold": 1.0
+                                            }
+                                          ],
+                                          "fallback": {
+                                            "type": "tconstruct:tool",
+                                            "model": "tconstruct:item/longbow"
+                                          },
+                                          "property": "tconstruct:charging"
+                                        },
+                                        "threshold": 0.05
+                                      }
+                                    ],
+                                    "fallback": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/longbow"
+                                    },
+                                    "property": "tconstruct:charge"
+                                  },
+                                  "property": "tconstruct:charge"
+                                },
+                                "property": "tconstruct:charging"
+                              },
+                              "threshold": 1.0
+                            }
+                          ],
+                          "fallback": {
+                            "type": "minecraft:range_dispatch",
+                            "entries": [
+                              {
+                                "model": {
+                                  "type": "minecraft:range_dispatch",
+                                  "entries": [
+                                    {
+                                      "model": {
+                                        "type": "tconstruct:tool",
+                                        "model": "tconstruct:item/tool/longbow/pulling_2"
+                                      },
+                                      "threshold": 1.0
+                                    }
+                                  ],
+                                  "fallback": {
+                                    "type": "minecraft:range_dispatch",
+                                    "entries": [
+                                      {
+                                        "model": {
+                                          "type": "minecraft:range_dispatch",
+                                          "entries": [
+                                            {
+                                              "model": {
+                                                "type": "tconstruct:tool",
+                                                "model": "tconstruct:item/tool/longbow/pulling_1"
+                                              },
+                                              "threshold": 1.0
+                                            }
+                                          ],
+                                          "fallback": {
+                                            "type": "tconstruct:tool",
+                                            "model": "tconstruct:item/longbow"
+                                          },
+                                          "property": "tconstruct:charging"
+                                        },
+                                        "threshold": 0.05
+                                      }
+                                    ],
+                                    "fallback": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/longbow"
+                                    },
+                                    "property": "tconstruct:charge"
+                                  },
+                                  "property": "tconstruct:charging"
+                                },
+                                "threshold": 0.6
+                              }
+                            ],
+                            "fallback": {
+                              "type": "minecraft:range_dispatch",
+                              "entries": [
+                                {
+                                  "model": {
+                                    "type": "minecraft:range_dispatch",
+                                    "entries": [
+                                      {
+                                        "model": {
+                                          "type": "tconstruct:tool",
+                                          "model": "tconstruct:item/tool/longbow/pulling_1"
+                                        },
+                                        "threshold": 1.0
+                                      }
+                                    ],
+                                    "fallback": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/longbow"
+                                    },
+                                    "property": "tconstruct:charging"
+                                  },
+                                  "threshold": 0.05
+                                }
+                              ],
+                              "fallback": {
+                                "type": "tconstruct:tool",
+                                "model": "tconstruct:item/longbow"
+                              },
+                              "property": "tconstruct:charge"
+                            },
+                            "property": "tconstruct:charge"
+                          },
+                          "property": "tconstruct:charge"
+                        },
+                        "property": "tconstruct:charging"
+                      },
+                      "property": "tconstruct:charge"
+                    },
+                    "property": "tconstruct:charging"
+                  },
+                  "threshold": 0.6
+                }
+              ],
+              "fallback": {
+                "type": "minecraft:range_dispatch",
+                "entries": [
+                  {
+                    "model": {
+                      "type": "minecraft:range_dispatch",
+                      "entries": [
+                        {
+                          "model": {
+                            "type": "tconstruct:tool",
+                            "model": "tconstruct:item/tool/longbow/blocking_1"
+                          },
+                          "threshold": 2.0
+                        }
+                      ],
+                      "fallback": {
+                        "type": "minecraft:range_dispatch",
+                        "entries": [
+                          {
+                            "model": {
+                              "type": "tconstruct:tool",
+                              "model": "tconstruct:item/tool/longbow/blocking"
+                            },
+                            "threshold": 2.0
+                          }
+                        ],
+                        "fallback": {
+                          "type": "minecraft:range_dispatch",
+                          "entries": [
+                            {
+                              "model": {
+                                "type": "minecraft:range_dispatch",
+                                "entries": [
+                                  {
+                                    "model": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/tool/longbow/pulling_3"
+                                    },
+                                    "threshold": 1.0
+                                  }
+                                ],
+                                "fallback": {
+                                  "type": "minecraft:range_dispatch",
+                                  "entries": [
+                                    {
+                                      "model": {
+                                        "type": "minecraft:range_dispatch",
+                                        "entries": [
+                                          {
+                                            "model": {
+                                              "type": "tconstruct:tool",
+                                              "model": "tconstruct:item/tool/longbow/pulling_2"
+                                            },
+                                            "threshold": 1.0
+                                          }
+                                        ],
+                                        "fallback": {
+                                          "type": "minecraft:range_dispatch",
+                                          "entries": [
+                                            {
+                                              "model": {
+                                                "type": "minecraft:range_dispatch",
+                                                "entries": [
+                                                  {
+                                                    "model": {
+                                                      "type": "tconstruct:tool",
+                                                      "model": "tconstruct:item/tool/longbow/pulling_1"
+                                                    },
+                                                    "threshold": 1.0
+                                                  }
+                                                ],
+                                                "fallback": {
+                                                  "type": "tconstruct:tool",
+                                                  "model": "tconstruct:item/longbow"
+                                                },
+                                                "property": "tconstruct:charging"
+                                              },
+                                              "threshold": 0.05
+                                            }
+                                          ],
+                                          "fallback": {
+                                            "type": "tconstruct:tool",
+                                            "model": "tconstruct:item/longbow"
+                                          },
+                                          "property": "tconstruct:charge"
+                                        },
+                                        "property": "tconstruct:charging"
+                                      },
+                                      "threshold": 0.6
+                                    }
+                                  ],
+                                  "fallback": {
+                                    "type": "minecraft:range_dispatch",
+                                    "entries": [
+                                      {
+                                        "model": {
+                                          "type": "minecraft:range_dispatch",
+                                          "entries": [
+                                            {
+                                              "model": {
+                                                "type": "tconstruct:tool",
+                                                "model": "tconstruct:item/tool/longbow/pulling_1"
+                                              },
+                                              "threshold": 1.0
+                                            }
+                                          ],
+                                          "fallback": {
+                                            "type": "tconstruct:tool",
+                                            "model": "tconstruct:item/longbow"
+                                          },
+                                          "property": "tconstruct:charging"
+                                        },
+                                        "threshold": 0.05
+                                      }
+                                    ],
+                                    "fallback": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/longbow"
+                                    },
+                                    "property": "tconstruct:charge"
+                                  },
+                                  "property": "tconstruct:charge"
+                                },
+                                "property": "tconstruct:charging"
+                              },
+                              "threshold": 1.0
+                            }
+                          ],
+                          "fallback": {
+                            "type": "minecraft:range_dispatch",
+                            "entries": [
+                              {
+                                "model": {
+                                  "type": "minecraft:range_dispatch",
+                                  "entries": [
+                                    {
+                                      "model": {
+                                        "type": "tconstruct:tool",
+                                        "model": "tconstruct:item/tool/longbow/pulling_2"
+                                      },
+                                      "threshold": 1.0
+                                    }
+                                  ],
+                                  "fallback": {
+                                    "type": "minecraft:range_dispatch",
+                                    "entries": [
+                                      {
+                                        "model": {
+                                          "type": "minecraft:range_dispatch",
+                                          "entries": [
+                                            {
+                                              "model": {
+                                                "type": "tconstruct:tool",
+                                                "model": "tconstruct:item/tool/longbow/pulling_1"
+                                              },
+                                              "threshold": 1.0
+                                            }
+                                          ],
+                                          "fallback": {
+                                            "type": "tconstruct:tool",
+                                            "model": "tconstruct:item/longbow"
+                                          },
+                                          "property": "tconstruct:charging"
+                                        },
+                                        "threshold": 0.05
+                                      }
+                                    ],
+                                    "fallback": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/longbow"
+                                    },
+                                    "property": "tconstruct:charge"
+                                  },
+                                  "property": "tconstruct:charging"
+                                },
+                                "threshold": 0.6
+                              }
+                            ],
+                            "fallback": {
+                              "type": "minecraft:range_dispatch",
+                              "entries": [
+                                {
+                                  "model": {
+                                    "type": "minecraft:range_dispatch",
+                                    "entries": [
+                                      {
+                                        "model": {
+                                          "type": "tconstruct:tool",
+                                          "model": "tconstruct:item/tool/longbow/pulling_1"
+                                        },
+                                        "threshold": 1.0
+                                      }
+                                    ],
+                                    "fallback": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/longbow"
+                                    },
+                                    "property": "tconstruct:charging"
+                                  },
+                                  "threshold": 0.05
+                                }
+                              ],
+                              "fallback": {
+                                "type": "tconstruct:tool",
+                                "model": "tconstruct:item/longbow"
+                              },
+                              "property": "tconstruct:charge"
+                            },
+                            "property": "tconstruct:charge"
+                          },
+                          "property": "tconstruct:charge"
+                        },
+                        "property": "tconstruct:charging"
+                      },
+                      "property": "tconstruct:charging"
+                    },
+                    "threshold": 0.05
+                  }
+                ],
+                "fallback": {
+                  "type": "minecraft:range_dispatch",
+                  "entries": [
+                    {
+                      "model": {
+                        "type": "tconstruct:tool",
+                        "model": "tconstruct:item/tool/longbow/blocking"
+                      },
+                      "threshold": 2.0
+                    }
+                  ],
+                  "fallback": {
+                    "type": "minecraft:range_dispatch",
+                    "entries": [
+                      {
+                        "model": {
+                          "type": "minecraft:range_dispatch",
+                          "entries": [
+                            {
+                              "model": {
+                                "type": "tconstruct:tool",
+                                "model": "tconstruct:item/tool/longbow/pulling_3"
+                              },
+                              "threshold": 1.0
+                            }
+                          ],
+                          "fallback": {
+                            "type": "minecraft:range_dispatch",
+                            "entries": [
+                              {
+                                "model": {
+                                  "type": "minecraft:range_dispatch",
+                                  "entries": [
+                                    {
+                                      "model": {
+                                        "type": "tconstruct:tool",
+                                        "model": "tconstruct:item/tool/longbow/pulling_2"
+                                      },
+                                      "threshold": 1.0
+                                    }
+                                  ],
+                                  "fallback": {
+                                    "type": "minecraft:range_dispatch",
+                                    "entries": [
+                                      {
+                                        "model": {
+                                          "type": "minecraft:range_dispatch",
+                                          "entries": [
+                                            {
+                                              "model": {
+                                                "type": "tconstruct:tool",
+                                                "model": "tconstruct:item/tool/longbow/pulling_1"
+                                              },
+                                              "threshold": 1.0
+                                            }
+                                          ],
+                                          "fallback": {
+                                            "type": "tconstruct:tool",
+                                            "model": "tconstruct:item/longbow"
+                                          },
+                                          "property": "tconstruct:charging"
+                                        },
+                                        "threshold": 0.05
+                                      }
+                                    ],
+                                    "fallback": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/longbow"
+                                    },
+                                    "property": "tconstruct:charge"
+                                  },
+                                  "property": "tconstruct:charging"
+                                },
+                                "threshold": 0.6
+                              }
+                            ],
+                            "fallback": {
+                              "type": "minecraft:range_dispatch",
+                              "entries": [
+                                {
+                                  "model": {
+                                    "type": "minecraft:range_dispatch",
+                                    "entries": [
+                                      {
+                                        "model": {
+                                          "type": "tconstruct:tool",
+                                          "model": "tconstruct:item/tool/longbow/pulling_1"
+                                        },
+                                        "threshold": 1.0
+                                      }
+                                    ],
+                                    "fallback": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/longbow"
+                                    },
+                                    "property": "tconstruct:charging"
+                                  },
+                                  "threshold": 0.05
+                                }
+                              ],
+                              "fallback": {
+                                "type": "tconstruct:tool",
+                                "model": "tconstruct:item/longbow"
+                              },
+                              "property": "tconstruct:charge"
+                            },
+                            "property": "tconstruct:charge"
+                          },
+                          "property": "tconstruct:charging"
+                        },
+                        "threshold": 1.0
+                      }
+                    ],
+                    "fallback": {
+                      "type": "minecraft:range_dispatch",
+                      "entries": [
+                        {
+                          "model": {
+                            "type": "minecraft:range_dispatch",
+                            "entries": [
+                              {
+                                "model": {
+                                  "type": "tconstruct:tool",
+                                  "model": "tconstruct:item/tool/longbow/pulling_2"
+                                },
+                                "threshold": 1.0
+                              }
+                            ],
+                            "fallback": {
+                              "type": "minecraft:range_dispatch",
+                              "entries": [
+                                {
+                                  "model": {
+                                    "type": "minecraft:range_dispatch",
+                                    "entries": [
+                                      {
+                                        "model": {
+                                          "type": "tconstruct:tool",
+                                          "model": "tconstruct:item/tool/longbow/pulling_1"
+                                        },
+                                        "threshold": 1.0
+                                      }
+                                    ],
+                                    "fallback": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/longbow"
+                                    },
+                                    "property": "tconstruct:charging"
+                                  },
+                                  "threshold": 0.05
+                                }
+                              ],
+                              "fallback": {
+                                "type": "tconstruct:tool",
+                                "model": "tconstruct:item/longbow"
+                              },
+                              "property": "tconstruct:charge"
+                            },
+                            "property": "tconstruct:charging"
+                          },
+                          "threshold": 0.6
+                        }
+                      ],
+                      "fallback": {
+                        "type": "minecraft:range_dispatch",
+                        "entries": [
+                          {
+                            "model": {
+                              "type": "minecraft:range_dispatch",
+                              "entries": [
+                                {
+                                  "model": {
+                                    "type": "tconstruct:tool",
+                                    "model": "tconstruct:item/tool/longbow/pulling_1"
+                                  },
+                                  "threshold": 1.0
+                                }
+                              ],
+                              "fallback": {
+                                "type": "tconstruct:tool",
+                                "model": "tconstruct:item/longbow"
+                              },
+                              "property": "tconstruct:charging"
+                            },
+                            "threshold": 0.05
+                          }
+                        ],
+                        "fallback": {
+                          "type": "tconstruct:tool",
+                          "model": "tconstruct:item/longbow"
+                        },
+                        "property": "tconstruct:charge"
+                      },
+                      "property": "tconstruct:charge"
+                    },
+                    "property": "tconstruct:charge"
+                  },
+                  "property": "tconstruct:charging"
+                },
+                "property": "tconstruct:charge"
+              },
+              "property": "tconstruct:charge"
+            },
+            "property": "tconstruct:charging"
+          },
+          "threshold": 1.0
+        }
+      ],
+      "fallback": {
+        "type": "minecraft:range_dispatch",
+        "entries": [
+          {
+            "model": {
+              "type": "minecraft:range_dispatch",
+              "entries": [
+                {
+                  "model": {
+                    "type": "tconstruct:tool",
+                    "model": "tconstruct:item/tool/longbow/blocking_2"
+                  },
+                  "threshold": 2.0
+                }
+              ],
+              "fallback": {
+                "type": "minecraft:range_dispatch",
+                "entries": [
+                  {
+                    "model": {
+                      "type": "minecraft:range_dispatch",
+                      "entries": [
+                        {
+                          "model": {
+                            "type": "tconstruct:tool",
+                            "model": "tconstruct:item/tool/longbow/blocking_1"
+                          },
+                          "threshold": 2.0
+                        }
+                      ],
+                      "fallback": {
+                        "type": "minecraft:range_dispatch",
+                        "entries": [
+                          {
+                            "model": {
+                              "type": "tconstruct:tool",
+                              "model": "tconstruct:item/tool/longbow/blocking"
+                            },
+                            "threshold": 2.0
+                          }
+                        ],
+                        "fallback": {
+                          "type": "minecraft:range_dispatch",
+                          "entries": [
+                            {
+                              "model": {
+                                "type": "minecraft:range_dispatch",
+                                "entries": [
+                                  {
+                                    "model": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/tool/longbow/pulling_3"
+                                    },
+                                    "threshold": 1.0
+                                  }
+                                ],
+                                "fallback": {
+                                  "type": "minecraft:range_dispatch",
+                                  "entries": [
+                                    {
+                                      "model": {
+                                        "type": "minecraft:range_dispatch",
+                                        "entries": [
+                                          {
+                                            "model": {
+                                              "type": "tconstruct:tool",
+                                              "model": "tconstruct:item/tool/longbow/pulling_2"
+                                            },
+                                            "threshold": 1.0
+                                          }
+                                        ],
+                                        "fallback": {
+                                          "type": "minecraft:range_dispatch",
+                                          "entries": [
+                                            {
+                                              "model": {
+                                                "type": "minecraft:range_dispatch",
+                                                "entries": [
+                                                  {
+                                                    "model": {
+                                                      "type": "tconstruct:tool",
+                                                      "model": "tconstruct:item/tool/longbow/pulling_1"
+                                                    },
+                                                    "threshold": 1.0
+                                                  }
+                                                ],
+                                                "fallback": {
+                                                  "type": "tconstruct:tool",
+                                                  "model": "tconstruct:item/longbow"
+                                                },
+                                                "property": "tconstruct:charging"
+                                              },
+                                              "threshold": 0.05
+                                            }
+                                          ],
+                                          "fallback": {
+                                            "type": "tconstruct:tool",
+                                            "model": "tconstruct:item/longbow"
+                                          },
+                                          "property": "tconstruct:charge"
+                                        },
+                                        "property": "tconstruct:charging"
+                                      },
+                                      "threshold": 0.6
+                                    }
+                                  ],
+                                  "fallback": {
+                                    "type": "minecraft:range_dispatch",
+                                    "entries": [
+                                      {
+                                        "model": {
+                                          "type": "minecraft:range_dispatch",
+                                          "entries": [
+                                            {
+                                              "model": {
+                                                "type": "tconstruct:tool",
+                                                "model": "tconstruct:item/tool/longbow/pulling_1"
+                                              },
+                                              "threshold": 1.0
+                                            }
+                                          ],
+                                          "fallback": {
+                                            "type": "tconstruct:tool",
+                                            "model": "tconstruct:item/longbow"
+                                          },
+                                          "property": "tconstruct:charging"
+                                        },
+                                        "threshold": 0.05
+                                      }
+                                    ],
+                                    "fallback": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/longbow"
+                                    },
+                                    "property": "tconstruct:charge"
+                                  },
+                                  "property": "tconstruct:charge"
+                                },
+                                "property": "tconstruct:charging"
+                              },
+                              "threshold": 1.0
+                            }
+                          ],
+                          "fallback": {
+                            "type": "minecraft:range_dispatch",
+                            "entries": [
+                              {
+                                "model": {
+                                  "type": "minecraft:range_dispatch",
+                                  "entries": [
+                                    {
+                                      "model": {
+                                        "type": "tconstruct:tool",
+                                        "model": "tconstruct:item/tool/longbow/pulling_2"
+                                      },
+                                      "threshold": 1.0
+                                    }
+                                  ],
+                                  "fallback": {
+                                    "type": "minecraft:range_dispatch",
+                                    "entries": [
+                                      {
+                                        "model": {
+                                          "type": "minecraft:range_dispatch",
+                                          "entries": [
+                                            {
+                                              "model": {
+                                                "type": "tconstruct:tool",
+                                                "model": "tconstruct:item/tool/longbow/pulling_1"
+                                              },
+                                              "threshold": 1.0
+                                            }
+                                          ],
+                                          "fallback": {
+                                            "type": "tconstruct:tool",
+                                            "model": "tconstruct:item/longbow"
+                                          },
+                                          "property": "tconstruct:charging"
+                                        },
+                                        "threshold": 0.05
+                                      }
+                                    ],
+                                    "fallback": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/longbow"
+                                    },
+                                    "property": "tconstruct:charge"
+                                  },
+                                  "property": "tconstruct:charging"
+                                },
+                                "threshold": 0.6
+                              }
+                            ],
+                            "fallback": {
+                              "type": "minecraft:range_dispatch",
+                              "entries": [
+                                {
+                                  "model": {
+                                    "type": "minecraft:range_dispatch",
+                                    "entries": [
+                                      {
+                                        "model": {
+                                          "type": "tconstruct:tool",
+                                          "model": "tconstruct:item/tool/longbow/pulling_1"
+                                        },
+                                        "threshold": 1.0
+                                      }
+                                    ],
+                                    "fallback": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/longbow"
+                                    },
+                                    "property": "tconstruct:charging"
+                                  },
+                                  "threshold": 0.05
+                                }
+                              ],
+                              "fallback": {
+                                "type": "tconstruct:tool",
+                                "model": "tconstruct:item/longbow"
+                              },
+                              "property": "tconstruct:charge"
+                            },
+                            "property": "tconstruct:charge"
+                          },
+                          "property": "tconstruct:charge"
+                        },
+                        "property": "tconstruct:charging"
+                      },
+                      "property": "tconstruct:charging"
+                    },
+                    "threshold": 0.05
+                  }
+                ],
+                "fallback": {
+                  "type": "minecraft:range_dispatch",
+                  "entries": [
+                    {
+                      "model": {
+                        "type": "tconstruct:tool",
+                        "model": "tconstruct:item/tool/longbow/blocking"
+                      },
+                      "threshold": 2.0
+                    }
+                  ],
+                  "fallback": {
+                    "type": "minecraft:range_dispatch",
+                    "entries": [
+                      {
+                        "model": {
+                          "type": "minecraft:range_dispatch",
+                          "entries": [
+                            {
+                              "model": {
+                                "type": "tconstruct:tool",
+                                "model": "tconstruct:item/tool/longbow/pulling_3"
+                              },
+                              "threshold": 1.0
+                            }
+                          ],
+                          "fallback": {
+                            "type": "minecraft:range_dispatch",
+                            "entries": [
+                              {
+                                "model": {
+                                  "type": "minecraft:range_dispatch",
+                                  "entries": [
+                                    {
+                                      "model": {
+                                        "type": "tconstruct:tool",
+                                        "model": "tconstruct:item/tool/longbow/pulling_2"
+                                      },
+                                      "threshold": 1.0
+                                    }
+                                  ],
+                                  "fallback": {
+                                    "type": "minecraft:range_dispatch",
+                                    "entries": [
+                                      {
+                                        "model": {
+                                          "type": "minecraft:range_dispatch",
+                                          "entries": [
+                                            {
+                                              "model": {
+                                                "type": "tconstruct:tool",
+                                                "model": "tconstruct:item/tool/longbow/pulling_1"
+                                              },
+                                              "threshold": 1.0
+                                            }
+                                          ],
+                                          "fallback": {
+                                            "type": "tconstruct:tool",
+                                            "model": "tconstruct:item/longbow"
+                                          },
+                                          "property": "tconstruct:charging"
+                                        },
+                                        "threshold": 0.05
+                                      }
+                                    ],
+                                    "fallback": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/longbow"
+                                    },
+                                    "property": "tconstruct:charge"
+                                  },
+                                  "property": "tconstruct:charging"
+                                },
+                                "threshold": 0.6
+                              }
+                            ],
+                            "fallback": {
+                              "type": "minecraft:range_dispatch",
+                              "entries": [
+                                {
+                                  "model": {
+                                    "type": "minecraft:range_dispatch",
+                                    "entries": [
+                                      {
+                                        "model": {
+                                          "type": "tconstruct:tool",
+                                          "model": "tconstruct:item/tool/longbow/pulling_1"
+                                        },
+                                        "threshold": 1.0
+                                      }
+                                    ],
+                                    "fallback": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/longbow"
+                                    },
+                                    "property": "tconstruct:charging"
+                                  },
+                                  "threshold": 0.05
+                                }
+                              ],
+                              "fallback": {
+                                "type": "tconstruct:tool",
+                                "model": "tconstruct:item/longbow"
+                              },
+                              "property": "tconstruct:charge"
+                            },
+                            "property": "tconstruct:charge"
+                          },
+                          "property": "tconstruct:charging"
+                        },
+                        "threshold": 1.0
+                      }
+                    ],
+                    "fallback": {
+                      "type": "minecraft:range_dispatch",
+                      "entries": [
+                        {
+                          "model": {
+                            "type": "minecraft:range_dispatch",
+                            "entries": [
+                              {
+                                "model": {
+                                  "type": "tconstruct:tool",
+                                  "model": "tconstruct:item/tool/longbow/pulling_2"
+                                },
+                                "threshold": 1.0
+                              }
+                            ],
+                            "fallback": {
+                              "type": "minecraft:range_dispatch",
+                              "entries": [
+                                {
+                                  "model": {
+                                    "type": "minecraft:range_dispatch",
+                                    "entries": [
+                                      {
+                                        "model": {
+                                          "type": "tconstruct:tool",
+                                          "model": "tconstruct:item/tool/longbow/pulling_1"
+                                        },
+                                        "threshold": 1.0
+                                      }
+                                    ],
+                                    "fallback": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/longbow"
+                                    },
+                                    "property": "tconstruct:charging"
+                                  },
+                                  "threshold": 0.05
+                                }
+                              ],
+                              "fallback": {
+                                "type": "tconstruct:tool",
+                                "model": "tconstruct:item/longbow"
+                              },
+                              "property": "tconstruct:charge"
+                            },
+                            "property": "tconstruct:charging"
+                          },
+                          "threshold": 0.6
+                        }
+                      ],
+                      "fallback": {
+                        "type": "minecraft:range_dispatch",
+                        "entries": [
+                          {
+                            "model": {
+                              "type": "minecraft:range_dispatch",
+                              "entries": [
+                                {
+                                  "model": {
+                                    "type": "tconstruct:tool",
+                                    "model": "tconstruct:item/tool/longbow/pulling_1"
+                                  },
+                                  "threshold": 1.0
+                                }
+                              ],
+                              "fallback": {
+                                "type": "tconstruct:tool",
+                                "model": "tconstruct:item/longbow"
+                              },
+                              "property": "tconstruct:charging"
+                            },
+                            "threshold": 0.05
+                          }
+                        ],
+                        "fallback": {
+                          "type": "tconstruct:tool",
+                          "model": "tconstruct:item/longbow"
+                        },
+                        "property": "tconstruct:charge"
+                      },
+                      "property": "tconstruct:charge"
+                    },
+                    "property": "tconstruct:charge"
+                  },
+                  "property": "tconstruct:charging"
+                },
+                "property": "tconstruct:charge"
+              },
+              "property": "tconstruct:charging"
+            },
+            "threshold": 0.6
+          }
+        ],
+        "fallback": {
+          "type": "minecraft:range_dispatch",
+          "entries": [
+            {
+              "model": {
+                "type": "minecraft:range_dispatch",
+                "entries": [
+                  {
+                    "model": {
+                      "type": "tconstruct:tool",
+                      "model": "tconstruct:item/tool/longbow/blocking_1"
+                    },
+                    "threshold": 2.0
+                  }
+                ],
+                "fallback": {
+                  "type": "minecraft:range_dispatch",
+                  "entries": [
+                    {
+                      "model": {
+                        "type": "tconstruct:tool",
+                        "model": "tconstruct:item/tool/longbow/blocking"
+                      },
+                      "threshold": 2.0
+                    }
+                  ],
+                  "fallback": {
+                    "type": "minecraft:range_dispatch",
+                    "entries": [
+                      {
+                        "model": {
+                          "type": "minecraft:range_dispatch",
+                          "entries": [
+                            {
+                              "model": {
+                                "type": "tconstruct:tool",
+                                "model": "tconstruct:item/tool/longbow/pulling_3"
+                              },
+                              "threshold": 1.0
+                            }
+                          ],
+                          "fallback": {
+                            "type": "minecraft:range_dispatch",
+                            "entries": [
+                              {
+                                "model": {
+                                  "type": "minecraft:range_dispatch",
+                                  "entries": [
+                                    {
+                                      "model": {
+                                        "type": "tconstruct:tool",
+                                        "model": "tconstruct:item/tool/longbow/pulling_2"
+                                      },
+                                      "threshold": 1.0
+                                    }
+                                  ],
+                                  "fallback": {
+                                    "type": "minecraft:range_dispatch",
+                                    "entries": [
+                                      {
+                                        "model": {
+                                          "type": "minecraft:range_dispatch",
+                                          "entries": [
+                                            {
+                                              "model": {
+                                                "type": "tconstruct:tool",
+                                                "model": "tconstruct:item/tool/longbow/pulling_1"
+                                              },
+                                              "threshold": 1.0
+                                            }
+                                          ],
+                                          "fallback": {
+                                            "type": "tconstruct:tool",
+                                            "model": "tconstruct:item/longbow"
+                                          },
+                                          "property": "tconstruct:charging"
+                                        },
+                                        "threshold": 0.05
+                                      }
+                                    ],
+                                    "fallback": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/longbow"
+                                    },
+                                    "property": "tconstruct:charge"
+                                  },
+                                  "property": "tconstruct:charging"
+                                },
+                                "threshold": 0.6
+                              }
+                            ],
+                            "fallback": {
+                              "type": "minecraft:range_dispatch",
+                              "entries": [
+                                {
+                                  "model": {
+                                    "type": "minecraft:range_dispatch",
+                                    "entries": [
+                                      {
+                                        "model": {
+                                          "type": "tconstruct:tool",
+                                          "model": "tconstruct:item/tool/longbow/pulling_1"
+                                        },
+                                        "threshold": 1.0
+                                      }
+                                    ],
+                                    "fallback": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/longbow"
+                                    },
+                                    "property": "tconstruct:charging"
+                                  },
+                                  "threshold": 0.05
+                                }
+                              ],
+                              "fallback": {
+                                "type": "tconstruct:tool",
+                                "model": "tconstruct:item/longbow"
+                              },
+                              "property": "tconstruct:charge"
+                            },
+                            "property": "tconstruct:charge"
+                          },
+                          "property": "tconstruct:charging"
+                        },
+                        "threshold": 1.0
+                      }
+                    ],
+                    "fallback": {
+                      "type": "minecraft:range_dispatch",
+                      "entries": [
+                        {
+                          "model": {
+                            "type": "minecraft:range_dispatch",
+                            "entries": [
+                              {
+                                "model": {
+                                  "type": "tconstruct:tool",
+                                  "model": "tconstruct:item/tool/longbow/pulling_2"
+                                },
+                                "threshold": 1.0
+                              }
+                            ],
+                            "fallback": {
+                              "type": "minecraft:range_dispatch",
+                              "entries": [
+                                {
+                                  "model": {
+                                    "type": "minecraft:range_dispatch",
+                                    "entries": [
+                                      {
+                                        "model": {
+                                          "type": "tconstruct:tool",
+                                          "model": "tconstruct:item/tool/longbow/pulling_1"
+                                        },
+                                        "threshold": 1.0
+                                      }
+                                    ],
+                                    "fallback": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/longbow"
+                                    },
+                                    "property": "tconstruct:charging"
+                                  },
+                                  "threshold": 0.05
+                                }
+                              ],
+                              "fallback": {
+                                "type": "tconstruct:tool",
+                                "model": "tconstruct:item/longbow"
+                              },
+                              "property": "tconstruct:charge"
+                            },
+                            "property": "tconstruct:charging"
+                          },
+                          "threshold": 0.6
+                        }
+                      ],
+                      "fallback": {
+                        "type": "minecraft:range_dispatch",
+                        "entries": [
+                          {
+                            "model": {
+                              "type": "minecraft:range_dispatch",
+                              "entries": [
+                                {
+                                  "model": {
+                                    "type": "tconstruct:tool",
+                                    "model": "tconstruct:item/tool/longbow/pulling_1"
+                                  },
+                                  "threshold": 1.0
+                                }
+                              ],
+                              "fallback": {
+                                "type": "tconstruct:tool",
+                                "model": "tconstruct:item/longbow"
+                              },
+                              "property": "tconstruct:charging"
+                            },
+                            "threshold": 0.05
+                          }
+                        ],
+                        "fallback": {
+                          "type": "tconstruct:tool",
+                          "model": "tconstruct:item/longbow"
+                        },
+                        "property": "tconstruct:charge"
+                      },
+                      "property": "tconstruct:charge"
+                    },
+                    "property": "tconstruct:charge"
+                  },
+                  "property": "tconstruct:charging"
+                },
+                "property": "tconstruct:charging"
+              },
+              "threshold": 0.05
+            }
+          ],
+          "fallback": {
+            "type": "minecraft:range_dispatch",
+            "entries": [
+              {
+                "model": {
+                  "type": "tconstruct:tool",
+                  "model": "tconstruct:item/tool/longbow/blocking"
+                },
+                "threshold": 2.0
+              }
+            ],
+            "fallback": {
+              "type": "minecraft:range_dispatch",
+              "entries": [
+                {
+                  "model": {
+                    "type": "minecraft:range_dispatch",
+                    "entries": [
+                      {
+                        "model": {
+                          "type": "tconstruct:tool",
+                          "model": "tconstruct:item/tool/longbow/pulling_3"
+                        },
+                        "threshold": 1.0
+                      }
+                    ],
+                    "fallback": {
+                      "type": "minecraft:range_dispatch",
+                      "entries": [
+                        {
+                          "model": {
+                            "type": "minecraft:range_dispatch",
+                            "entries": [
+                              {
+                                "model": {
+                                  "type": "tconstruct:tool",
+                                  "model": "tconstruct:item/tool/longbow/pulling_2"
+                                },
+                                "threshold": 1.0
+                              }
+                            ],
+                            "fallback": {
+                              "type": "minecraft:range_dispatch",
+                              "entries": [
+                                {
+                                  "model": {
+                                    "type": "minecraft:range_dispatch",
+                                    "entries": [
+                                      {
+                                        "model": {
+                                          "type": "tconstruct:tool",
+                                          "model": "tconstruct:item/tool/longbow/pulling_1"
+                                        },
+                                        "threshold": 1.0
+                                      }
+                                    ],
+                                    "fallback": {
+                                      "type": "tconstruct:tool",
+                                      "model": "tconstruct:item/longbow"
+                                    },
+                                    "property": "tconstruct:charging"
+                                  },
+                                  "threshold": 0.05
+                                }
+                              ],
+                              "fallback": {
+                                "type": "tconstruct:tool",
+                                "model": "tconstruct:item/longbow"
+                              },
+                              "property": "tconstruct:charge"
+                            },
+                            "property": "tconstruct:charging"
+                          },
+                          "threshold": 0.6
+                        }
+                      ],
+                      "fallback": {
+                        "type": "minecraft:range_dispatch",
+                        "entries": [
+                          {
+                            "model": {
+                              "type": "minecraft:range_dispatch",
+                              "entries": [
+                                {
+                                  "model": {
+                                    "type": "tconstruct:tool",
+                                    "model": "tconstruct:item/tool/longbow/pulling_1"
+                                  },
+                                  "threshold": 1.0
+                                }
+                              ],
+                              "fallback": {
+                                "type": "tconstruct:tool",
+                                "model": "tconstruct:item/longbow"
+                              },
+                              "property": "tconstruct:charging"
+                            },
+                            "threshold": 0.05
+                          }
+                        ],
+                        "fallback": {
+                          "type": "tconstruct:tool",
+                          "model": "tconstruct:item/longbow"
+                        },
+                        "property": "tconstruct:charge"
+                      },
+                      "property": "tconstruct:charge"
+                    },
+                    "property": "tconstruct:charging"
+                  },
+                  "threshold": 1.0
+                }
+              ],
+              "fallback": {
+                "type": "minecraft:range_dispatch",
+                "entries": [
+                  {
+                    "model": {
+                      "type": "minecraft:range_dispatch",
+                      "entries": [
+                        {
+                          "model": {
+                            "type": "tconstruct:tool",
+                            "model": "tconstruct:item/tool/longbow/pulling_2"
+                          },
+                          "threshold": 1.0
+                        }
+                      ],
+                      "fallback": {
+                        "type": "minecraft:range_dispatch",
+                        "entries": [
+                          {
+                            "model": {
+                              "type": "minecraft:range_dispatch",
+                              "entries": [
+                                {
+                                  "model": {
+                                    "type": "tconstruct:tool",
+                                    "model": "tconstruct:item/tool/longbow/pulling_1"
+                                  },
+                                  "threshold": 1.0
+                                }
+                              ],
+                              "fallback": {
+                                "type": "tconstruct:tool",
+                                "model": "tconstruct:item/longbow"
+                              },
+                              "property": "tconstruct:charging"
+                            },
+                            "threshold": 0.05
+                          }
+                        ],
+                        "fallback": {
+                          "type": "tconstruct:tool",
+                          "model": "tconstruct:item/longbow"
+                        },
+                        "property": "tconstruct:charge"
+                      },
+                      "property": "tconstruct:charging"
+                    },
+                    "threshold": 0.6
+                  }
+                ],
+                "fallback": {
+                  "type": "minecraft:range_dispatch",
+                  "entries": [
+                    {
+                      "model": {
+                        "type": "minecraft:range_dispatch",
+                        "entries": [
+                          {
+                            "model": {
+                              "type": "tconstruct:tool",
+                              "model": "tconstruct:item/tool/longbow/pulling_1"
+                            },
+                            "threshold": 1.0
+                          }
+                        ],
+                        "fallback": {
+                          "type": "tconstruct:tool",
+                          "model": "tconstruct:item/longbow"
+                        },
+                        "property": "tconstruct:charging"
+                      },
+                      "threshold": 0.05
+                    }
+                  ],
+                  "fallback": {
+                    "type": "tconstruct:tool",
+                    "model": "tconstruct:item/longbow"
+                  },
+                  "property": "tconstruct:charge"
+                },
+                "property": "tconstruct:charge"
+              },
+              "property": "tconstruct:charge"
+            },
+            "property": "tconstruct:charging"
+          },
+          "property": "tconstruct:charge"
+        },
+        "property": "tconstruct:charge"
+      },
+      "property": "tconstruct:charge"
+    },
+    "on_true": {
+      "type": "tconstruct:tool",
+      "model": "tconstruct:item/tool/longbow/broken"
+    },
+    "property": "tconstruct:broken"
+  }
+}

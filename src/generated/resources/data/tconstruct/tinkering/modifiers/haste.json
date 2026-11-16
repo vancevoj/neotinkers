@@ -1,0 +1,36 @@
+{
+  "level_display": {
+    "type": "tconstruct:unique",
+    "first_unique": false,
+    "unique_until": 5
+  },
+  "modules": [
+    {
+      "type": "tconstruct:stat_boost",
+      "each_level": 4.0,
+      "operation": "add",
+      "stat": "tconstruct:mining_speed"
+    },
+    {
+      "type": "tconstruct:attribute",
+      "attribute": "tconstruct:player.mining_speed_multiplier",
+      "each_level": 0.1,
+      "operation": "add_multiplied_total",
+      "slots": [
+        "mainhand",
+        "offhand",
+        "feet",
+        "legs",
+        "chest",
+        "head",
+        "body",
+        "saddle"
+      ],
+      "tool": {
+        "type": "mantle:inverted",
+        "inverted_type": "mantle:tag",
+        "tag": "tconstruct:modifiable/harvest"
+      }
+    }
+  ]
+}

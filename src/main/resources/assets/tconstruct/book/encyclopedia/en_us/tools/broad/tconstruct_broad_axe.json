@@ -1,0 +1,15 @@
+{
+  "tool": "tconstruct:broad_axe",
+  "text": [
+    { "text": "The Broad Axe can mine a single column of a tree, or 6 blocks in a vertical column." },
+    { "text": "Expanders alternate between increasing width and depth.", "paragraph": true }
+  ],
+  "properties": [
+    "+5 Attack Damage",
+    "165% Attack Multiplier",
+    "0.6 Attack Speed",
+    "30% Mining Multiplier",
+    "425% Durability Multiplier",
+    "Strips wood"
+  ]
+}

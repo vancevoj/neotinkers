@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "hanging=false": { "type": "tconstruct:tank", "model": "tconstruct:block/foundry/tank/lantern" },
+    "hanging=true": { "type": "tconstruct:tank", "model": "tconstruct:block/foundry/tank/lantern_hanging" }
+  }
+}

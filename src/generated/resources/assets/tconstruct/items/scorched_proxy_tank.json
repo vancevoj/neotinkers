@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "tconstruct:gui",
+    "model": "tconstruct:item/scorched_proxy_tank"
+  }
+}

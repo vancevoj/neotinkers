@@ -1,0 +1,27 @@
+{
+  "type": "neoforge:add_spawns",
+  "biomes": {
+    "type": "neoforge:and",
+    "values": [
+      {
+        "type": "neoforge:or",
+        "values": [
+          "#minecraft:is_overworld"
+        ]
+      },
+      {
+        "type": "neoforge:not",
+        "value": "#c:no_default_monsters"
+      }
+    ]
+  },
+  "spawners": {
+    "type": "tconstruct:terracube",
+    "count": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 4,
+      "min_inclusive": 2
+    },
+    "weight": 10
+  }
+}

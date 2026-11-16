@@ -1,0 +1,11 @@
+{
+  "type": "tconstruct:fixed_material_swapping",
+  "index": 0,
+  "ingredient": {
+    "ingredient": "tconstruct:stray_head"
+  },
+  "material": "tconstruct:ice",
+  "max_stack_size": 16,
+  "repair_value": 6,
+  "tools": "#tconstruct:modifiable/skulls/swappable"
+}

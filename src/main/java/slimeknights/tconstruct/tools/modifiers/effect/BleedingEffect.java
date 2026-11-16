@@ -1,0 +1,42 @@
+package slimeknights.tconstruct.tools.modifiers.effect;
+
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.LivingEntity;
+import slimeknights.tconstruct.common.TinkerDamageTypes;
+import slimeknights.tconstruct.library.tools.helper.ToolAttackUtil;
+import slimeknights.tconstruct.tools.modifiers.traits.melee.LaceratingModifier;
+
+/**
+ * Potion effect from {@link LaceratingModifier}
+ * TODO 1.21: move to {@link slimeknights.tconstruct.shared.effect}
+ */
+public class BleedingEffect extends NoMilkEffect {
+  public BleedingEffect() {
+    super(MobEffectCategory.HARMFUL, 0xa80000, true);
+  }
+
+  @Override
+  public boolean shouldApplyEffectTickThisTick(int duration, int level) {
+    // every half second
+    return duration > 0 && duration % 20 == 0;
+  }
+
+  @Override
+  public boolean applyEffectTick(ServerLevel serverLevel, LivingEntity target, int level) {
+    // attribute to player kill
+    LivingEntity lastAttacker = target.getLastHurtMob();
+    DamageSource source = TinkerDamageTypes.source(target.level().registryAccess(), TinkerDamageTypes.BLEEDING, lastAttacker);
+
+    // perform damage
+    int hurtResistantTime = target.getInvulnerableTime();
+    ToolAttackUtil.attackEntitySecondary(source, 1, target, target, true);
+    target.setInvulnerableTime(hurtResistantTime);
+
+    // damage particles, effect ticks only run server side now
+    serverLevel.sendParticles(ParticleTypes.DAMAGE_INDICATOR, target.getX(), target.getY(0.5), target.getZ(), 1, 0.1, 0, 0.1, 0.2);
+    return true;
+  }
+}

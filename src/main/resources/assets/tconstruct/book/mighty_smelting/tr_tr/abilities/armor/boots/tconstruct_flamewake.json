@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:flamewake",
+  "text": [
+    {
+      "text": "Kim çakmak taşı ve tuğla ile botları birleştirmenin iyi bir düşünce olacağını düşündü? Artık güvenlice bir yere adım atamıyorum!"
+    }
+  ],
+  "effects": [
+    "Yürüdüğün yerde ateş bırakır",
+    "Genişletilmiş ile alanı artırılabilir",
+    "Tek seviye",
+    "1 yetenek yuvası gerekir"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": "#c:slimeball/ender",
+  "material": "tconstruct:slimeball#ender",
+  "needed": 1,
+  "value": 1
+}

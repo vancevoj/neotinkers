@@ -1,0 +1,19 @@
+{
+  "color": "FF74ABFE",
+  "generator": {
+    "supported_stats": [
+      "tconstruct:shield_core",
+      "tconstruct:repair_kit",
+      "tconstruct:arrow_head"
+    ],
+    "transformer": {
+      "type": "tconstruct:grey_to_sprite",
+      "palette": {
+        "000": "FF000000",
+        "063": "minecraft:block/blue_ice",
+        "102": "minecraft:block/packed_ice",
+        "140": "minecraft:block/ice"
+      }
+    }
+  }
+}

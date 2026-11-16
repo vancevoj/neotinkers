@@ -1,0 +1,14 @@
+{
+  "title": "焦褐遮光玻璃",
+  "item": "tconstruct:scorched_tinted_glass",
+  "text": [
+    {
+      "text": "想让熔铸炉里可生成烈焰人的数量最大化吗？不妨将普通的遮光玻璃替换成焦褐遮光玻璃， 虽然完全透明，但光线无法穿过。",
+      "paragraph": true
+    },
+	  {
+      "text": "焦褐遮光玻璃不能用于搭建熔铸炉底板。",
+      "paragraph": true
+    }
+  ]
+}

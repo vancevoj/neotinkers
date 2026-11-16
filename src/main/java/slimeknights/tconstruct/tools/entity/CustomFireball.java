@@ -1,0 +1,177 @@
+package slimeknights.tconstruct.tools.entity;
+
+import lombok.Getter;
+import lombok.Setter;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.projectile.hurtingprojectile.Fireball;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import slimeknights.mantle.util.CombatHelper;
+import slimeknights.tconstruct.library.modifiers.entity.ProjectileWithPower;
+import slimeknights.tconstruct.shared.TinkerEffects;
+import slimeknights.tconstruct.tools.TinkerModifiers;
+
+/** Custom implementation of {@link net.minecraft.world.entity.projectile.hurtingprojectile.SmallFireball} for the sake of modifiers. */
+public class CustomFireball extends Fireball implements ProjectileWithPower {
+  /** Damage type to deal from this projectile */
+  private ResourceKey<DamageType> damageType = DamageTypes.FIREBALL;
+  /** Damage type to deal when enderference is targeting a teleporting mob */
+  private ResourceKey<DamageType> enderferenceType = DamageTypes.ON_FIRE;
+  /** Amount of damage to deal */
+  @Getter @Setter
+  private float power = 2.5f;
+  /** Damage multiplier on power. Separate from power for the sake of conditional power modules. */
+  @Setter
+  private float damageMultiplier = 2f;
+
+  public CustomFireball(EntityType<? extends CustomFireball> type, Level level) {
+    super(type, level);
+  }
+
+  public CustomFireball(Level level, LivingEntity shooter, double xOffset, double yOffset, double zOffset) {
+    super(TinkerModifiers.fireball.get(), shooter, new Vec3(xOffset, yOffset, zOffset), level);
+  }
+
+  public CustomFireball(Level pLevel, double x, double y, double z, double xOffset, double yOffset, double zOffset) {
+    super(TinkerModifiers.fireball.get(), x, y, z, new Vec3(xOffset, yOffset, zOffset), pLevel);
+  }
+
+
+  /* Behavior */
+
+  @Override
+  protected boolean shouldBurn() {
+    return false;
+  }
+
+  @Override
+  public boolean isPickable() {
+    return false;
+  }
+
+  @Override
+  public boolean hurtServer(ServerLevel level, DamageSource pSource, float pAmount) {
+    return false;
+  }
+
+  @Override
+  protected Component getTypeName() {
+    ItemStack stack = getItem();
+    if (!stack.isEmpty()) {
+      return stack.getHoverName();
+    }
+    return super.getTypeName();
+  }
+
+
+  /* Hitting */
+
+  /** Sets the damage type on this projectile */
+  public void setDamageType(ResourceKey<DamageType> damageType, ResourceKey<DamageType> enderferenceType) {
+    this.damageType = damageType;
+    this.enderferenceType = enderferenceType;
+  }
+
+  @Override
+  public float getDamage() {
+    return ProjectileWithPower.velocityScale(this, power * damageMultiplier);
+  }
+
+  @Override
+  protected void onHitEntity(EntityHitResult hit) {
+    super.onHitEntity(hit);
+
+    // based on SmallFireball, uses custom damage type and power though
+    if (this.level() instanceof ServerLevel serverLevel) {
+      Entity target = hit.getEntity();
+      Entity owner = this.getOwner();
+      DamageSource source = CombatHelper.damageSource(TinkerEffects.needsEnderferenceOverride(target) ? enderferenceType : damageType, this, owner);
+      if (target.hurtServer(serverLevel, source, getDamage()) && owner instanceof LivingEntity) {
+        EnchantmentHelper.doPostAttackEffects(serverLevel, target, source);
+      }
+    }
+  }
+
+  @Override
+  protected void onHit(HitResult pResult) {
+    super.onHit(pResult);
+    if (!this.level().isClientSide()) {
+      this.discard();
+    }
+  }
+
+
+  /* Despawn */
+
+  @Override
+  public void tick() {
+    super.tick();
+    // should not exist for longer than 2 minutes, deals with the fact the projectile is not guaranteed to hit a block
+    if (tickCount > 2400) {
+      this.discard();
+    }
+  }
+
+  @Override
+  public void checkBelowWorld() {
+    // despawn if going too high or low, otherwise projectile may live forever going into the sky
+    double y = getY();
+    Level level = level();
+    // max build height used to be exclusive, max Y is inclusive
+    if (y < (level.getMinY() - 64) || y > level.getMaxY() + 1 + 64) {
+      onBelowWorld();
+    }
+  }
+
+
+  /* NBT */
+  private static final String TAG_POWER = "damage_power"; // "power" is taken by the velocity
+  private static final String TAG_MULTIPLIER = "damage_multiplier";
+  private static final String TAG_DAMAGE_TYPE = "damage_type";
+  private static final String TAG_ENDERFERENCE_TYPE = "enderference_type";
+
+  @Override
+  protected void addAdditionalSaveData(ValueOutput output) {
+    super.addAdditionalSaveData(output);
+    output.putFloat(TAG_POWER, power);
+    output.putFloat(TAG_MULTIPLIER, damageMultiplier);
+    output.putString(TAG_DAMAGE_TYPE, damageType.identifier().toString());
+    output.putString(TAG_ENDERFERENCE_TYPE, enderferenceType.identifier().toString());
+  }
+
+  /** Parses the given damage type */
+  private static ResourceKey<DamageType> parseDamageType(String damageStr, ResourceKey<DamageType> fallback) {
+    if (!damageStr.isEmpty()) {
+      Identifier damageLoc = Identifier.tryParse(damageStr);
+      if (damageLoc != null) {
+        return ResourceKey.create(Registries.DAMAGE_TYPE, damageLoc);
+      }
+    }
+    return fallback;
+  }
+
+  @Override
+  protected void readAdditionalSaveData(ValueInput input) {
+    super.readAdditionalSaveData(input);
+    power = input.getFloatOr(TAG_POWER, 0);
+    damageMultiplier = input.getFloatOr(TAG_MULTIPLIER, 0);
+    damageType = parseDamageType(input.getStringOr(TAG_DAMAGE_TYPE, ""), DamageTypes.FIREBALL);
+    enderferenceType = parseDamageType(input.getStringOr(TAG_ENDERFERENCE_TYPE, ""), DamageTypes.ON_FIRE);
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "tconstruct:part_builder_recycling",
+  "pattern": "tconstruct:venom_bottle",
+  "results": {
+    "tconstruct:scale": {
+      "count": 5,
+      "item": "minecraft:turtle_scute"
+    }
+  },
+  "tool": "minecraft:turtle_helmet"
+}

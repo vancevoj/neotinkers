@@ -1,0 +1,33 @@
+{
+  "color": "FF5C2B29",
+  "fallbacks": [
+    "wood",
+    "stick"
+  ],
+  "generator": {
+    "supported_stats": [
+      "tconstruct:shield_core",
+      "tconstruct:repair_kit",
+      "tconstruct:arrow_shaft",
+      "tconstruct:wood"
+    ],
+    "transformer": {
+      "type": "tconstruct:animated_sprite",
+      "frames": 7,
+      "meta": "tconstruct:block/wood/blazewood",
+      "palette": {
+        "000": "FF000000",
+        "063": {
+          "color": "FF404040",
+          "path": "tconstruct:block/wood/blazewood"
+        },
+        "102": {
+          "color": "FF808080",
+          "path": "tconstruct:block/wood/blazewood"
+        },
+        "140": "tconstruct:block/wood/blazewood"
+      }
+    }
+  },
+  "luminosity": 7
+}

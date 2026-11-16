@@ -1,0 +1,10 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": "tconstruct:grout",
+  "result": {
+    "amount": 500,
+    "fluid": "tconstruct:seared_stone"
+  },
+  "temperature": 600,
+  "time": 80
+}

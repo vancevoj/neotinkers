@@ -1,0 +1,135 @@
+package slimeknights.tconstruct.library.tools.definition;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.gson.JsonElement;
+import lombok.extern.log4j.Log4j2;
+import net.minecraft.resources.FileToIdConverter;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.conditions.ICondition.IContext;
+import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
+import slimeknights.mantle.data.loadable.field.ContextKey;
+import slimeknights.mantle.util.typed.TypedMapBuilder;
+import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.common.network.TinkerNetwork;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
+/** JSON loader that loads tool definitions from JSON */
+@Log4j2
+public class ToolDefinitionLoader extends SimpleJsonResourceReloadListener<JsonElement> {
+  public static final String FOLDER = "tinkering/tool_definitions";
+  /** ID of this loader in the server reload listener event */
+  public static final Identifier LISTENER_ID = TConstruct.getResource("tool_definitions");
+  private static final ToolDefinitionLoader INSTANCE = new ToolDefinitionLoader();
+
+  /** Map of loaded tool definition data */
+  private Map<Identifier,ToolDefinitionData> dataMap = Collections.emptyMap();
+
+  /** Tool definitions registered to be loaded */
+  private final Map<Identifier,ToolDefinition> definitions = new HashMap<>();
+
+  /** Condition context */
+  private IContext conditionContext = IContext.EMPTY;
+
+  private ToolDefinitionLoader() {
+    super(ExtraCodecs.JSON, FileToIdConverter.json(FOLDER));
+  }
+
+  /** Gets the instance of the definition loader */
+  public static ToolDefinitionLoader getInstance() {
+    return INSTANCE;
+  }
+
+  /** Initializes the tool definition loader */
+  public static void init() {
+    NeoForge.EVENT_BUS.addListener(INSTANCE::addDataPackListeners);
+    NeoForge.EVENT_BUS.addListener(INSTANCE::onDatapackSync);
+  }
+
+  /**
+   * Updates the tool data from the server.list. Should only be called client side
+   * @param dataMap  Server data map
+   */
+  protected void updateDataFromServer(Map<Identifier,ToolDefinitionData> dataMap) {
+    this.dataMap = dataMap;
+    for (Entry<Identifier,ToolDefinition> entry : definitions.entrySet()) {
+      ToolDefinitionData data = dataMap.get(entry.getKey());
+      ToolDefinition definition = entry.getValue();
+      // errored serverside, so resolve without error here
+      if (data != null) {
+        definition.setData(data);
+      } else {
+        definition.clearData();
+      }
+    }
+  }
+
+  /** Creates context for modifier parsing */
+  public static TypedMapBuilder contextBuilder(Identifier key) {
+    return TypedMapBuilder.builder().put(ContextKey.ID, key).put(ContextKey.DEBUG, "Tool Definition " + key);
+  }
+
+  @Override
+  protected void apply(Map<Identifier,JsonElement> splashList, ResourceManager resourceManagerIn, ProfilerFiller profilerIn) {
+    long time = System.nanoTime();
+    ImmutableMap.Builder<Identifier, ToolDefinitionData> builder = ImmutableMap.builder();
+    for (Entry<Identifier,ToolDefinition> entry : definitions.entrySet()) {
+      Identifier key = entry.getKey();
+      ToolDefinition definition = entry.getValue();
+      // first, need to have a json for the given name
+      JsonElement element = splashList.get(key);
+      if (element == null) {
+        log.error("Missing tool definition for tool {}", key);
+        definition.clearData();
+        continue;
+      }
+      try {
+        // TODO: do we want to allow load conditions for tool definitions? might make merging harder should we go that route instead
+        ToolDefinitionData data = ToolDefinitionData.LOADABLE.convert(element, key.toString(), contextBuilder(key).put(ContextKey.CONDITION_CONTEXT, conditionContext).build());
+        builder.put(key, data);
+        definition.setData(data);
+      } catch (Exception e) {
+        log.error("Failed to load tool definition for tool {}", key, e);
+        definition.clearData();
+      }
+    }
+    this.dataMap = builder.build();
+    log.info("Loaded {} tool definitions in {} ms", this.dataMap.size(), (System.nanoTime() - time) / 1000000f);
+  }
+
+  /** Gets a list of all tool definitions registered to the loader */
+  public Collection<ToolDefinition> getRegisteredToolDefinitions() {
+    return definitions.values();
+  }
+
+  /** Called on datapack sync to send the tool data to all players */
+  private void onDatapackSync(OnDatapackSyncEvent event) {
+    UpdateToolDefinitionDataPacket packet = new UpdateToolDefinitionDataPacket(dataMap);
+    TinkerNetwork.getInstance().sendToPlayerList(event.getPlayer(), event.getPlayerList(), packet);
+  }
+
+  /** Adds the managers as datapack listeners */
+  private void addDataPackListeners(final AddServerReloadListenersEvent event) {
+    event.addListener(LISTENER_ID, this);
+    conditionContext = event.getConditionContext();
+  }
+
+  /** Registers a tool definition with the loader */
+  public synchronized void registerToolDefinition(ToolDefinition definition) {
+    Identifier name = definition.getId();
+    if (definitions.containsKey(name)) {
+      throw new IllegalArgumentException("Duplicate tool definition " + name);
+    }
+    definitions.put(name, definition);
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "tconstruct:swappable_modifier",
+  "allow_crystal": false,
+  "inputs": [
+    {
+      "ingredient": "tconstruct:blazewood"
+    },
+    {
+      "ingredient": "tconstruct:pattern"
+    },
+    {
+      "ingredient": "tconstruct:blazewood"
+    }
+  ],
+  "result": {
+    "name": "tconstruct:embellishment",
+    "value": "tconstruct:blazewood"
+  },
+  "tools": "#tconstruct:modifiable/embellishment/wood",
+  "variant_formatter": "tconstruct:material"
+}

@@ -1,0 +1,36 @@
+{
+  "parent": "tconstruct:world/tinkers_gadgetry",
+  "criteria": {
+    "found_island": {
+      "conditions": {
+        "player": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:location": {
+              "structures": "tconstruct:earth_slime_island"
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.tconstruct.world.earth_island.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "id": "tconstruct:earth_slime_sapling"
+    },
+    "title": {
+      "translate": "advancements.tconstruct.world.earth_island.title"
+    }
+  },
+  "requirements": [
+    [
+      "found_island"
+    ]
+  ]
+}

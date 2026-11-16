@@ -1,0 +1,33 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_combination_filled",
+      "match": [
+        "c:ores/tungsten",
+        "c:ore_rates/sparse"
+      ]
+    }
+  ],
+  "type": "tconstruct:ore_melting",
+  "byproducts": [
+    {
+      "amount": 90,
+      "rate": "metal",
+      "tag": "c:molten_gold"
+    }
+  ],
+  "ingredient": {
+    "neoforge:ingredient_type": "neoforge:intersection",
+    "children": [
+      "#c:ores/tungsten",
+      "#c:ore_rates/sparse"
+    ]
+  },
+  "rate": "metal",
+  "result": {
+    "amount": 90,
+    "tag": "c:molten_tungsten"
+  },
+  "temperature": 950,
+  "time": 97
+}

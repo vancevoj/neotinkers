@@ -1,0 +1,10 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": "tconstruct:cobalt_reinforcement",
+  "result": {
+    "amount": 90,
+    "tag": "c:molten_cobalt"
+  },
+  "temperature": 950,
+  "time": 65
+}

@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": "tconstruct:earth_slime_crystal",
+  "material": "tconstruct:earthslime",
+  "needed": 1,
+  "value": 1
+}

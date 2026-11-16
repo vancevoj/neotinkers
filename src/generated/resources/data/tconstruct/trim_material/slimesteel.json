@@ -1,0 +1,12 @@
+{
+  "description": {
+    "color": "#27C6C6",
+    "translate": "trim_material.tconstruct.format",
+    "with": [
+      {
+        "translate": "material.tconstruct.slimesteel"
+      }
+    ]
+  },
+  "palette_id": "tconstruct:trim/slimesteel"
+}

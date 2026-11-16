@@ -1,0 +1,14 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": [
+    "minecraft:blast_furnace",
+    "minecraft:hopper",
+    "minecraft:minecart"
+  ],
+  "result": {
+    "amount": 450,
+    "tag": "c:molten_iron"
+  },
+  "temperature": 800,
+  "time": 134
+}

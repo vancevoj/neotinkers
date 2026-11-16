@@ -1,0 +1,9 @@
+{
+  "loader": "mantle:nbt_key",
+  "parent": "neoforge:item/default",
+  "textures": {
+    "default": "tconstruct:item/arrow/crystalshot_random"
+  },
+  "nbt_key": "variant",
+  "extra_textures_key": "tconstruct:crystalshot"
+}

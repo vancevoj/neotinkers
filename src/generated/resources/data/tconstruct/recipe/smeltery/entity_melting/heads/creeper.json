@@ -1,0 +1,10 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": "minecraft:creeper_head",
+  "result": {
+    "amount": 250,
+    "fluid": "tconstruct:molten_glass"
+  },
+  "temperature": 750,
+  "time": 98
+}

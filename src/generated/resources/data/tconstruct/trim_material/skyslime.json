@@ -1,0 +1,12 @@
+{
+  "description": {
+    "color": "#01CBCD",
+    "translate": "trim_material.tconstruct.format",
+    "with": [
+      {
+        "translate": "material.tconstruct.skyslime"
+      }
+    ]
+  },
+  "palette_id": "tconstruct:trim/skyslime"
+}

@@ -1,0 +1,12 @@
+{
+  "description": {
+    "color": "#236C45",
+    "translate": "trim_material.tconstruct.format",
+    "with": [
+      {
+        "translate": "material.tconstruct.queens_slime"
+      }
+    ]
+  },
+  "palette_id": "tconstruct:trim/queens_slime"
+}

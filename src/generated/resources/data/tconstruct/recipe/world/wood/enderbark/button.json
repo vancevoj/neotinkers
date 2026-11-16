@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "group": "wooden_button",
+  "ingredients": [
+    "tconstruct:enderbark_planks"
+  ],
+  "result": {
+    "id": "tconstruct:enderbark_button"
+  }
+}

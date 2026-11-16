@@ -1,0 +1,6 @@
+{
+  "parent": "neoforge:item/bucket_drip",
+  "flip_gas": true,
+  "fluid": "tconstruct:ichor",
+  "loader": "tconstruct:fluid_container"
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "tconstruct:sky_slime_crystal",
+    "I": "#c:ingots/rose_gold",
+    "W": "#tconstruct:skyroot_logs"
+  },
+  "pattern": [
+    "CWC",
+    " I ",
+    " W "
+  ],
+  "result": {
+    "id": "tconstruct:sky_staff"
+  }
+}

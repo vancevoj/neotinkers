@@ -1,0 +1,23 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "neoforge:item/default",
+  "textures": {
+    "cuirass": "tconstruct:item/tool/armor/travelers/boots/cuirass_broken",
+    "metal": "tconstruct:item/tool/armor/travelers/boots/metal_broken"
+  },
+  "modifier_maps": [
+    "tconstruct:travelers/boots_broken",
+    "tconstruct:travelers/boots",
+    "tconstruct:armor/boots"
+  ],
+  "parts": [
+    {
+      "name": "cuirass",
+      "index": 1
+    },
+    {
+      "name": "metal",
+      "index": 0
+    }
+  ]
+}

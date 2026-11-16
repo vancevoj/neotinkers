@@ -1,0 +1,20 @@
+{
+  "type": "tconstruct:slime_tree",
+  "base_height": 5,
+  "can_double_height": true,
+  "has_vines": false,
+  "leaves_provider": {
+    "type": "minecraft:simple",
+    "state": "tconstruct:sky_slime_leaves"
+  },
+  "planted": true,
+  "random_height": 4,
+  "trunk_provider": {
+    "type": "minecraft:simple",
+    "state": "tconstruct:skyroot_log"
+  },
+  "vines_provider": {
+    "type": "minecraft:simple",
+    "state": "minecraft:air"
+  }
+}

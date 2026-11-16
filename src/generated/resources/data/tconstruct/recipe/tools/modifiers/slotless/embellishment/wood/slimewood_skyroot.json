@@ -1,0 +1,21 @@
+{
+  "type": "tconstruct:swappable_modifier",
+  "allow_crystal": false,
+  "inputs": [
+    {
+      "ingredient": "tconstruct:skyroot_planks"
+    },
+    {
+      "ingredient": "tconstruct:pattern"
+    },
+    {
+      "ingredient": "tconstruct:skyroot_planks"
+    }
+  ],
+  "result": {
+    "name": "tconstruct:embellishment",
+    "value": "tconstruct:slimewood#skyroot"
+  },
+  "tools": "#tconstruct:modifiable/embellishment/wood",
+  "variant_formatter": "tconstruct:material"
+}

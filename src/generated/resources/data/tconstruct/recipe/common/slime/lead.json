@@ -1,0 +1,23 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "tconstruct:config",
+      "prop": "slime_recipe_fix"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "O": "#c:slime_balls",
+    "~": "minecraft:string"
+  },
+  "pattern": [
+    "~~ ",
+    "~O ",
+    "  ~"
+  ],
+  "result": {
+    "count": 2,
+    "id": "minecraft:lead"
+  }
+}

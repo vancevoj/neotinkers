@@ -1,0 +1,57 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "tconstruct:config",
+      "prop": "slimy_loot_chests"
+    }
+  ],
+  "name": "minecraft:chests/simple_dungeon",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "tconstruct:earth_slime_sapling",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "tconstruct:sky_slime_sapling",
+          "weight": 7
+        }
+      ],
+      "name": "main"
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 4,
+              "min": 2
+            }
+          },
+          "name": "tconstruct:earth_slime_grass_seeds",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 4,
+              "min": 2
+            }
+          },
+          "name": "tconstruct:sky_slime_grass_seeds",
+          "weight": 7
+        }
+      ],
+      "name": "pool1"
+    }
+  ]
+}

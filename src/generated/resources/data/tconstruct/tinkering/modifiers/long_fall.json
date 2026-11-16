@@ -1,0 +1,27 @@
+{
+  "level_display": "tconstruct:no_levels",
+  "modules": [
+    {
+      "type": "tconstruct:requirements",
+      "requirement": {
+        "type": "tconstruct:has_modifier",
+        "check": "all",
+        "level": {
+          "min": 4
+        },
+        "modifier": {
+          "type": "tconstruct:single",
+          "modifier": "tconstruct:feather_fall"
+        }
+      },
+      "translation_key": "modifier.tconstruct.long_fall.requirements"
+    },
+    {
+      "type": "tconstruct:block_damage",
+      "damage_source": {
+        "type": "mantle:tag",
+        "tag": "tconstruct:protection/fall"
+      }
+    }
+  ]
+}

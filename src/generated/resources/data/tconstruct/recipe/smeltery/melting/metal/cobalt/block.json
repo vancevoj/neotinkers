@@ -1,0 +1,10 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": "#c:storage_blocks/cobalt",
+  "result": {
+    "amount": 810,
+    "tag": "c:molten_cobalt"
+  },
+  "temperature": 950,
+  "time": 194
+}

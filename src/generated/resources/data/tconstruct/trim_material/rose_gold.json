@@ -1,0 +1,12 @@
+{
+  "description": {
+    "color": "#F7CDBB",
+    "translate": "trim_material.tconstruct.format",
+    "with": [
+      {
+        "translate": "material.tconstruct.rose_gold"
+      }
+    ]
+  },
+  "palette_id": "tconstruct:trim/rose_gold"
+}

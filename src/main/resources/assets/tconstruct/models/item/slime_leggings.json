@@ -1,0 +1,19 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "neoforge:item/default",
+  "textures": {
+    "slime": "tconstruct:item/tool/armor/slime/leggings/slime",
+    "shell": "tconstruct:item/tool/armor/slime/leggings/shell"
+  },
+  "modifier_maps": ["tconstruct:slime/leggings", "tconstruct:armor/leggings"],
+  "parts": [
+    { "name": "slime", "index": 1 },
+    { "name": "shell", "index": 0 }
+  ],
+  "overrides": [
+    {
+      "predicate": { "tconstruct:broken": 1 },
+      "model": "tconstruct:item/armor/slime/leggings_broken"
+    }
+  ]
+}

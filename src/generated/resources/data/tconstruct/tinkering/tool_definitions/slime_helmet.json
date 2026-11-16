@@ -1,0 +1,60 @@
+{
+  "modules": [
+    {
+      "type": "tconstruct:material_stats",
+      "primary_part": 1,
+      "stat_types": [
+        "tconstruct:skull",
+        {
+          "scale": 1.1,
+          "stat": "tconstruct:slime"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:material_traits",
+      "hooks": [
+        "tconstruct:trim_trait"
+      ],
+      "material_index": 0,
+      "stat_type": "tconstruct:skull"
+    },
+    {
+      "type": "tconstruct:remapping_materials",
+      "missing": [
+        {
+          "type": "tconstruct:random",
+          "allow_hidden": true
+        },
+        {
+          "type": "tconstruct:fixed",
+          "material": "tconstruct:blood"
+        }
+      ],
+      "remap": [
+        {
+          "tconstruct:blazing_bone": "tconstruct:blaze",
+          "tconstruct:glass": "tconstruct:gunpowder",
+          "tconstruct:necronium": "tconstruct:necrotic_bone",
+          "tconstruct:venombone": "tconstruct:ice"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:modifier_slots",
+      "slots": {
+        "abilities": 2,
+        "upgrades": 3
+      }
+    },
+    {
+      "type": "tconstruct:unique_material_name",
+      "index": 1
+    },
+    {
+      "type": "tconstruct:custom_material_name",
+      "index": 0,
+      "suffix": "skull"
+    }
+  ]
+}

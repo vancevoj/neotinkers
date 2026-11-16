@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": "#c:slimeball/earth",
+  "material": "tconstruct:slimeball#earth",
+  "needed": 1,
+  "value": 1
+}

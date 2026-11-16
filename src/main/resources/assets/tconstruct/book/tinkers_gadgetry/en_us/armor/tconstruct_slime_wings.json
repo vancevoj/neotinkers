@@ -1,0 +1,14 @@
+{
+  "tool": "tconstruct:slime_wings",
+  "text": [
+    { "text": "Fall with style!" },
+    { "text": "To create these futuristic wings, you simply need to pour slime on an elytra in a basin. The slimelytra can later be repaired using phantom membranes in addition to it's slime type.", "paragraph": true }
+  ],
+  "properties": [
+    "Low Armor",
+    "0 Defense Slots",
+    "4 Upgrade Slots",
+    "1 Ability Slot",
+    "Wings"
+  ]
+}

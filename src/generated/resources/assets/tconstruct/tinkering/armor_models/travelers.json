@@ -1,0 +1,38 @@
+{
+  "layers": [
+    {
+      "type": "tconstruct:fixed",
+      "prefix": "tconstruct:travelers/base_"
+    },
+    {
+      "type": "tconstruct:first_present",
+      "options": [
+        {
+          "type": "tconstruct:material_has_fallback",
+          "apply": {
+            "type": "tconstruct:dyed",
+            "prefix": "tconstruct:travelers/cuirass_",
+            "suffix": "_tconstruct_wool_white"
+          },
+          "fallback": "wool",
+          "index": 1
+        },
+        {
+          "type": "tconstruct:dyed",
+          "prefix": "tconstruct:travelers/cuirass_"
+        },
+        {
+          "type": "tconstruct:material",
+          "index": 1,
+          "prefix": "tconstruct:travelers/cuirass_"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:material",
+      "index": 0,
+      "prefix": "tconstruct:travelers/metal_"
+    },
+    "tconstruct:trim"
+  ]
+}

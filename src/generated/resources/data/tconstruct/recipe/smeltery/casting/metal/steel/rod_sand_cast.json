@@ -1,0 +1,19 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:rods/steel"
+    }
+  ],
+  "type": "tconstruct:casting_table",
+  "cast": "#tconstruct:casts/single_use/rod",
+  "cast_consumed": true,
+  "cooling_time": 46,
+  "fluid": {
+    "amount": 45,
+    "tag": "c:molten_steel"
+  },
+  "result": {
+    "tag": "c:rods/steel"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:gears"
+    }
+  ],
+  "type": "tconstruct:item_part_builder",
+  "pattern": "tconstruct:gear",
+  "pattern_item": "#tconstruct:casts/sand",
+  "result": "tconstruct:gear_sand_cast",
+  "title_key": "tconstruct:sand_cast"
+}

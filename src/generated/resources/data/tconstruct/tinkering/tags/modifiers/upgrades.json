@@ -1,0 +1,10 @@
+{
+  "values": [
+    "#tconstruct:upgrades/general",
+    "#tconstruct:upgrades/melee",
+    "#tconstruct:upgrades/damage",
+    "#tconstruct:upgrades/harvest",
+    "#tconstruct:upgrades/armor",
+    "#tconstruct:upgrades/ranged"
+  ]
+}

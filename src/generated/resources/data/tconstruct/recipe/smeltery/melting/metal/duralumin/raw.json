@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:raw_materials/duralumin"
+    }
+  ],
+  "type": "tconstruct:ore_melting",
+  "byproducts": [
+    {
+      "amount": 90,
+      "rate": "metal",
+      "tag": "c:molten_copper"
+    }
+  ],
+  "ingredient": "#c:raw_materials/duralumin",
+  "rate": "metal",
+  "result": {
+    "amount": 90,
+    "tag": "c:molten_duralumin"
+  },
+  "temperature": 625,
+  "time": 82
+}

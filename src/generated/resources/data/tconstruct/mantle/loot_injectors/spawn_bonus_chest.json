@@ -1,0 +1,85 @@
+{
+  "name": "minecraft:chests/spawn_bonus_chest",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "tconstruct:add_tool_data",
+            "materials": [
+              {
+                "type": "tconstruct:random",
+                "material": {
+                  "type": "mantle:inverted",
+                  "inverted_type": "mantle:tag",
+                  "tag": "tconstruct:exclude_from_loot"
+                },
+                "tier": {
+                  "max": 1
+                }
+              },
+              {
+                "type": "tconstruct:first"
+              },
+              {
+                "type": "tconstruct:random",
+                "material": {
+                  "type": "mantle:inverted",
+                  "inverted_type": "mantle:tag",
+                  "tag": "tconstruct:exclude_from_loot"
+                },
+                "tier": {
+                  "max": 1
+                }
+              }
+            ]
+          },
+          "name": "tconstruct:hand_axe",
+          "weight": 2
+        }
+      ],
+      "name": "main"
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "tconstruct:add_tool_data",
+            "materials": [
+              {
+                "type": "tconstruct:random",
+                "material": {
+                  "type": "mantle:inverted",
+                  "inverted_type": "mantle:tag",
+                  "tag": "tconstruct:exclude_from_loot"
+                },
+                "tier": {
+                  "max": 1
+                }
+              },
+              {
+                "type": "tconstruct:first"
+              },
+              {
+                "type": "tconstruct:random",
+                "material": {
+                  "type": "mantle:inverted",
+                  "inverted_type": "mantle:tag",
+                  "tag": "tconstruct:exclude_from_loot"
+                },
+                "tier": {
+                  "max": 1
+                }
+              }
+            ]
+          },
+          "name": "tconstruct:pickaxe",
+          "weight": 2
+        }
+      ],
+      "name": "pool1"
+    }
+  ]
+}

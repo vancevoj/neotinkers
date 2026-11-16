@@ -1,0 +1,29 @@
+{
+  "type": "tconstruct:swappable_modifier",
+  "allow_crystal": false,
+  "inputs": [
+    {
+      "ingredient": "minecraft:nether_quartz_ore"
+    },
+    {
+      "ingredient": "minecraft:blaze_rod"
+    },
+    {
+      "ingredient": "minecraft:nether_quartz_ore"
+    },
+    {
+      "ingredient": "#c:ingots/manyullyn"
+    },
+    {
+      "ingredient": "#c:ingots/manyullyn"
+    }
+  ],
+  "result": {
+    "name": "tconstruct:crystalshot",
+    "value": "quartz"
+  },
+  "slots": {
+    "abilities": 1
+  },
+  "tools": "#tconstruct:modifiable/ranged/bows"
+}

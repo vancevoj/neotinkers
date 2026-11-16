@@ -1,0 +1,39 @@
+package slimeknights.tconstruct.tools.modifiers.traits.skull;
+
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.hook.combat.DamageDealtModifierHook;
+import slimeknights.tconstruct.library.modifiers.impl.NoLevelsModifier;
+import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
+import slimeknights.tconstruct.library.tools.context.EquipmentContext;
+import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
+import slimeknights.tconstruct.tools.TinkerModifiers;
+
+/** Use {@link slimeknights.tconstruct.library.modifiers.modules.combat.MobEffectModule} */
+@Deprecated(forRemoval = true)
+public class WitheredModifier extends NoLevelsModifier implements DamageDealtModifierHook {
+  @Override
+  protected void registerHooks(Builder hookBuilder) {
+    super.registerHooks(hookBuilder);
+    hookBuilder.addModule(StrongBonesModifier.CALCIFIABLE_MODULE);
+    hookBuilder.addHook(this, ModifierHooks.DAMAGE_DEALT);
+  }
+
+  @Override
+  public void onDamageDealt(IToolStackView tool, ModifierEntry modifier, EquipmentContext context, EquipmentSlot slotType, LivingEntity target, DamageSource source, float amount, boolean isDirectDamage) {
+    // drink milk for more power, but less duration
+    if (isDirectDamage && !source.is(DamageTypeTags.IS_PROJECTILE)) {
+      LivingEntity attacker = context.getEntity();
+      // calcifiedEffect is a DeferredHolder with a wildcard registry type, so wrap the effect as a Holder<MobEffect>
+      boolean isCalcified = attacker.hasEffect(BuiltInRegistries.MOB_EFFECT.wrapAsHolder(TinkerModifiers.calcifiedEffect.value()));
+      target.addEffect(new MobEffectInstance(MobEffects.WITHER, isCalcified ? 100 : 200, isCalcified ? 1 : 0), attacker);
+    }
+  }
+}

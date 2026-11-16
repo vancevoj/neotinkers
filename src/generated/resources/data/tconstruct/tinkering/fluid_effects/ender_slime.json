@@ -1,0 +1,71 @@
+{
+  "block_effects": [
+    {
+      "type": "tconstruct:sequence",
+      "effects": [
+        {
+          "type": "tconstruct:break_block"
+        },
+        {
+          "type": "tconstruct:place_block"
+        }
+      ]
+    }
+  ],
+  "entity_effects": [
+    {
+      "type": "tconstruct:mob_effect",
+      "action": "add",
+      "effect": "minecraft:slowness",
+      "level": 1,
+      "time": 100
+    },
+    {
+      "type": "tconstruct:conditional",
+      "effect": {
+        "type": "tconstruct:mob_effect",
+        "action": "add",
+        "effect": "tconstruct:returning",
+        "level": 1,
+        "time": 140
+      },
+      "target": {
+        "type": "mantle:has_effect",
+        "effect": "tconstruct:returning"
+      }
+    },
+    {
+      "type": "tconstruct:conditional",
+      "effect": {
+        "type": "tconstruct:sequence",
+        "effects": [
+          {
+            "type": "tconstruct:mob_effect",
+            "action": "set",
+            "effect": "tconstruct:returning",
+            "level": 1,
+            "time": 140
+          },
+          {
+            "type": "tconstruct:teleport",
+            "chances": {
+              "flat": 16
+            },
+            "diameter": {
+              "each_level": 8
+            }
+          }
+        ]
+      },
+      "target": {
+        "type": "mantle:inverted",
+        "effect": "tconstruct:returning",
+        "inverted_type": "mantle:has_effect"
+      }
+    }
+  ],
+  "fluid": {
+    "amount": 50,
+    "tag": "tconstruct:ender_slime"
+  }
+}

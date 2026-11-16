@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:geore_clusters/gold"
+    }
+  ],
+  "type": "tconstruct:ore_melting",
+  "byproducts": [
+    {
+      "amount": 360,
+      "rate": "metal",
+      "tag": "c:molten_cobalt"
+    }
+  ],
+  "ingredient": "#c:geore_clusters/gold",
+  "rate": "metal",
+  "result": {
+    "amount": 360,
+    "tag": "c:molten_gold"
+  },
+  "temperature": 700,
+  "time": 142
+}

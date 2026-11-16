@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:nuggets/uranium"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:nuggets/uranium",
+  "result": {
+    "amount": 10,
+    "tag": "c:molten_uranium"
+  },
+  "temperature": 830,
+  "time": 20
+}

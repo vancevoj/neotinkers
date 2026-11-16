@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "tconstruct:tank_fluid",
+    "model": "tconstruct:item/scorched_fuel_gauge"
+  }
+}

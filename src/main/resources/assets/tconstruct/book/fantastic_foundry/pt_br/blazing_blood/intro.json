@@ -1,0 +1,14 @@
+{
+  "title": "Sangue de Blaze",
+  "image": {
+    "file": "tconstruct:book/images/manyullyn_alloy.png",
+    "width": 179,
+    "height": 69
+  },
+  "text": [
+    {
+      "text": "Então Tinkereiro, você está tentando fazer ligas melhores, mas acha a lava muito fraca? Por que não liquefazer a essência de um blaze para alimentar seus desejos?",
+      "paragraph": true
+    }
+  ]
+}

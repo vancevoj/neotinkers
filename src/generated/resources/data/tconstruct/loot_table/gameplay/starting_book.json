@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:advancement_reward",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "tconstruct:materials_and_you"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "tconstruct:gameplay/starting_book"
+}

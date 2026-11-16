@@ -1,0 +1,16 @@
+{
+  "block_effects": [
+    {
+      "type": "tconstruct:interact"
+    }
+  ],
+  "entity_effects": [
+    {
+      "type": "tconstruct:interact"
+    }
+  ],
+  "fluid": {
+    "amount": 50,
+    "tag": "c:ender"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "tconstruct:part_builder_tool_recycling",
+  "parts": [
+    "tconstruct:repair_kit",
+    "tconstruct:repair_kit"
+  ],
+  "pattern": "tconstruct:venom_bottle",
+  "tools": {
+    "ingredient": [
+      "tconstruct:travelers_helmet",
+      "tconstruct:travelers_chestplate",
+      "tconstruct:travelers_leggings",
+      "tconstruct:travelers_boots"
+    ]
+  }
+}

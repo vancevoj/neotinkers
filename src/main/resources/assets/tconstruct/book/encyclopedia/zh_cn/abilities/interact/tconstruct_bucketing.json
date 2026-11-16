@@ -1,0 +1,17 @@
+{
+  "modifier_id": "tconstruct:bucketing",
+  "text": [
+    {
+      "text": "工具在按下“使用”键时盛装流体，若同时潜行则改为倒出流体。额外让工具储罐容量增 加1000mB。"
+    },
+    {
+      "text": "拥有“装桶”的工具获得与流体储罐方块交互的能力，可以从工具储罐填充或抽取流体。 ",
+      "paragraph": true
+    }
+  ],
+  "more_text_space": true,
+  "effects": [
+    "最高1级",
+    "需要1个能力槽"
+  ]
+}

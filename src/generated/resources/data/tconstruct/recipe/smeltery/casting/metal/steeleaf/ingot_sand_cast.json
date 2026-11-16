@@ -1,0 +1,19 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:ingots/steeleaf"
+    }
+  ],
+  "type": "tconstruct:casting_table",
+  "cast": "#tconstruct:casts/single_use/ingot",
+  "cast_consumed": true,
+  "cooling_time": 64,
+  "fluid": {
+    "amount": 90,
+    "tag": "tconstruct:molten_steeleaf"
+  },
+  "result": {
+    "tag": "c:ingots/steeleaf"
+  }
+}

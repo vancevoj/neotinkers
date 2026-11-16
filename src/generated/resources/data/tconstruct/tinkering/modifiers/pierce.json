@@ -1,0 +1,22 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:stat_boost",
+      "each_level": 0.5,
+      "operation": "add",
+      "stat": "tconstruct:attack_damage"
+    },
+    {
+      "type": "tconstruct:weapon_mob_effect",
+      "apply_before_melee": true,
+      "effect": "tconstruct:pierce",
+      "level": {
+        "per_level": 1.0
+      },
+      "time": {
+        "flat": 80.0
+      }
+    }
+  ]
+}

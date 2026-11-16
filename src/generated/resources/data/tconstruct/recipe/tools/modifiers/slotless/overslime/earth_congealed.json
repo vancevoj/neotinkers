@@ -1,0 +1,6 @@
+{
+  "type": "tconstruct:overslime_modifier",
+  "ingredient": "tconstruct:earth_congealed_slime",
+  "restore_amount": 80,
+  "tools": "#tconstruct:modifiable/durability"
+}

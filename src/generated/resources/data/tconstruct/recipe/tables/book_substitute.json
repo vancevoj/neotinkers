@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:paper",
+    "minecraft:paper",
+    "minecraft:paper",
+    "#c:slime_balls",
+    "tconstruct:pattern",
+    "tconstruct:pattern"
+  ],
+  "result": {
+    "id": "minecraft:book"
+  }
+}

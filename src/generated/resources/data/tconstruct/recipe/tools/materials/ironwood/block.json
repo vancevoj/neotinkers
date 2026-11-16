@@ -1,0 +1,17 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:storage_blocks/ironwood"
+    }
+  ],
+  "type": "tconstruct:material",
+  "ingredient": "#c:storage_blocks/ironwood",
+  "leftover": {
+    "count": 1,
+    "tag": "c:ingots/ironwood"
+  },
+  "material": "tconstruct:ironwood",
+  "needed": 1,
+  "value": 9
+}

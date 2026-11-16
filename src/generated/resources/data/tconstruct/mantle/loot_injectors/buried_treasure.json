@@ -1,0 +1,38 @@
+{
+  "name": "minecraft:chests/buried_treasure",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "tconstruct:add_tool_data",
+              "materials": [
+                {
+                  "type": "tconstruct:ancient"
+                },
+                {
+                  "type": "tconstruct:ancient"
+                },
+                {
+                  "type": "tconstruct:ancient"
+                }
+              ]
+            },
+            {
+              "type": "mantle:set_fluid",
+              "fluid": {
+                "amount": 1000,
+                "id": "minecraft:lava"
+              }
+            }
+          ],
+          "name": "tconstruct:swasher",
+          "weight": 2
+        }
+      ],
+      "name": "pool3"
+    }
+  ]
+}

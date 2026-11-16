@@ -1,0 +1,40 @@
+{
+  "parent": "tconstruct:tools/tinker_tool",
+  "criteria": {
+    "damage": {
+      "conditions": {
+        "items": [
+          {
+            "predicates": {
+              "tconstruct:tool_stack": {
+                "predicate": {
+                  "type": "tconstruct:stat_in_range",
+                  "min": 20,
+                  "stat": "tconstruct:attack_damage"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.tconstruct.tools.one_shot.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "id": "minecraft:zombie_head"
+    },
+    "title": {
+      "translate": "advancements.tconstruct.tools.one_shot.title"
+    }
+  },
+  "requirements": [
+    [
+      "damage"
+    ]
+  ]
+}

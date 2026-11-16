@@ -1,0 +1,22 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "value": "tools_complement:lead_hammer"
+    }
+  ],
+  "type": "tconstruct:damagable_melting",
+  "ingredient": {
+    "neoforge:ingredient_type": "mantle:item_name",
+    "items": [
+      "tools_complement:lead_hammer"
+    ]
+  },
+  "result": {
+    "amount": 1170,
+    "tag": "c:molten_lead",
+    "unit_size": 10
+  },
+  "temperature": 330,
+  "time": 157
+}

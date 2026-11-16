@@ -1,0 +1,13 @@
+{
+  "title": "Geodos de Slime-do-Ender",
+  "image": {
+    "file": "tconstruct:book/images/geodes/enderslime.png",
+    "width": 180,
+    "height": 99
+  },
+  "text": [
+    {
+      "text": "Geodos de Slime-do-Ender podem ser encontrados nas ilhas exteriores do The End, tanto no subsolo quanto flutuando sozinhas. Às vezes, é difícil distinguir um geodo das outras rochas que flutuam naquele céu."
+    }
+  ]
+}

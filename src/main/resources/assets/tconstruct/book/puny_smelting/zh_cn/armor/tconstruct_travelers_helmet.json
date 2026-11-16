@@ -1,0 +1,18 @@
+{
+  "tool": "tconstruct:travelers_helmet",
+  "text": [
+    { "text": "最适合戴这护目镜的人选——国王“King”、旅鼠“Lemmings”和我的朋友King Lemmings。" },
+	{
+      "text": "这护目镜可真是好东西。能护你周全，视野一级棒，还会让你看起来像个国王。", "paragraph": true
+    }
+  ],
+  "properties": [
+    "较低的护甲值",
+    "较低的耐久度",
+    "2 升级槽",
+    "2 防御槽",
+    "1 能力槽",
+    "2 材料特性",
+    "保暖"
+  ]
+}

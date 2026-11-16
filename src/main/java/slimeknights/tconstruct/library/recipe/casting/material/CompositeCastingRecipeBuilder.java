@@ -1,0 +1,53 @@
+package slimeknights.tconstruct.library.recipe.casting.material;
+
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import slimeknights.mantle.data.loadable.Loadables;
+import slimeknights.mantle.data.predicate.IJsonPredicate;
+import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
+import slimeknights.tconstruct.common.recipe.LoadableFinishedRecipe;
+import slimeknights.tconstruct.library.json.predicate.material.MaterialPredicate;
+import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
+import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
+import slimeknights.tconstruct.library.tools.part.IMaterialItem;
+import slimeknights.tconstruct.smeltery.TinkerSmeltery;
+
+import javax.annotation.Nullable;
+
+/** Builder for a composite part recipe, should exist for each part */
+@Accessors(fluent = true)
+@RequiredArgsConstructor(staticName = "composite")
+public class CompositeCastingRecipeBuilder extends AbstractRecipeBuilder<CompositeCastingRecipeBuilder> {
+  private final IMaterialItem result;
+  private final int itemCost;
+  @Setter @Nullable
+  private MaterialStatsId castingStatConflict = null;
+  /** Registered serializer, must be type aware. Since 26.1 serializers are records, see {@link LoadableFinishedRecipe#typeAware(RecipeSerializer)} */
+  private final RecipeSerializer<? extends CompositeCastingRecipe> serializer;
+  @Setter
+  private IJsonPredicate<MaterialVariantId> allowedMaterials = MaterialPredicate.ANY;
+
+  public static CompositeCastingRecipeBuilder basin(IMaterialItem result, int itemCost) {
+    return composite(result, itemCost, TinkerSmeltery.basinCompositeSerializer.get());
+  }
+
+  public static CompositeCastingRecipeBuilder table(IMaterialItem result, int itemCost) {
+    return composite(result, itemCost, TinkerSmeltery.tableCompositeSerializer.get());
+  }
+
+  @Override
+  public void save(RecipeOutput output) {
+    save(output, Loadables.ITEM.getKey(result.asItem()));
+  }
+
+  @Override
+  public void save(RecipeOutput output, Identifier id) {
+    AdvancementHolder advancement = this.buildOptionalAdvancement(output, id, "casting");
+    output.accept(recipeKey(id), new CompositeCastingRecipe(LoadableFinishedRecipe.typeAware(serializer), id, group, itemCost, result, allowedMaterials, castingStatConflict), advancement);
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "title": "Alaşımlayıcı Grafiksel Kullanıcı Arayüzü",
+  "text": [
+    {
+      "text": "1: Bu alan, yanındaki tankları görebileceğin yerdir, daha çok tank malzemeler için daha çok çentiğe eşittir ."
+    },
+    {
+      "text": "2: Bu alan, alaşımlanmış malzemelerin büyülerinin çalışması bittiğinde görüleceği yerdir.",
+      "paragraph": true
+    },
+    {
+      "text": "3: Bu alan yakıtının görüleceği yerdir. Daha sıcak yakıt daha çok şeyi ergitebilirsin demektir.",
+      "paragraph": true
+    }
+  ]
+}

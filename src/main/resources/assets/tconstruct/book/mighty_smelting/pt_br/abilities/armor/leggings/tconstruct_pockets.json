@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:pockets",
+  "text": [
+    {
+      "text": "A única coisa que você precisa agora é de uma calculadora de bolsos para poder somar corretamente o número de bolsos."
+    }
+  ],
+  "effects": [
+    "Adiciona mais espaço de inventário",
+    "Acesse ao se agachar e ao interagir com as calças",
+    "Múltiplos níveis, cada nível adiciona +18 slots",
+    "Requer 1 slot de habilidade"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "type": "tconstruct:modifier_salvage",
+  "modifier": "tconstruct:soulbound",
+  "slots": {
+    "upgrades": 1
+  },
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:difference",
+    "base": "#tconstruct:modifiable",
+    "subtracted": "#tconstruct:modifiable/single_use"
+  }
+}

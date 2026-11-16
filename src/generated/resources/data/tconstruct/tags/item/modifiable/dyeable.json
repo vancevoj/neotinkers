@@ -1,0 +1,23 @@
+{
+  "values": [
+    "tconstruct:arrow",
+    "tconstruct:sky_staff",
+    "tconstruct:earth_staff",
+    "tconstruct:ichor_staff",
+    "tconstruct:ender_staff",
+    "tconstruct:travelers_helmet",
+    "tconstruct:travelers_chestplate",
+    "tconstruct:travelers_leggings",
+    "tconstruct:travelers_boots",
+    "tconstruct:plate_helmet",
+    "tconstruct:plate_chestplate",
+    "tconstruct:plate_leggings",
+    "tconstruct:plate_boots",
+    "tconstruct:slime_helmet",
+    "tconstruct:slimy_chestplate",
+    "tconstruct:slime_leggings",
+    "tconstruct:slime_boots",
+    "tconstruct:slime_wings",
+    "tconstruct:travelers_shield"
+  ]
+}

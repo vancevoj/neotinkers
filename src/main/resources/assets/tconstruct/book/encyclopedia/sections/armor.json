@@ -1,0 +1,8 @@
+[
+  {
+    "name": "info",
+    "type": "mantle:text",
+    "data": "armor/info.json",
+    "extraData": { "tconstruct:load_tools": { "tag": "tconstruct:modifiable/book_armor", "path": "armor", "sort": false }}
+  }
+]

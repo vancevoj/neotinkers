@@ -1,0 +1,28 @@
+{
+  "parent": "tconstruct:smeltery/mighty_smelting",
+  "criteria": {
+    "open_smeltery": {
+      "conditions": {
+        "type": "tconstruct:smeltery"
+      },
+      "trigger": "tconstruct:block_container_opened"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.tconstruct.smeltery.structure.description"
+    },
+    "icon": {
+      "id": "tconstruct:smeltery_controller"
+    },
+    "title": {
+      "translate": "advancements.tconstruct.smeltery.structure.title"
+    }
+  },
+  "requirements": [
+    [
+      "open_smeltery"
+    ]
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "stats": {
+    "tconstruct:arrow_head": {},
+    "tconstruct:skull": {
+      "durability": 250
+    },
+    "tconstruct:slime": {
+      "durability": 250,
+      "overslime_capacity": 0
+    }
+  }
+}

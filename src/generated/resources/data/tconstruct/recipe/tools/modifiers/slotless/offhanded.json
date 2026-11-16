@@ -1,0 +1,20 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "ingredient": "minecraft:leather"
+    },
+    {
+      "ingredient": "minecraft:fire_charge"
+    },
+    {
+      "ingredient": "#c:slimeball/ichor"
+    }
+  ],
+  "level": {
+    "max": 2
+  },
+  "result": "tconstruct:offhanded",
+  "tools": "#tconstruct:modifiable/interactable/charge/modifier"
+}

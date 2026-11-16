@@ -1,0 +1,12 @@
+{
+  "description": {
+    "color": "#B80000",
+    "translate": "trim_material.tconstruct.format",
+    "with": [
+      {
+        "translate": "material.tconstruct.cinderslime"
+      }
+    ]
+  },
+  "palette_id": "tconstruct:trim/cinderslime"
+}

@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:raw_materials/tungsten"
+    }
+  ],
+  "type": "tconstruct:ore_melting",
+  "byproducts": [
+    {
+      "amount": 90,
+      "rate": "metal",
+      "tag": "c:molten_gold"
+    }
+  ],
+  "ingredient": "#c:raw_materials/tungsten",
+  "rate": "metal",
+  "result": {
+    "amount": 90,
+    "tag": "c:molten_tungsten"
+  },
+  "temperature": 950,
+  "time": 97
+}

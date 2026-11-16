@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "tconstruct:seared_cobble",
+  "result": {
+    "id": "tconstruct:seared_cobble_stairs"
+  }
+}

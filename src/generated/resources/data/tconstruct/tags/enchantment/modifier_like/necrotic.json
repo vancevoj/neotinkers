@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "cyclic:life_leech",
+      "required": false
+    },
+    {
+      "id": "ensorcellation:leech",
+      "required": false
+    }
+  ]
+}

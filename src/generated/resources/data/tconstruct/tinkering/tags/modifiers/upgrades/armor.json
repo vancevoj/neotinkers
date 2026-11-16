@@ -1,0 +1,9 @@
+{
+  "values": [
+    "#tconstruct:upgrades/armor/general",
+    "#tconstruct:upgrades/armor/helmet",
+    "#tconstruct:upgrades/armor/chestplate",
+    "#tconstruct:upgrades/armor/leggings",
+    "#tconstruct:upgrades/armor/boots"
+  ]
+}

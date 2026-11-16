@@ -1,0 +1,15 @@
+{
+  "type": "tconstruct:incremental_modifier",
+  "allow_crystal": true,
+  "amount_per_item": 1,
+  "input": "#c:dusts/redstone",
+  "level": {
+    "max": 3
+  },
+  "needed_per_level": 45,
+  "result": "tconstruct:speedy",
+  "slots": {
+    "upgrades": 1
+  },
+  "tools": "#tconstruct:modifiable/armor/leggings"
+}

@@ -1,0 +1,12 @@
+{
+  "title": "焦褐方块",
+  "item": {
+    "tag": "tconstruct:scorched_blocks"
+  },
+  "text": [
+    {
+      "text": "这些方块可在熔铸炉的搭建过程中用作底板和侧壁的材料，也适合用来点缀你的基地。",
+      "paragraph": true
+    }
+  ]
+}

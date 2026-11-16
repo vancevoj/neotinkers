@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "tconstruct:tool",
+    "model": "tconstruct:item/throwing_axe"
+  }
+}

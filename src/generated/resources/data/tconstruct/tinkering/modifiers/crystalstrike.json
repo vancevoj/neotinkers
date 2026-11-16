@@ -1,0 +1,45 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:attribute",
+      "attribute": "minecraft:attack_speed",
+      "each_level": 0.05,
+      "operation": "add_multiplied_total",
+      "slots": [
+        "mainhand",
+        "offhand",
+        "feet",
+        "legs",
+        "chest",
+        "head",
+        "body",
+        "saddle"
+      ],
+      "tooltip_style": "percent"
+    },
+    {
+      "type": "tconstruct:attribute",
+      "attribute": "tconstruct:generic.bad_effect_duration_multiplier",
+      "each_level": 0.05,
+      "operation": "add_multiplied_total",
+      "slots": [
+        "mainhand",
+        "offhand",
+        "feet",
+        "legs",
+        "chest",
+        "head",
+        "body",
+        "saddle"
+      ],
+      "tooltip_style": "percent"
+    },
+    {
+      "type": "tconstruct:armor_level",
+      "allow_broken": false,
+      "held_tag": "tconstruct:modifiable/armor/held",
+      "key": "tconstruct:crystalstrike_knockback"
+    }
+  ]
+}

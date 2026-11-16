@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:sheetmetals/nickel"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:sheetmetals/nickel",
+  "result": {
+    "amount": 90,
+    "tag": "c:molten_nickel"
+  },
+  "temperature": 950,
+  "time": 65
+}

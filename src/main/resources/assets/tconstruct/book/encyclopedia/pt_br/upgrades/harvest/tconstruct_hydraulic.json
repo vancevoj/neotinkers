@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:hydraulic",
+  "text": [
+    {
+      "text": "Concede +4 de velocidade de mineração por nível na chuva. Quando submerso, concede +8 de velocidade de mineração por nível, ignorando a penalidade normal de mineração debaixo d'água."
+    }
+  ],
+  "more_text_space": true,
+  "effects": [
+    "Pode aplicar níveis progressivamente",
+    "Máximo de 5 níveis",
+    "Requer 1 slot de melhoria por nível"
+  ]
+}

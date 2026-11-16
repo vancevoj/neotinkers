@@ -1,0 +1,32 @@
+{
+  "default": [
+    {
+      "level": 1,
+      "name": "tconstruct:pierce"
+    }
+  ],
+  "perStat": {
+    "tconstruct:ammo": [
+      {
+        "level": 1,
+        "name": "tconstruct:spike"
+      }
+    ],
+    "tconstruct:armor": [
+      {
+        "level": 1,
+        "name": "tconstruct:piercing_guard"
+      }
+    ],
+    "tconstruct:skull": [
+      {
+        "level": 1,
+        "name": "tconstruct:strong_bones"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:skeleton_disguise"
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": "#c:storage_blocks/steel",
+  "result": {
+    "amount": 810,
+    "tag": "c:molten_steel"
+  },
+  "temperature": 950,
+  "time": 194
+}

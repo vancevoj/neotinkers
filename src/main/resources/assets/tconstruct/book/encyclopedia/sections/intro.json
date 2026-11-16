@@ -1,0 +1,12 @@
+[
+  {
+    "name": "foreward",
+    "type": "mantle:text",
+    "data": "intro/foreward.json"
+  },
+  {
+    "name": "focus",
+    "type": "mantle:text",
+    "data": "intro/focus.json"
+  }
+]

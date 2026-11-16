@@ -1,0 +1,10 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": "tconstruct:earth_slime_crystal_block",
+  "result": {
+    "amount": 1000,
+    "tag": "c:slime"
+  },
+  "temperature": 50,
+  "time": 62
+}

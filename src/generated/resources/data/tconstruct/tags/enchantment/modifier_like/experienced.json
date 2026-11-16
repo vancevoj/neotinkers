@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "cyclic:experience_boost",
+      "required": false
+    },
+    {
+      "id": "ensorcellation:exp_boost",
+      "required": false
+    }
+  ]
+}

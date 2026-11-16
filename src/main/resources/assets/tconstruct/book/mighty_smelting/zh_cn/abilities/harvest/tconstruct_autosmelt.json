@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:autosmelt",
+  "text": [
+    {
+      "text": "业火是绝佳的烧炼热源。"
+    }
+  ],
+  "effects": [
+    "尝试烧炼方块的掉落物",
+    "单个等级",
+    "需要1个能力槽"
+  ]
+}

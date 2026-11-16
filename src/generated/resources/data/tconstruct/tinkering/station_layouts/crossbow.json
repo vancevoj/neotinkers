@@ -1,0 +1,42 @@
+{
+  "icon": {
+    "components": {
+      "tconstruct:tool_data": {
+        "tic_display": 1,
+        "tic_materials": [
+          "tconstruct:ui_render#head",
+          "tconstruct:ui_render#handle",
+          "tconstruct:ui_render#extra",
+          "tconstruct:ui_render#large",
+          "tconstruct:ui_render#extra_large"
+        ]
+      }
+    },
+    "item": "tconstruct:crossbow"
+  },
+  "input_slots": [
+    {
+      "filter": "tconstruct:bow_limb",
+      "icon": "tconstruct:bow_limb",
+      "translation_key": "item.tconstruct.bow_limb",
+      "x": 10,
+      "y": 20
+    },
+    {
+      "filter": "tconstruct:bow_grip",
+      "icon": "tconstruct:bow_grip",
+      "translation_key": "item.tconstruct.bow_grip",
+      "x": 46,
+      "y": 56
+    },
+    {
+      "filter": "tconstruct:bowstring",
+      "icon": "tconstruct:bowstring",
+      "translation_key": "item.tconstruct.bowstring",
+      "x": 28,
+      "y": 38
+    }
+  ],
+  "sortIndex": 8,
+  "translation_key": "item.tconstruct.crossbow"
+}

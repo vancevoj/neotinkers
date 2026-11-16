@@ -1,0 +1,14 @@
+{
+  "tool": "tconstruct:slime_boots",
+  "text": [
+    { "text": "Essas botas combinam o poder do coelho com slime para permitir que você salte por aí com facilidade." },
+    { "text": "Para criar essas botas fantásticas, derrame fluido de slime-do-ender sobre um pé de coelho. As botas podem ser reparadas mais tarde usando pele de coelho.", "paragraph": true }
+  ],
+  "properties": [
+    "Alta Durabilidade",
+    "Sem Slots de Armadura ou Defesa",
+    "5 Slots de Melhoria",
+    "1 Slot de Habilidade",
+    "Elásticas e Saltitantes"
+  ]
+}

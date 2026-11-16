@@ -1,0 +1,11 @@
+{
+  "type": "tconstruct:casting_table",
+  "cast": "minecraft:glass_bottle",
+  "cast_consumed": true,
+  "cooling_time": 1,
+  "fluid": {
+    "amount": 250,
+    "tag": "c:honey"
+  },
+  "result": "minecraft:honey_bottle"
+}

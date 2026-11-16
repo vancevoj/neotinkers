@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "tconstruct:knightslime_ingot",
+  "key": {
+    "#": "#c:nuggets/knightslime",
+    "*": "tconstruct:knightslime_nugget"
+  },
+  "pattern": [
+    "###",
+    "#*#",
+    "###"
+  ],
+  "result": {
+    "id": "tconstruct:knightslime_ingot"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "tool": "tconstruct:crossbow",
+  "text": [
+    {
+      "text": "弩适合那些想要机动作战的人。"
+    },
+    {
+      "text": "不是让你把弓绞成麻花！",
+      "paragraph": true
+    }
+  ],
+  "properties": [
+    "弓更迅捷机敏的版本",
+    "装填一根箭随时发射",
+    "或者放个烟花来开趴"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": "minecraft:purple_wool",
+  "material": "tconstruct:wool#purple",
+  "needed": 1,
+  "value": 1
+}

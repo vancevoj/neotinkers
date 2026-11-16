@@ -1,0 +1,140 @@
+package slimeknights.tconstruct.library.recipe.tinkerstation.repairing;
+
+import lombok.Getter;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
+import slimeknights.mantle.data.loadable.field.ContextKey;
+import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.ModifierId;
+import slimeknights.tconstruct.library.recipe.display.VanillaFilteredRecipe;
+import slimeknights.tconstruct.library.recipe.modifiers.adding.OverslimeCraftingTableRecipe;
+import slimeknights.tconstruct.library.recipe.modifiers.adding.OverslimeCraftingTableRecipe.ToolFound;
+import slimeknights.tconstruct.library.recipe.tinkerstation.IDisplayCraftingTinkering;
+import slimeknights.tconstruct.library.tools.helper.ToolDamageUtil;
+import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
+import slimeknights.tconstruct.library.tools.nbt.ToolStack;
+import slimeknights.tconstruct.tools.TinkerModifiers;
+
+import java.util.List;
+import java.util.function.Predicate;
+
+/**
+ * Recipe for repairing a tool in the crafting table provided it has the given modifier.
+ * @see ModifierRepairRecipeBuilder
+ * @see ModifierRepairTinkerStationRecipe
+ * @see slimeknights.tconstruct.library.modifiers.modules.behavior.MaterialRepairModule
+ */
+public class ModifierRepairCraftingRecipe extends CustomRecipe implements IModifierRepairRecipe, VanillaFilteredRecipe<IDisplayCraftingTinkering> {
+  public static final RecordLoadable<ModifierRepairCraftingRecipe> LOADER = RecordLoadable.create(ContextKey.ID.requiredField(), MODIFIER_FIELD, INGREDIENT_FIELD, REPAIR_AMOUNT_FIELD, ModifierRepairCraftingRecipe::new);
+  private static final Predicate<ItemStack> TOOLS = stack -> stack.is(TinkerTags.Items.DURABILITY);
+
+  @Getter
+  private final Identifier id;
+  @Getter
+  private final ModifierId modifier;
+  @Getter
+  private final Ingredient ingredient;
+  @Getter
+  private final int repairAmount;
+  public ModifierRepairCraftingRecipe(Identifier idIn, ModifierId modifier, Ingredient ingredient, int repairAmount) {
+    this.id = idIn;
+    this.modifier = modifier;
+    this.ingredient = ingredient;
+    this.repairAmount = repairAmount;
+  }
+
+  @Override
+  public CraftingBookCategory category() {
+    return CraftingBookCategory.EQUIPMENT;
+  }
+
+  @Override
+  public boolean matches(CraftingInput inv, Level world) {
+    ToolFound inputs = OverslimeCraftingTableRecipe.findTool(inv, TOOLS, ingredient);
+    if (inputs == null) {
+      return false;
+    }
+    // tool must have the modifier and be damaged
+    IToolStackView tool = ToolStack.from(inputs.tool());
+    return (tool.isBroken() || tool.getDamage() > 0) && tool.getModifierLevel(modifier) > 0;
+  }
+
+  @Override
+  public ItemStack assemble(CraftingInput inv) {
+    ToolFound inputs = OverslimeCraftingTableRecipe.findTool(inv, TOOLS, ingredient);
+    if (inputs == null) {
+      TConstruct.LOG.error("Recipe repair on {} failed to find items after matching", id);
+      return ItemStack.EMPTY;
+    }
+
+    // scale the repair based on the modifiers
+    ToolStack tool = ToolStack.from(inputs.tool());
+    float repairAmount = inputs.itemsFound() * this.repairAmount * tool.getModifierLevel(modifier);
+    for (ModifierEntry entry : tool.getModifierList()) {
+      repairAmount = entry.getHook(ModifierHooks.REPAIR_FACTOR).getRepairFactor(tool, entry, repairAmount);
+      if (repairAmount <= 0) {
+        // failed to repair
+        return ItemStack.EMPTY;
+      }
+    }
+
+    // repair the tool
+    tool = tool.copy();
+    ToolDamageUtil.repair(tool, (int)repairAmount);
+    return tool.copyStack(inputs.tool(), 1);
+  }
+
+  @Override
+  public NonNullList<ItemStack> getRemainingItems(CraftingInput inv) {
+    // step 1: find out how much we need to repair
+    ToolFound inputs = OverslimeCraftingTableRecipe.findTool(inv, TOOLS, ingredient);
+    int repairPerItem = 0;
+    int repairNeeded = 0;
+    if (inputs != null) {
+      ToolStack tool = ToolStack.from(inputs.tool());
+      repairNeeded = tool.getDamage();
+      float repairFloat = tool.getModifierLevel(modifier) * repairAmount;
+      if (repairFloat > 0) {
+        for (ModifierEntry entry : tool.getModifierList()) {
+          repairFloat = entry.getHook(ModifierHooks.REPAIR_FACTOR).getRepairFactor(tool, entry, repairFloat);
+          if (repairFloat <= 0) {
+            break;
+          }
+        }
+        repairPerItem = (int)repairFloat;
+      }
+    }
+
+    // step 2: consume as many items as are needed to do the repair
+    return OverslimeCraftingTableRecipe.getRemainingItems(inv, ingredient, repairNeeded, repairPerItem);
+  }
+
+  @Override
+  public RecipeSerializer<? extends CustomRecipe> getSerializer() {
+    return TinkerModifiers.craftingModifierRepair.get();
+  }
+
+
+  /* JEI */
+  private List<IDisplayCraftingTinkering> displayRecipes;
+
+  @Override
+  public List<IDisplayCraftingTinkering> getFilteredRecipes(RegistryAccess access) {
+    if (displayRecipes == null) {
+      displayRecipes = List.of(new ModifierRepairTinkerStationRecipe.DisplayRecipe(getId(), this, true));
+    }
+    return displayRecipes;
+  }
+}

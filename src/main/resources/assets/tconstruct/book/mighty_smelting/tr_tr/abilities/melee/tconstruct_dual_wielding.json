@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:dual_wielding",
+  "text": [
+    {
+      "text": "Düellolar çifte kullanım ile daha onurludur."
+    }
+  ],
+  "effects": [
+    "Araçlarınızı çifte kullanmanızı sağlar",
+    "Tek seviye",
+    "1 yetenek yuvası gereklidir"
+  ]
+}

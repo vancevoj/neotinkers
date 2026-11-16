@@ -1,0 +1,26 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "ingredient": "minecraft:piston"
+    },
+    {
+      "ingredient": "tconstruct:sky_slime"
+    }
+  ],
+  "level": {
+    "max": 2
+  },
+  "result": "tconstruct:ricochet",
+  "slots": {
+    "upgrades": 1
+  },
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:modifiable/armor/worn",
+      "#tconstruct:modifiable/shields"
+    ]
+  }
+}

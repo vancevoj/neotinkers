@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:tool_belt",
+  "text": [
+    {
+      "text": "Permite a troca dos 4 primeiros slots da hotbar usando a interação das calças. Cada nível consecutivo adiciona um slot adicional, até o máximo de 9 slots no nível 6."
+    }
+  ],
+  "more_text_space": true,
+  "effects": [
+    "O primeiro nível requer 1 slot de habilidade",
+    "Máximo de 6 níveis",
+    "Receita diferente a cada nível"
+  ]
+}

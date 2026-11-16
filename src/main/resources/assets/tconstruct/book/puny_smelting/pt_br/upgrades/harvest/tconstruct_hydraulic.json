@@ -1,0 +1,15 @@
+{
+  "modifier_id": "tconstruct:hydraulic",
+  "text": [
+    {
+      "text": "Usando a magia das bombas e dos fluidos, você pode mover coisas com facilidade. Neste caso, você simplesmente não consegue."
+    }
+  ],
+  "effects": [
+    "Minera mais rápido debaixo d'água ou na chuva",
+    "Múltiplos níveis, aumenta ainda mais a velocidade com cada nível",
+    "Requer 1 slot de melhoria por nível"
+  ]
+}
+
+

@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:gears/invar"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:gears/invar",
+  "result": {
+    "amount": 360,
+    "tag": "c:molten_invar"
+  },
+  "temperature": 900,
+  "time": 127
+}

@@ -1,0 +1,28 @@
+{
+  "name": "minecraft:chests/pillager_outpost",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "tconstruct:add_tool_data",
+            "materials": [
+              {
+                "type": "tconstruct:ancient"
+              },
+              {
+                "type": "tconstruct:ancient"
+              },
+              {
+                "type": "tconstruct:ancient"
+              }
+            ]
+          },
+          "name": "tconstruct:war_pick"
+        }
+      ],
+      "name": "main"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "tconstruct:wax_copper_platform",
+  "ingredients": [
+    "tconstruct:weathered_copper_platform",
+    "minecraft:honeycomb"
+  ],
+  "result": {
+    "id": "tconstruct:waxed_weathered_copper_platform"
+  }
+}

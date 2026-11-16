@@ -1,0 +1,47 @@
+package slimeknights.tconstruct.library.materials.definition;
+
+import net.minecraft.resources.Identifier;
+
+/** Internal record to represent a material ID with a variant. Use {@link MaterialVariantId} to create if needed */
+record MaterialVariantIdImpl(MaterialId material, String variant) implements MaterialVariantId {
+
+  @Override
+  public MaterialId getId() {
+    return material;
+  }
+
+  @Override
+  public String getVariant() {
+    return variant;
+  }
+
+  @Override
+  public boolean hasVariant() {
+    return true;
+  }
+
+  @Override
+  public boolean matchesVariant(MaterialVariantId other) {
+    // special case: material#default will match against the empty variant, to allow recipes to look for a material with no variant
+    if (DEFAULT_VARIANT.equals(variant)) {
+      String otherVariant = other.getVariant();
+      return this.material.equals(other.getId()) && (otherVariant.isEmpty() || DEFAULT_VARIANT.equals(otherVariant));
+    }
+    return this.sameVariant(other);
+  }
+
+  @Override
+  public Identifier getLocation(char separator) {
+    return material.withSuffix(separator + variant);
+  }
+
+  @Override
+  public String getSuffix() {
+    return material.getNamespace() + '_' + material.getPath() + '_' + variant;
+  }
+
+  @Override
+  public String toString() {
+    return material + "#" + variant;
+  }
+}

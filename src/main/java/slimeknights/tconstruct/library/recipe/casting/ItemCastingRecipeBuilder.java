@@ -1,0 +1,288 @@
+package slimeknights.tconstruct.library.recipe.casting;
+
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.fluids.FluidStack;
+import slimeknights.mantle.data.loadable.common.IngredientLoadable;
+import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
+import slimeknights.mantle.recipe.helper.ItemOutput;
+import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
+import slimeknights.mantle.recipe.ingredient.EmptyIngredient;
+import slimeknights.mantle.recipe.ingredient.FluidIngredient;
+import slimeknights.mantle.registration.object.FluidObject;
+import slimeknights.tconstruct.common.recipe.LoadableFinishedRecipe;
+import slimeknights.tconstruct.smeltery.TinkerSmeltery;
+
+import static slimeknights.tconstruct.library.recipe.melting.IMeltingRecipe.getTemperature;
+
+/**
+ * Builder for an item casting recipe. Takes a fluid and optional cast to create an item
+ */
+@SuppressWarnings({"WeakerAccess", "unused", "UnusedReturnValue"})
+@RequiredArgsConstructor(staticName = "castingRecipe")
+public class ItemCastingRecipeBuilder extends AbstractRecipeBuilder<ItemCastingRecipeBuilder> {
+  private final ItemOutput result;
+  /** Registered serializer, must be type aware. Since 26.1 serializers are records, see {@link LoadableFinishedRecipe#typeAware(RecipeSerializer)} */
+  private final RecipeSerializer<? extends ItemCastingRecipe> recipeSerializer;
+  private Ingredient cast = EmptyIngredient.VANILLA;
+  private FluidIngredient fluid = FluidIngredient.EMPTY;
+  @Setter @Accessors(chain = true)
+  private int coolingTime = -1;
+  private boolean consumed = false;
+  private boolean switchSlots = false;
+
+  /**
+   * Creates a new casting basin recipe
+   * @param result  Recipe result
+   * @return  Builder instance
+   */
+  public static ItemCastingRecipeBuilder basinRecipe(ItemOutput result) {
+    return castingRecipe(result, TinkerSmeltery.basinRecipeSerializer.get());
+  }
+
+  /**
+   * Creates a new casting basin recipe
+   * @param result  Recipe result
+   * @return  Builder instance
+   */
+  public static ItemCastingRecipeBuilder retexturedBasinRecipe(ItemOutput result) {
+    return castingRecipe(result, TinkerSmeltery.retexturedBasinRecipeSerializer.get());
+  }
+
+  /**
+   * Creates a new casting basin recipe
+   * @param resultIn  Recipe result
+   * @return  Builder instance
+   */
+  public static ItemCastingRecipeBuilder basinRecipe(ItemLike resultIn) {
+    return basinRecipe(ItemOutput.fromItem(resultIn));
+  }
+
+  /**
+   * Creates a new casting basin recipe
+   * @param result  Recipe result
+   * @return  Builder instance
+   */
+  public static ItemCastingRecipeBuilder basinRecipe(TagKey<Item> result) {
+    return basinRecipe(ItemOutput.fromTag(result));
+  }
+
+  /**
+   * Creates a new casting basin recipe that duplicates the input
+   * @return  Builder instance
+   */
+  public static ItemCastingRecipeBuilder basinDuplication() {
+    return castingRecipe(ItemOutput.EMPTY, TinkerSmeltery.basinDuplicationRecipeSerializer.get());
+  }
+
+  /**
+   * Creates a new casting table recipe
+   * @param resultIn  Recipe result
+   * @return  Builder instance
+   */
+  public static ItemCastingRecipeBuilder tableRecipe(ItemOutput resultIn) {
+    return castingRecipe(resultIn, TinkerSmeltery.tableRecipeSerializer.get());
+  }
+
+  /**
+   * Creates a new casting table recipe
+   * @param resultIn  Recipe result
+   * @return  Builder instance
+   */
+  public static ItemCastingRecipeBuilder retexturedTableRecipe(ItemOutput resultIn) {
+    return castingRecipe(resultIn, TinkerSmeltery.retexturedTableRecipeSerializer.get());
+  }
+
+  /**
+   * Creates a new casting table recipe
+   * @param resultIn  Recipe result
+   * @return  Builder instance
+   */
+  public static ItemCastingRecipeBuilder tableRecipe(ItemLike resultIn) {
+    return tableRecipe(ItemOutput.fromItem(resultIn));
+  }
+
+  /**
+   * Creates a new casting table recipe
+   * @param result  Recipe result
+   * @return  Builder instance
+   */
+  public static ItemCastingRecipeBuilder tableRecipe(TagKey<Item> result) {
+    return tableRecipe(ItemOutput.fromTag(result));
+  }
+
+  /**
+   * Creates a new casting table recipe that duplicates the input
+   * @return  Builder instance
+   */
+  public static ItemCastingRecipeBuilder tableDuplication() {
+    return castingRecipe(ItemOutput.EMPTY, TinkerSmeltery.tableDuplicationRecipeSerializer.get());
+  }
+
+
+  /* Fluids */
+
+  /**
+   * Sets the fluid for this recipe
+   * @param fluid   Fluid instance
+   * @param amount  amount of fluid
+   * @return  Builder instance
+   */
+  public ItemCastingRecipeBuilder setFluid(Fluid fluid, int amount) {
+    return this.setFluid(FluidIngredient.of(fluid, amount));
+  }
+
+  /**
+   * Sets the fluid for this recipe
+   * @param tagIn   Tag<Fluid> instance
+   * @param amount  amount of fluid
+   * @return  Builder instance
+   */
+  public ItemCastingRecipeBuilder setFluid(TagKey<Fluid> tagIn, int amount) {
+    return this.setFluid(FluidIngredient.of(tagIn, amount));
+  }
+
+  /**
+   * Sets the fluid ingredient
+   * @param fluid  Fluid ingredient instance
+   * @return  Builder instance
+   */
+  public ItemCastingRecipeBuilder setFluid(FluidIngredient fluid) {
+    this.fluid = fluid;
+    return this;
+  }
+
+  /**
+   * Sets the recipe cooling time
+   * @param temperature  Recipe temperature
+   * @param amount       Recipe amount
+   */
+  public ItemCastingRecipeBuilder setCoolingTime(int temperature, int amount) {
+    return setCoolingTime(ICastingRecipe.calcCoolingTime(temperature, amount));
+  }
+
+  /**
+   * Sets the fluid for this recipe, and cooling time if unset.
+   * @param fluidStack  Fluid input
+   * @return  Builder instance
+   */
+  public ItemCastingRecipeBuilder setFluidAndTime(FluidStack fluidStack) {
+    this.fluid = FluidIngredient.of(fluidStack);
+    if (this.coolingTime == -1) {
+      this.coolingTime = ICastingRecipe.calcCoolingTime(fluidStack);
+    }
+    return this;
+  }
+
+  /**
+   * Sets the fluid for this recipe, and cooling time if unset. Unlike {@link #setFluidAndTime(FluidStack)}, safe to use in datagen as no stack is created.
+   * @param fluid   Fluid input
+   * @param amount  Fluid amount
+   * @return  Builder instance
+   */
+  public ItemCastingRecipeBuilder setFluidAndTime(Fluid fluid, int amount) {
+    this.fluid = FluidIngredient.of(fluid, amount);
+    if (this.coolingTime == -1) {
+      this.coolingTime = ICastingRecipe.calcCoolingTime(getTemperature(fluid), amount);
+    }
+    return this;
+  }
+
+  /**
+   * Sets the fluid for this recipe, and cooling time
+   * @param fluid      Fluid object instance
+   * @param amount     amount of fluid
+   */
+  public ItemCastingRecipeBuilder setFluidAndTime(FluidObject<?> fluid, int amount) {
+    setFluid(fluid.ingredient(amount));
+    setCoolingTime(getTemperature(fluid), amount);
+    return this;
+  }
+
+  /* Cast */
+
+  /**
+   * Sets the cast from a tag
+   * @param tagIn     Cast tag
+   * @param consumed  If true, the cast is consumed
+   * @return  Builder instance
+   */
+  public ItemCastingRecipeBuilder setCast(TagKey<Item> tagIn, boolean consumed) {
+    return this.setCast(IngredientHelper.tag(tagIn), consumed);
+  }
+
+  /**
+   * Sets the cast from a tag
+   * @param itemIn    Cast item
+   * @param consumed  If true, the cast is consumed
+   * @return  Builder instance
+   */
+  public ItemCastingRecipeBuilder setCast(ItemLike itemIn, boolean consumed) {
+    return this.setCast(Ingredient.of(itemIn), consumed);
+  }
+
+  /**
+   * Sets the cast from an ingredient
+   * @param ingredient  Cast ingredient
+   * @param consumed    If true, the cast is consumed
+   * @return  Builder instance
+   */
+  public ItemCastingRecipeBuilder setCast(Ingredient ingredient, boolean consumed) {
+    this.cast = ingredient;
+    this.consumed = consumed;
+    return this;
+  }
+
+  /**
+   * Set output of recipe to be put into the input slot.
+   * Mostly used for cast creation
+   * @return  Builder instance
+   */
+  public ItemCastingRecipeBuilder setSwitchSlots() {
+    this.switchSlots = true;
+    return this;
+  }
+
+  /**
+   * Builds a recipe using the registry name as the recipe name
+   * @param output  Recipe output
+   */
+  @Override
+  public void save(RecipeOutput output) {
+    this.save(output, LoadableFinishedRecipe.getItemId(this.result));
+  }
+
+  @Override
+  public void save(RecipeOutput output, Identifier id) {
+    if (this.fluid == FluidIngredient.EMPTY) {
+      throw new IllegalStateException("Casting recipes require a fluid input");
+    }
+    if (this.coolingTime < 0) {
+      throw new IllegalStateException("Cooling time is too low, must be at least 0");
+    }
+    AdvancementHolder advancement = this.buildOptionalAdvancement(output, id, "casting");
+    TypeAwareRecipeSerializer<? extends ItemCastingRecipe> serializer = LoadableFinishedRecipe.typeAware(recipeSerializer);
+    // empty result is useless normally, so assume its the duplication recipe
+    if (result == ItemOutput.EMPTY) {
+      if (consumed) {
+        throw new IllegalStateException("Cannot consume cast on a duplication recipe");
+      }
+      output.accept(recipeKey(id), new CastDuplicationRecipe(serializer, id, group, cast, fluid, coolingTime), advancement);
+    } else {
+      // yeah, retextured recipes have their own constructor, does not matter as long as we pass the right serializer in
+      // you can use this for your custom recipe extensions too if you don't change the JSON :)
+      output.accept(recipeKey(id), new ItemCastingRecipe(serializer, id, group, cast, fluid, result, coolingTime, consumed && !IngredientLoadable.isEmpty(cast), switchSlots), advancement);
+    }
+  }
+}

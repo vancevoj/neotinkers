@@ -1,0 +1,15 @@
+{
+  "modifier_id": "tconstruct:pathing",
+  "text": [
+    {
+      "text": "还在为迷路而困扰？那就造出一条真正意义的路来！把走过的土地都踩实，就再也不用 担心会迷失方向了！"
+    }
+  ],
+  "tool_filter": "tconstruct:modifiable/armor/boots",
+  "effects": [
+    "踩平走过的泥土",
+    "“延展”可以扩大范围",
+    "单个等级",
+    "需要1个能力槽"
+  ]
+}

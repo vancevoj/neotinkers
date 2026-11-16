@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:raw_materials/steel"
+    }
+  ],
+  "type": "tconstruct:ore_melting",
+  "byproducts": [
+    {
+      "amount": 90,
+      "rate": "metal",
+      "tag": "c:molten_iron"
+    }
+  ],
+  "ingredient": "#c:raw_materials/steel",
+  "rate": "metal",
+  "result": {
+    "amount": 90,
+    "tag": "c:molten_steel"
+  },
+  "temperature": 950,
+  "time": 97
+}

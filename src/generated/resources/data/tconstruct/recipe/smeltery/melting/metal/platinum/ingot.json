@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:ingots/platinum"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:ingots/platinum",
+  "result": {
+    "amount": 90,
+    "tag": "c:molten_platinum"
+  },
+  "temperature": 970,
+  "time": 65
+}

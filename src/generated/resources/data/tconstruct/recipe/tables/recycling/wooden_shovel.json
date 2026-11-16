@@ -1,0 +1,11 @@
+{
+  "type": "tconstruct:part_builder_recycling",
+  "pattern": "tconstruct:venom_bottle",
+  "results": {
+    "tconstruct:rod": {
+      "count": 4,
+      "item": "minecraft:stick"
+    }
+  },
+  "tool": "minecraft:wooden_shovel"
+}

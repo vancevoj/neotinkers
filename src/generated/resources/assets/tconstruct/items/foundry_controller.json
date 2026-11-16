@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "tconstruct:fluid_texture",
+    "model": "tconstruct:item/foundry_controller"
+  }
+}

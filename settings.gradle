@@ -1,0 +1,23 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        // NeoForged: ModDevGradle plugin + NeoForge artifacts
+        maven { url = 'https://maven.neoforged.net/releases' }
+    }
+}
+
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
+// Build Mantle from the sibling vancevoj/Mantle port checkout (26.3 line). The
+// `slimeknights.mantle:Mantle` dependency declared in build.gradle is
+// substituted with this local build, so the two ports compile together.
+// Clone it next to this repo:  git clone https://github.com/vancevoj/Mantle ../Mantle (branch 26.3-dev)
+if (file('../Mantle/settings.gradle').exists() || file('../Mantle/settings.gradle.kts').exists()) {
+    includeBuild '../Mantle'
+} else {
+    logger.warn('WARNING: ../Mantle not found. Clone the Mantle 1.21 port next to this repo; TConstruct will not compile without it.')
+}
+
+rootProject.name = 'TConstruct'

@@ -1,0 +1,14 @@
+{
+  "tool": "tconstruct:slime_boots",
+  "text": [
+    { "text": "These boots take the bounciness of slime to enhance your jumping and movement." },
+    { "text": "To create these fantastic boots, pour slime on laces in a basin.", "paragraph": true }
+  ],
+  "properties": [
+    "Low Armor",
+    "0 Defense Slots",
+    "3 Upgrade Slots",
+    "2 Ability Slots",
+    "Bouncy"
+  ]
+}

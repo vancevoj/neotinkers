@@ -1,0 +1,30 @@
+{
+  "color": "FFE9ECEC",
+  "fallbacks": [
+    "wool"
+  ],
+  "generator": {
+    "supported_stats": [
+      "tconstruct:arrow_head",
+      "tconstruct:cuirass",
+      "tconstruct:armor_cuirass",
+      "tconstruct:repair_kit",
+      "tconstruct:fletching"
+    ],
+    "transformer": {
+      "type": "tconstruct:grey_to_sprite",
+      "palette": {
+        "000": "FF000000",
+        "063": {
+          "color": "FF404040",
+          "path": "minecraft:block/white_wool"
+        },
+        "102": {
+          "color": "FF808080",
+          "path": "minecraft:block/white_wool"
+        },
+        "140": "minecraft:block/white_wool"
+      }
+    }
+  }
+}

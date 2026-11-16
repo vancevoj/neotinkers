@@ -1,0 +1,17 @@
+{
+  "level_display": {
+    "type": "tconstruct:map_level",
+    "level": {
+      "each_level": 2
+    }
+  },
+  "modules": [
+    {
+      "type": "tconstruct:trait",
+      "fixed_level": false,
+      "level": 2,
+      "name": "tconstruct:feather_fall"
+    }
+  ],
+  "show_in_tooltips": "parts_only"
+}

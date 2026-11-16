@@ -1,0 +1,5 @@
+{
+  "type": "tconstruct:tinker_station_part_swapping",
+  "max_stack_size": 2,
+  "tools": "tconstruct:throwing_axe"
+}

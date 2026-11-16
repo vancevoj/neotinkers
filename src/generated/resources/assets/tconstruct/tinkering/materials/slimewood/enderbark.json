@@ -1,0 +1,40 @@
+{
+  "color": "FF5B2F66",
+  "fallbacks": [
+    "slime_wood",
+    "wood",
+    "stick",
+    "primitive"
+  ],
+  "generator": {
+    "supported_stats": [
+      "tconstruct:head",
+      "tconstruct:handle",
+      "tconstruct:binding",
+      "tconstruct:repair_kit",
+      "tconstruct:limb",
+      "tconstruct:grip",
+      "tconstruct:shield_core",
+      "tconstruct:wood",
+      "tconstruct:arrow_shaft"
+    ],
+    "transformer": {
+      "type": "tconstruct:grey_to_sprite",
+      "palette": {
+        "000": "FF000000",
+        "063": {
+          "color": "FF404040",
+          "path": "tconstruct:block/wood/enderbark/planks"
+        },
+        "102": {
+          "color": "FF808080",
+          "path": "tconstruct:block/wood/enderbark/planks"
+        },
+        "140": "tconstruct:block/wood/enderbark/planks",
+        "216": "tconstruct:block/wood/enderbark/planks",
+        "255": "FF594D59"
+      }
+    },
+    "variant": true
+  }
+}

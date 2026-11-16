@@ -1,0 +1,29 @@
+{
+  "color": "FFC3B9A1",
+  "fallbacks": [
+    "wood"
+  ],
+  "generator": {
+    "supported_stats": [
+      "tconstruct:shell",
+      "tconstruct:repair_kit",
+      "tconstruct:cuirass",
+      "tconstruct:armor_cuirass"
+    ],
+    "transformer": {
+      "type": "tconstruct:recolor_sprite",
+      "color_mapping": {
+        "type": "tconstruct:grey_to_color",
+        "palette": {
+          "000": "FF000000",
+          "063": "FF6F516C",
+          "102": "FF7E627B",
+          "140": "FF958C79",
+          "178": "FFA99B87",
+          "216": "FFC3B9A1",
+          "255": "FFDCD9C0"
+        }
+      }
+    }
+  }
+}

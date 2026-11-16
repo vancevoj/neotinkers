@@ -1,0 +1,6 @@
+{
+  "type": "tconstruct:overslime_modifier",
+  "ingredient": "tconstruct:ichor_slime",
+  "restore_amount": 540,
+  "tools": "#tconstruct:modifiable/durability"
+}

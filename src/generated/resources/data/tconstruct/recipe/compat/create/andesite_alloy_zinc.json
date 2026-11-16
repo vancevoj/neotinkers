@@ -1,0 +1,17 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "tconstruct:casting_basin",
+  "cast": "minecraft:andesite",
+  "cast_consumed": true,
+  "cooling_time": 16,
+  "fluid": {
+    "amount": 10,
+    "tag": "c:molten_zinc"
+  },
+  "result": "create:andesite_alloy"
+}

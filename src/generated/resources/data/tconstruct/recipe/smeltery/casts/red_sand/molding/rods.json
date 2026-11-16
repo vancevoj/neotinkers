@@ -1,0 +1,6 @@
+{
+  "type": "tconstruct:molding_table",
+  "material": "#tconstruct:casts/red_sand",
+  "pattern": "#c:rods",
+  "result": "tconstruct:rod_red_sand_cast"
+}

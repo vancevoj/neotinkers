@@ -1,0 +1,35 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "tconstruct:item/tool/swasher/display",
+  "textures": {
+    "blade": "tconstruct:item/tool/swasher/blade_broken",
+    "barrel": "tconstruct:item/tool/swasher/barrel",
+    "handle": "tconstruct:item/tool/swasher/handle",
+    "tank": "tconstruct:item/tool/swasher/tank"
+  },
+  "modifier_maps": [
+    "tconstruct:swasher/broken",
+    "tconstruct:swasher"
+  ],
+  "modifier_roots": [
+    "tconstruct:item/tool/swasher/modifiers/broken/",
+    "tconstruct:item/tool/swasher/modifiers/"
+  ],
+  "parts": [
+    {
+      "name": "handle",
+      "index": 1
+    },
+    {
+      "name": "blade",
+      "index": 0
+    },
+    {
+      "name": "barrel",
+      "index": 2
+    },
+    {
+      "name": "tank"
+    }
+  ]
+}

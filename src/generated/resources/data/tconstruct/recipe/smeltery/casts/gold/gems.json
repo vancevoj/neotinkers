@@ -1,0 +1,12 @@
+{
+  "type": "tconstruct:casting_table",
+  "cast": "#c:gems",
+  "cast_consumed": true,
+  "cooling_time": 57,
+  "fluid": {
+    "amount": 90,
+    "tag": "c:molten_gold"
+  },
+  "result": "tconstruct:gem_cast",
+  "switch_slots": true
+}

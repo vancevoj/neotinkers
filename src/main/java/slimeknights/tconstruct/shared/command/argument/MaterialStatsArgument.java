@@ -1,0 +1,54 @@
+package slimeknights.tconstruct.shared.command.argument;
+
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
+import com.mojang.brigadier.suggestion.Suggestions;
+import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import lombok.NoArgsConstructor;
+import net.minecraft.commands.CommandSourceStack;
+import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.materials.MaterialRegistry;
+import slimeknights.tconstruct.library.materials.stats.MaterialStatType;
+import slimeknights.tconstruct.library.materials.stats.MaterialStatsId;
+import slimeknights.tconstruct.library.utils.IdParser;
+import slimeknights.tconstruct.library.utils.Util;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.concurrent.CompletableFuture;
+
+/** Argument type for a material stat type */
+@NoArgsConstructor(staticName = "stats")
+public class MaterialStatsArgument implements ArgumentType<MaterialStatType<?>> {
+    private static final Collection<String> EXAMPLES = Arrays.asList("tconstruct:head", "tconstruct:limb");
+    // 26.3 dev only allows strings, numbers and components as translation arguments
+    private static final DynamicCommandExceptionType MODIFIER_NOT_FOUND = new DynamicCommandExceptionType(name -> TConstruct.makeTranslation("command", "material_stat.not_found", String.valueOf(name)));
+
+    @Override
+    public MaterialStatType<?> parse(StringReader reader) throws CommandSyntaxException {
+      MaterialStatsId loc = new MaterialStatsId(IdParser.read(TConstruct.MOD_ID, reader));
+      MaterialStatType<?> statType = MaterialRegistry.getInstance().getStatType(loc);
+      if (statType == null) {
+        throw MODIFIER_NOT_FOUND.create(loc);
+      }
+      return statType;
+    }
+
+    /** Gets a modifier from the command context */
+    public static MaterialStatType<?> getStat(CommandContext<CommandSourceStack> context, String name) {
+      return context.getArgument(name, MaterialStatType.class);
+    }
+
+    @Override
+    public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
+      return TinkerSuggestionProvider.suggestResource(TConstruct.MOD_ID, MaterialRegistry.getInstance().getAllStatTypeIds(), builder, id -> id, id -> Util.makeTranslation("stat", id));
+    }
+
+    @Override
+    public Collection<String> getExamples() {
+      return EXAMPLES;
+    }
+  }

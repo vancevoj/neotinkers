@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "tconstruct:tool",
+      "model": "tconstruct:item/slime_boots"
+    },
+    "on_true": {
+      "type": "tconstruct:tool",
+      "model": "tconstruct:item/armor/slime/boots_broken"
+    },
+    "property": "tconstruct:broken"
+  }
+}

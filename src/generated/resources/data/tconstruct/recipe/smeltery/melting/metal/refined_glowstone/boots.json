@@ -1,0 +1,17 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:armors/boots/refined_glowstone"
+    }
+  ],
+  "type": "tconstruct:damagable_melting",
+  "ingredient": "#c:armors/boots/refined_glowstone",
+  "result": {
+    "amount": 360,
+    "tag": "c:molten_refined_glowstone",
+    "unit_size": 10
+  },
+  "temperature": 825,
+  "time": 122
+}

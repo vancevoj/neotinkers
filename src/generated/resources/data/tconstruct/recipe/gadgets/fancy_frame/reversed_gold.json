@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "tconstruct:reverse_fancy_item_frame",
+  "ingredients": [
+    "tconstruct:gold_item_frame",
+    "minecraft:redstone_torch"
+  ],
+  "result": {
+    "id": "tconstruct:reversed_gold_item_frame"
+  }
+}

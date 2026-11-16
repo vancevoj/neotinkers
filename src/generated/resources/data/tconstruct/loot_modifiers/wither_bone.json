@@ -1,0 +1,18 @@
+{
+  "type": "mantle:replace_item",
+  "condition": {
+    "type": "minecraft:all_of",
+    "terms": [
+      {
+        "type": "neoforge:loot_table_id",
+        "loot_table_id": "minecraft:entities/wither_skeleton"
+      },
+      {
+        "type": "tconstruct:config",
+        "prop": "wither_bone_drop"
+      }
+    ]
+  },
+  "original": "minecraft:bone",
+  "replacement": "tconstruct:necrotic_bone"
+}

@@ -1,0 +1,22 @@
+{
+  "level_display": "tconstruct:no_levels",
+  "modules": [
+    {
+      "type": "tconstruct:attribute",
+      "attribute": "tconstruct:generic.bouncy",
+      "flat": 1.0,
+      "operation": "add_value",
+      "slots": [
+        "mainhand",
+        "offhand",
+        "feet",
+        "legs",
+        "chest",
+        "head",
+        "body",
+        "saddle"
+      ],
+      "tooltip_style": "none"
+    }
+  ]
+}

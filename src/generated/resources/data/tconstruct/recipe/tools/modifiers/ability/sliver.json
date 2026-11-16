@@ -1,0 +1,26 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "ingredient": "tconstruct:silky_cloth"
+    },
+    {
+      "ingredient": "tconstruct:sky_slime_vine"
+    },
+    {
+      "ingredient": "tconstruct:silky_cloth"
+    },
+    {
+      "ingredient": "tconstruct:sky_slime_vine"
+    },
+    {
+      "ingredient": "tconstruct:sky_slime_vine"
+    }
+  ],
+  "result": "tconstruct:sliver",
+  "slots": {
+    "abilities": 1
+  },
+  "tools": "#tconstruct:modifiable/staffs"
+}

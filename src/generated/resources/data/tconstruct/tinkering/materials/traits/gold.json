@@ -1,0 +1,30 @@
+{
+  "perStat": {
+    "tconstruct:armor": [
+      {
+        "level": 1,
+        "name": "tconstruct:golden"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:magic_protection"
+      }
+    ],
+    "tconstruct:plating_shield": [
+      {
+        "level": 1,
+        "name": "tconstruct:magic_protection"
+      }
+    ],
+    "tconstruct:skull": [
+      {
+        "level": 1,
+        "name": "tconstruct:chrysophilite"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:piglin_disguise"
+      }
+    ]
+  }
+}

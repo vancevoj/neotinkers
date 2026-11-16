@@ -1,0 +1,28 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "tconstruct:modifiable/armor/golden"
+    }
+  ],
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "check_trait_level": true,
+  "inputs": [
+    {
+      "ingredient": "#c:ingots/gold"
+    },
+    {
+      "ingredient": "#c:ingots/gold"
+    },
+    {
+      "ingredient": "#c:ingots/gold"
+    }
+  ],
+  "level": 1,
+  "result": "tconstruct:golden",
+  "slots": {
+    "defense": 1
+  },
+  "tools": "#tconstruct:modifiable/armor/golden"
+}

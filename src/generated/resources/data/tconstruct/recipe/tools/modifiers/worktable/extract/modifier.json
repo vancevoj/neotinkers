@@ -1,0 +1,25 @@
+{
+  "type": "tconstruct:extract_modifier",
+  "inputs": [
+    {
+      "ingredient": "tconstruct:ender_slime_crystal"
+    },
+    {
+      "ingredient": "minecraft:wet_sponge"
+    }
+  ],
+  "leftovers": [
+    "minecraft:sponge"
+  ],
+  "modifier_predicate": {
+    "type": "mantle:inverted",
+    "inverted_type": "tconstruct:tag",
+    "tag": "tconstruct:extract_blacklist/tools"
+  },
+  "name": "modifiers",
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:difference",
+    "base": "#tconstruct:modifiable",
+    "subtracted": "#tconstruct:modifiable/unsalvageable"
+  }
+}

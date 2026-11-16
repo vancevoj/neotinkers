@@ -1,0 +1,21 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "value": "oreberriesreplanted:aluminum_oreberry"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": {
+    "neoforge:ingredient_type": "mantle:item_name",
+    "items": [
+      "oreberriesreplanted:aluminum_oreberry"
+    ]
+  },
+  "result": {
+    "amount": 10,
+    "tag": "c:molten_aluminum"
+  },
+  "temperature": 425,
+  "time": 16
+}

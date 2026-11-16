@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:sharpness",
+  "text": [
+    {
+      "text": "Concede +0.75 de dano por nível."
+    }
+  ],
+  "more_text_space": true,
+  "effects": [
+    "Pode aplicar níveis progressivamente",
+    "Máximo de 5 níveis",
+    "Requer 1 slot de melhoria por nível"
+  ]
+}

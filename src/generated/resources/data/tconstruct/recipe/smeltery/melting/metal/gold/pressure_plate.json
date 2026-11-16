@@ -1,0 +1,10 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": "minecraft:light_weighted_pressure_plate",
+  "result": {
+    "amount": 180,
+    "tag": "c:molten_gold"
+  },
+  "temperature": 700,
+  "time": 80
+}

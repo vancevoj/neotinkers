@@ -1,0 +1,16 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "tconstruct:item/terracube_spawn_egg",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": -5260842
+      },
+      {
+        "type": "minecraft:constant",
+        "value": -6182991
+      }
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": "#c:slimeball/sky",
+  "material": "tconstruct:slimeball#sky",
+  "needed": 1,
+  "value": 1
+}

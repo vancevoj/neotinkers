@@ -1,0 +1,63 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:conditional_melee_damage",
+      "attacker": {
+        "type": "mantle:has_effect",
+        "effect": "minecraft:poison"
+      },
+      "formula": [
+        "$poison",
+        0.5,
+        "+",
+        "$level",
+        "*",
+        "$multiplier",
+        "*",
+        "$damage",
+        "+"
+      ],
+      "percent": false,
+      "variables": {
+        "poison": {
+          "type": "tconstruct:entity",
+          "effect": "minecraft:poison",
+          "entity_type": "tconstruct:effect_level",
+          "fallback": 0.0,
+          "which": "attacker"
+        }
+      }
+    },
+    {
+      "type": "tconstruct:conditional_stat",
+      "entity": {
+        "type": "mantle:has_effect",
+        "effect": "minecraft:poison"
+      },
+      "formula": [
+        "$poison",
+        0.5,
+        "+",
+        0.1,
+        "*",
+        "$level",
+        "*",
+        "$multiplier",
+        "*",
+        "$value",
+        "+"
+      ],
+      "percent": false,
+      "stat": "tconstruct:draw_speed",
+      "variables": {
+        "poison": {
+          "type": "tconstruct:entity",
+          "effect": "minecraft:poison",
+          "entity_type": "tconstruct:effect_level",
+          "fallback": 0.0
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "neoforge:item/default-tool",
+  "textures": {
+    "head":    "tconstruct:item/tool/melting_pan/head",
+    "handle":  "tconstruct:item/tool/melting_pan/handle"
+  },
+  "modifier_maps": ["tconstruct:melting_pan"],
+  "modifier_roots": [ "tconstruct:item/tool/melting_pan/modifiers/" ],
+  "parts": [
+    { "name": "handle",  "index": 1 },
+    { "name": "head",    "index": 0 }
+  ],
+  "overrides": [
+    {
+      "predicate": { "tconstruct:charge": 1.0 },
+      "model": "tconstruct:item/tool/melting_pan/charged"
+    },
+    {
+      "predicate": { "tconstruct:charging": 2 },
+      "model": "tconstruct:item/tool/melting_pan/blocking"
+    },
+    {
+      "predicate": { "tconstruct:charging": 2, "tconstruct:charge": 1.0 },
+      "model": "tconstruct:item/tool/melting_pan/blocking_charged"
+    },
+    {
+      "predicate": { "tconstruct:broken": 1 },
+      "model": "tconstruct:item/tool/melting_pan/broken"
+    }
+  ]
+}

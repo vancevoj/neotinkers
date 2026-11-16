@@ -1,0 +1,13 @@
+{
+  "title": "沙子铸模",
+  "image": {
+    "file": "tconstruct:book/images/sandcast_partbuilder.png",
+    "width": 172,
+    "height": 74
+  },
+  "text": [
+    {
+      "text": "沙子铸模也可以由部件制造台制作，只需要把空白沙子铸模放在模板槽即可。制作盔甲镶板 铸模时，这一步不可省略。"
+    }
+  ]
+}

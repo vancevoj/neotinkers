@@ -1,0 +1,8 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": "#minecraft:acacia_logs",
+  "leftover": "minecraft:acacia_planks",
+  "material": "tconstruct:wood",
+  "needed": 1,
+  "value": 4
+}

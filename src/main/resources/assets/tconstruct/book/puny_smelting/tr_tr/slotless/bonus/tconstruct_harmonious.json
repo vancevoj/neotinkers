@@ -1,0 +1,12 @@
+{
+  "modifier_id": "tconstruct:harmonious",
+  "text": [
+    {
+      "text": "Müzik ruh için iyidir ve aracın için de. Belki aracının bir ruhu vardır?"
+    }
+  ],
+  "effects": [
+    "Bir yükseltme yuvası ekler",
+    "Tek seviye"
+  ]
+}

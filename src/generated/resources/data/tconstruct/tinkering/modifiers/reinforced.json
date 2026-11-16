@@ -1,0 +1,56 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:reduce_tool_damage",
+      "cause": {
+        "type": "mantle:inverted",
+        "inverted_type": "tconstruct:tag",
+        "tag": "tconstruct:durability/bypass_reinforced"
+      },
+      "formula": [
+        0.025,
+        "$level",
+        "*",
+        11.0,
+        "$level",
+        "-",
+        "*"
+      ],
+      "modifier_level": {
+        "max": 5
+      },
+      "tool": {
+        "type": "tconstruct:has_modifier",
+        "check": "all",
+        "level": 0,
+        "modifier": {
+          "type": "tconstruct:single",
+          "modifier": "tconstruct:unbreakable"
+        }
+      }
+    },
+    {
+      "type": "tconstruct:reduce_tool_damage",
+      "cause": {
+        "type": "mantle:inverted",
+        "inverted_type": "tconstruct:tag",
+        "tag": "tconstruct:durability/bypass_reinforced"
+      },
+      "each_level": 0.05,
+      "flat": 0.5,
+      "modifier_level": {
+        "min": 6
+      },
+      "tool": {
+        "type": "tconstruct:has_modifier",
+        "check": "all",
+        "level": 0,
+        "modifier": {
+          "type": "tconstruct:single",
+          "modifier": "tconstruct:unbreakable"
+        }
+      }
+    }
+  ]
+}

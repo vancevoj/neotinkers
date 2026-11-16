@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:sheetmetals/silver"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:sheetmetals/silver",
+  "result": {
+    "amount": 90,
+    "tag": "c:molten_silver"
+  },
+  "temperature": 790,
+  "time": 60
+}

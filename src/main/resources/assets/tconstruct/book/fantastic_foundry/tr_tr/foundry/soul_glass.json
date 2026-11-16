@@ -1,0 +1,14 @@
+{
+  "title": "Kavrulmuş Ruh Camı",
+  "item": "tconstruct:scorched_soul_glass",
+  "text": [
+    {
+      "text": "Bakmak yeterince iyi değil mi, ergimiş metallere ellemek mi istiyorsun? Onlar içinde yüzmek mi? Ruh camı içinden geçebileceğin engel oluşturur ama sıvılar geçemez.",
+      "paragraph": true
+    },
+	{
+      "text": "Cam dökümevinin tabanında kullanılamaz.",
+      "paragraph": true
+    }
+  ]
+}

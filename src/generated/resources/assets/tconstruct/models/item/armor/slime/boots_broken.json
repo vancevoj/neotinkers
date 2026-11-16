@@ -1,0 +1,23 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "neoforge:item/default",
+  "textures": {
+    "slime": "tconstruct:item/tool/armor/slime/boots/slime_broken",
+    "laces": "tconstruct:item/tool/armor/slime/boots/laces"
+  },
+  "modifier_maps": [
+    "tconstruct:slime/boots_broken",
+    "tconstruct:slime/boots",
+    "tconstruct:armor/boots"
+  ],
+  "parts": [
+    {
+      "name": "slime",
+      "index": 1
+    },
+    {
+      "name": "laces",
+      "index": 0
+    }
+  ]
+}

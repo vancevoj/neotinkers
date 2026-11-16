@@ -1,0 +1,13 @@
+{
+  "title": "大师熔炼术",
+  "image": {
+    "file": "tconstruct:book/images/zh_cn/book_mighty_smelting.png",
+    "width": 128,
+    "height": 64
+  },
+  "text": [
+    {
+      "text": "好内容太多，一本书写不下，所以我只能再写一本书。掌握了熔化炉的用法之后，你可以熔 化一些砖泥，然后倒在一本书上，制作本书的 续篇。"
+    }
+  ]
+}

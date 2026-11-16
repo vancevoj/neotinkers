@@ -1,0 +1,11 @@
+{
+  "type": "tconstruct:entity_melting",
+  "damage": 2,
+  "entity": {
+    "tag": "c:bees"
+  },
+  "result": {
+    "amount": 25,
+    "tag": "c:honey"
+  }
+}

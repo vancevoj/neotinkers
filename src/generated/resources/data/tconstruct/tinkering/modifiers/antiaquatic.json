@@ -1,0 +1,14 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:conditional_melee_damage",
+      "each_level": 2.0,
+      "percent": false,
+      "target": {
+        "type": "mantle:mob_type",
+        "mobs": "minecraft:water"
+      }
+    }
+  ]
+}

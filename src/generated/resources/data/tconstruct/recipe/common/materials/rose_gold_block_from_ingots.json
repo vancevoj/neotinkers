@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "tconstruct:rose_gold_block",
+  "key": {
+    "#": "#c:ingots/rose_gold",
+    "*": "tconstruct:rose_gold_ingot"
+  },
+  "pattern": [
+    "###",
+    "#*#",
+    "###"
+  ],
+  "result": {
+    "id": "tconstruct:rose_gold_block"
+  }
+}

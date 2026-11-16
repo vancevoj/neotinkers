@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:coins/lead"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:coins/lead",
+  "result": {
+    "amount": 30,
+    "tag": "c:molten_lead"
+  },
+  "temperature": 330,
+  "time": 29
+}

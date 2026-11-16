@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:autosmelt",
+  "text": [
+    {
+      "text": "As chamas do inferno são úteis para aumentar o calor."
+    }
+  ],
+  "effects": [
+    "Os drops de todos os blocos são fundidos, se possível",
+    "Nível único",
+    "Requer 1 slot de Habilidade"
+  ]
+}

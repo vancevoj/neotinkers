@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "tconstruct:tool",
+      "model": "tconstruct:item/plate_chestplate"
+    },
+    "on_true": {
+      "type": "tconstruct:tool",
+      "model": "tconstruct:item/armor/plate/chestplate_broken"
+    },
+    "property": "tconstruct:broken"
+  }
+}

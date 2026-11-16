@@ -1,0 +1,18 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "ingredient": "#c:ingots/amethyst_bronze"
+    },
+    {
+      "ingredient": "minecraft:flint"
+    }
+  ],
+  "level": 1,
+  "result": "tconstruct:fireprimer",
+  "slots": {
+    "upgrades": 1
+  },
+  "tools": "tconstruct:flint_and_brick"
+}

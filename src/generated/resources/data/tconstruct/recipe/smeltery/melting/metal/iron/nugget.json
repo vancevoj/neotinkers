@@ -1,0 +1,10 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": "#c:nuggets/iron",
+  "result": {
+    "amount": 10,
+    "tag": "c:molten_iron"
+  },
+  "temperature": 800,
+  "time": 20
+}

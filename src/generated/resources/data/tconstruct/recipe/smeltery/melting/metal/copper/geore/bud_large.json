@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:geore_large_buds/copper"
+    }
+  ],
+  "type": "tconstruct:ore_melting",
+  "byproducts": [
+    {
+      "amount": 90,
+      "rate": "metal",
+      "tag": "c:molten_gold"
+    }
+  ],
+  "ingredient": "#c:geore_large_buds/copper",
+  "rate": "metal",
+  "result": {
+    "amount": 270,
+    "tag": "c:molten_copper"
+  },
+  "temperature": 500,
+  "time": 100
+}

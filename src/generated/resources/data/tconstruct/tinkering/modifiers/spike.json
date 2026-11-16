@@ -1,0 +1,15 @@
+{
+  "level_display": "tconstruct:no_levels",
+  "modules": [
+    {
+      "type": "tconstruct:tool_actions",
+      "tool_actions": [
+        "shield_disable"
+      ]
+    },
+    {
+      "type": "tconstruct:arrow_pierce",
+      "flat": 1
+    }
+  ]
+}

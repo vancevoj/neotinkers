@@ -1,0 +1,37 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:attribute",
+      "attribute": "tconstruct:generic.jump_boost",
+      "each_level": 1.0,
+      "operation": "add_value",
+      "slots": [
+        "mainhand",
+        "offhand",
+        "feet",
+        "legs",
+        "chest",
+        "head",
+        "body",
+        "saddle"
+      ]
+    },
+    {
+      "type": "tconstruct:attribute",
+      "attribute": "tconstruct:generic.safe_fall_distance",
+      "each_level": 1.0,
+      "operation": "add_value",
+      "slots": [
+        "mainhand",
+        "offhand",
+        "feet",
+        "legs",
+        "chest",
+        "head",
+        "body",
+        "saddle"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "ingredient": "minecraft:piston"
+    },
+    {
+      "ingredient": "#c:ingots/queens_slime"
+    },
+    {
+      "ingredient": "minecraft:piston"
+    },
+    {
+      "ingredient": "#c:slimeball/ender"
+    },
+    {
+      "ingredient": "#c:slimeball/ender"
+    }
+  ],
+  "level": {
+    "max": 2
+  },
+  "result": "tconstruct:reach",
+  "slots": {
+    "abilities": 1
+  },
+  "tools": "#tconstruct:modifiable/armor/chestplate"
+}

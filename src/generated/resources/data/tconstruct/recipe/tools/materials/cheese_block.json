@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": "tconstruct:cheese_block",
+  "material": "tconstruct:cheese",
+  "needed": 1,
+  "value": 4
+}

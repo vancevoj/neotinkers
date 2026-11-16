@@ -1,0 +1,23 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "ingredient": "#minecraft:fishes"
+    },
+    {
+      "ingredient": "minecraft:prismarine_bricks"
+    },
+    {
+      "ingredient": "#minecraft:fishes"
+    }
+  ],
+  "level": {
+    "max": 3
+  },
+  "result": "tconstruct:depth_strider",
+  "slots": {
+    "upgrades": 1
+  },
+  "tools": "#tconstruct:modifiable/armor/boots"
+}

@@ -1,0 +1,14 @@
+{
+  "tool": "tconstruct:slime_leggings",
+  "text": [
+    { "text": "Slimeshells are one part defense, one part storage, granting the best of both shulker abilities." },
+    { "text": "To create these wondrous pants, pour slime on a shell in a basin.", "paragraph": true }
+  ],
+  "properties": [
+    "Low Armor",
+    "0 Defense Slots",
+    "3 Upgrade Slots",
+    "2 Ability Slots",
+    "Shell Storage"
+  ]
+}

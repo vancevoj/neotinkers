@@ -1,0 +1,40 @@
+{
+  "criteria": {
+    "has_boots": {
+      "conditions": {
+        "player": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:equipment": {
+              "feet": {
+                "predicates": {
+                  "tconstruct:tool_stack": {
+                    "predicate": {
+                      "type": "tconstruct:has_volatile_key",
+                      "key": "tconstruct:snow_boots"
+                    }
+                  }
+                }
+              }
+            },
+            "minecraft:stepping_on": {
+              "block": {
+                "blocks": "minecraft:powder_snow"
+              }
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "requirements": [
+    [
+      "has_boots"
+    ]
+  ],
+  "rewards": {
+    "function": "tconstruct:grant_advancement/adventure_walk_on_powder_snow_with_leather_boots"
+  }
+}

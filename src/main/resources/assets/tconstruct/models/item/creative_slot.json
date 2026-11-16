@@ -1,0 +1,9 @@
+{
+  "loader": "mantle:nbt_key",
+  "parent": "neoforge:item/default",
+  "textures": {
+    "default": "tconstruct:item/slot/default"
+  },
+  "nbt_key": "slot",
+  "extra_textures_key": "tconstruct:creative_slot"
+}

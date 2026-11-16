@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "G": "minecraft:glowstone",
+    "b": "tconstruct:seared_brick"
+  },
+  "pattern": [
+    " b ",
+    "bGb",
+    " b "
+  ],
+  "result": {
+    "id": "tconstruct:seared_lamp"
+  }
+}

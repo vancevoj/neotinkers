@@ -1,0 +1,12 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "ingredient": "#c:music_discs"
+    }
+  ],
+  "level": 1,
+  "result": "tconstruct:harmonious",
+  "tools": "#tconstruct:modifiable/bonus_slots"
+}

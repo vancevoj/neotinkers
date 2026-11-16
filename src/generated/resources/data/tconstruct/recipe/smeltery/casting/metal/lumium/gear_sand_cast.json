@@ -1,0 +1,19 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:gears/lumium"
+    }
+  ],
+  "type": "tconstruct:casting_table",
+  "cast": "#tconstruct:casts/single_use/gear",
+  "cast_consumed": true,
+  "cooling_time": 136,
+  "fluid": {
+    "amount": 360,
+    "tag": "c:molten_lumium"
+  },
+  "result": {
+    "tag": "c:gears/lumium"
+  }
+}

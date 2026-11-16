@@ -1,0 +1,13 @@
+{
+  "title": "Döküm",
+  "image": {
+    "file": "tconstruct:book/images/scorched_casting.png",
+    "width": 109,
+    "height": 75
+  },
+  "text": [
+    {
+      "text": "Gerçek Onarıcılar yanlışlıkla yanlış bir şeyi dökümlemeyi önlemek için hep bir kalıp kullanır bu yüzden kavrulmuş masa hep birine gereksinim duyar. Altın iskeleleri ve parmaklıkları boş bir döküm bloğu yerine kullanılabilir."
+    }
+	]
+}

@@ -1,0 +1,35 @@
+{
+  "block_effects": [
+    {
+      "type": "tconstruct:mob_effect_cloud",
+      "effects": [
+        {
+          "effect": "minecraft:absorption",
+          "level": 2,
+          "time": 300
+        }
+      ]
+    }
+  ],
+  "entity_effects": [
+    {
+      "type": "tconstruct:damage",
+      "damage": 3.0,
+      "damage_type": {
+        "melee": "tconstruct:fluid_magic_melee",
+        "ranged": "tconstruct:fluid_magic_ranged"
+      }
+    },
+    {
+      "type": "tconstruct:mob_effect",
+      "action": "set",
+      "effect": "minecraft:absorption",
+      "level": 2,
+      "time": 300
+    }
+  ],
+  "fluid": {
+    "amount": 10,
+    "tag": "c:molten_rose_gold"
+  }
+}

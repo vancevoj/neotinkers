@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "tconstruct:modifiable/embellishment/slime"
+    }
+  ],
+  "type": "tconstruct:swappable_modifier",
+  "allow_crystal": false,
+  "inputs": [
+    {
+      "ingredient": "tconstruct:greenheart_planks"
+    },
+    {
+      "ingredient": "tconstruct:earth_slime_sapling"
+    },
+    {
+      "ingredient": "tconstruct:greenheart_planks"
+    }
+  ],
+  "result": {
+    "name": "tconstruct:embellishment",
+    "value": "tconstruct:earthslime"
+  },
+  "tools": "#tconstruct:modifiable/embellishment/slime",
+  "variant_formatter": "tconstruct:material"
+}

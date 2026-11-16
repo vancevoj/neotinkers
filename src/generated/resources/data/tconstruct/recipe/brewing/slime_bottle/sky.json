@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:glass_bottle"
+  },
+  "output": {
+    "id": "tconstruct:sky_slime_bottle"
+  },
+  "reagent": {
+    "item": "tconstruct:sky_congealed_slime"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:item_part_builder",
+  "pattern": "tconstruct:ingot",
+  "pattern_item": "#tconstruct:casts/sand",
+  "result": "tconstruct:ingot_sand_cast",
+  "title_key": "tconstruct:sand_cast"
+}

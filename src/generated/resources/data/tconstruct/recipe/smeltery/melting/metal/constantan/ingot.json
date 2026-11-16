@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:ingots/constantan"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:ingots/constantan",
+  "result": {
+    "amount": 90,
+    "tag": "c:molten_constantan"
+  },
+  "temperature": 920,
+  "time": 64
+}

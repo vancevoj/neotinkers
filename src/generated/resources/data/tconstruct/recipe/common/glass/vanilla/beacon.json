@@ -1,0 +1,22 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "tconstruct:config",
+      "prop": "glass_recipe_fix"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "G": "#c:glass_blocks/colorless",
+    "O": "minecraft:obsidian",
+    "S": "minecraft:nether_star"
+  },
+  "pattern": [
+    "GGG",
+    "GSG",
+    "OOO"
+  ],
+  "result": {
+    "id": "minecraft:beacon"
+  }
+}

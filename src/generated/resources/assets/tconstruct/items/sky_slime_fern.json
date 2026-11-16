@@ -1,0 +1,11 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "tconstruct:item/sky_slime_fern",
+    "tints": [
+      {
+        "type": "tconstruct:block_item"
+      }
+    ]
+  }
+}

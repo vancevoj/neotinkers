@@ -1,0 +1,36 @@
+{
+  "default": [
+    {
+      "level": 1,
+      "name": "tconstruct:magnetic"
+    }
+  ],
+  "perStat": {
+    "tconstruct:armor": [
+      {
+        "level": 1,
+        "name": "tconstruct:projectile_protection"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:iron_armor"
+      }
+    ],
+    "tconstruct:maille": [
+      {
+        "level": 1,
+        "name": "tconstruct:projectile_protection"
+      }
+    ],
+    "tconstruct:skull": [
+      {
+        "level": 1,
+        "name": "tconstruct:rebuff"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:husk_disguise"
+      }
+    ]
+  }
+}

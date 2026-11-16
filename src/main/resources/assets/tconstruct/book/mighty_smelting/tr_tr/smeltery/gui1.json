@@ -1,0 +1,14 @@
+{
+  "title": "Kallama Ocağı Grafiksel Kullanıcı Arayüzü",
+  "image": {
+    "file": "tconstruct:book/images/smeltergui.png",
+    "width": 179,
+    "height": 74
+  },
+  "text": [
+    {
+      "text": "Senin yalın kallama ocağı grafiksel kullanıcı arayüzün. Ne çok, ne az.",
+      "paragraph": true
+    }
+	]
+}

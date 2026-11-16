@@ -1,0 +1,129 @@
+package slimeknights.tconstruct.plugin.jei;
+
+import mezz.jei.api.neoforge.NeoForgeTypes;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.drawable.IDrawableAnimated.StartDirection;
+import mezz.jei.api.gui.ingredient.IRecipeSlotRichTooltipCallback;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.gui.placement.HorizontalAlignment;
+import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
+import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.category.AbstractRecipeCategory;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.neoforged.neoforge.fluids.FluidStack;
+import slimeknights.mantle.fluid.tooltip.FluidTooltipHandler;
+import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.recipe.alloying.AlloyRecipe;
+import slimeknights.tconstruct.library.recipe.fuel.MeltingFuel;
+import slimeknights.tconstruct.library.recipe.fuel.MeltingFuelLookup;
+import slimeknights.tconstruct.plugin.jei.melting.MeltingFuelHandler;
+import slimeknights.tconstruct.plugin.jei.util.CategoryUtil;
+import slimeknights.tconstruct.plugin.jei.util.FluidTooltipCallback;
+import slimeknights.tconstruct.smeltery.TinkerSmeltery;
+
+import java.awt.Color;
+import java.util.List;
+import java.util.function.Function;
+
+/**
+ * Alloy recipe category for JEI display
+ */
+public class AlloyRecipeCategory extends AbstractRecipeCategory<AlloyRecipe> {
+  private static final Identifier BACKGROUND_LOC = TConstruct.getResource("textures/gui/jei/alloy.png");
+  private static final Component TITLE = TConstruct.makeTranslation("jei", "alloy.title");
+  private static final Component CATALYST = TConstruct.makeTranslation("jei", "alloy.catalyst").withStyle(ChatFormatting.ITALIC);
+  private static final String KEY_TEMPERATURE = TConstruct.makeTranslationKey("jei", "temperature");
+
+  /** Tooltip for fluid inputs */
+  private static final FluidTooltipCallback CATALYST_TOOLTIP = (fluid, slot, tooltip) -> {
+    tooltip.add(CATALYST);
+    FluidTooltipHandler.appendMaterial(fluid, tooltip);
+  };
+
+  /** Tooltip for fuel display */
+  public static final FluidTooltipCallback FUEL_TOOLTIP = (fluid, slot, tooltip) -> {
+    MeltingFuel fuel = MeltingFuelLookup.findFuel(fluid.getFluid());
+    if (fuel != null) {
+      tooltip.add(Component.translatable(KEY_TEMPERATURE, fuel.getTemperature()).withStyle(ChatFormatting.GRAY));
+    }
+  };
+
+  private final IDrawable background;
+  private final IDrawable arrow;
+  private final IDrawable tank;
+
+  public AlloyRecipeCategory(IGuiHelper helper) {
+    super(TConstructJEIConstants.ALLOY, TITLE, helper.createDrawableItemLike(TinkerSmeltery.smelteryController), 172, 62);
+    this.background = helper.createDrawable(BACKGROUND_LOC, 0, 0, 172, 62);
+    this.arrow = helper.drawableBuilder(BACKGROUND_LOC, 172, 0, 24, 17).buildAnimated(200, StartDirection.LEFT, false);
+    this.tank = helper.createDrawable(BACKGROUND_LOC, 172, 17, 16, 16);
+  }
+
+  @Override
+  public void createRecipeExtras(IRecipeExtrasBuilder builder, AlloyRecipe recipe, IFocusGroup focuses) {
+    builder.addDrawableWidget(arrow).setPosition(90, 21);
+    builder.addText(Component.translatable(KEY_TEMPERATURE, recipe.getTemperature()), 139, 9)
+      .setPosition(33, 5)
+      .setColor(Color.GRAY.getRGB())
+      .setTextAlignment(HorizontalAlignment.CENTER);
+  }
+
+  @Override
+  public void draw(AlloyRecipe recipe, IRecipeSlotsView slots, GuiGraphicsExtractor graphics, double mouseX, double mouseY) {
+    background.draw(graphics);
+  }
+
+  /**
+   * Draws a variable number of fluids
+   * @param builder      Builder
+   * @param role         Role of the fluids in the recipe
+   * @param x            X start
+   * @param y            Y start
+   * @param totalWidth   Total width
+   * @param height       Tank height
+   * @param fluids       List of fluids to draw
+   * @param minAmount    Minimum tank size
+   * @param mapper       Logic to get a fluid list from the object
+   * @param tooltip      Tooltip callback
+   * @param <T> Object type
+   * @return Max amount based on fluids
+   */
+  @Deprecated(forRemoval = true)
+  public static <T> int drawVariableFluids(IRecipeLayoutBuilder builder, RecipeIngredientRole role, int x, int y, int totalWidth, int height, List<T> fluids, int minAmount, Function<T,List<FluidStack>> mapper, Function<T,IRecipeSlotRichTooltipCallback> tooltip) {
+    // JEI 31 removed the list based tooltip callback, so this takes rich callbacks now
+    return CategoryUtil.drawMultipleFluids(builder, i -> role, x, y, totalWidth, height, fluids, minAmount, mapper, tooltip);
+  }
+
+  @Override
+  public void setRecipe(IRecipeLayoutBuilder builder, AlloyRecipe recipe, IFocusGroup focuses) {
+    // inputs
+    int maxAmount = CategoryUtil.drawMultipleFluids(builder, ingredient -> ingredient.catalyst() ? RecipeIngredientRole.CRAFTING_STATION : RecipeIngredientRole.INPUT,
+                                       19, 11, 48, 32, recipe.getInputs(), recipe.getOutput().getAmount(),
+                                       ingredient -> ingredient.fluid().getFluids(),
+                                       ingredient -> ingredient.catalyst() ? CATALYST_TOOLTIP : FluidTooltipCallback.UNITS);
+
+    // output
+    builder.addOutputSlot(137, 11)
+           .addRichTooltipCallback(FluidTooltipCallback.UNITS)
+           .setFluidRenderer(maxAmount, false, 16, 32)
+           .add(NeoForgeTypes.FLUID_STACK, recipe.getOutput());
+
+    // fuel
+    builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 94, 43)
+           .addRichTooltipCallback(FUEL_TOOLTIP)
+           .setFluidRenderer(1, false, 16, 16)
+           .setOverlay(tank, 0, 0)
+           .addIngredients(NeoForgeTypes.FLUID_STACK, MeltingFuelHandler.getUsableFuels(recipe.getTemperature()));
+  }
+
+  @Override
+  public Identifier getIdentifier(AlloyRecipe recipe) {
+    return recipe.getId();
+  }
+}

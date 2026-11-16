@@ -1,0 +1,20 @@
+{
+  "values": [
+    "tconstruct:bucketing",
+    "tconstruct:firestarter",
+    "tconstruct:glowing",
+    "tconstruct:pathing",
+    "tconstruct:stripping",
+    "tconstruct:tilling",
+    "tconstruct:brushing",
+    "tconstruct:spitting",
+    "tconstruct:splashing",
+    "tconstruct:slurping",
+    "tconstruct:bonking",
+    "tconstruct:flinging",
+    "tconstruct:springing",
+    "tconstruct:warping",
+    "tconstruct:throwing",
+    "tconstruct:drill_attack"
+  ]
+}

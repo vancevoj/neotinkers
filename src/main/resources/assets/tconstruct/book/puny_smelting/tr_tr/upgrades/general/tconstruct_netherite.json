@@ -1,0 +1,17 @@
+{
+  "modifier_id": "tconstruct:netherite",
+  "text": [
+    {
+      "text": "Netherın gücü aracına doğru yoğunca akıyor."
+    },
+    {
+      "text": "O kadar ki araç lav gibi dış hasarlardan zarar almaz.", "paragraph": true
+    }
+  ],
+  "effects": [
+    "Dayanıklılık, saldırı hasarı, çıkarım hızı, sertliği ve savurma direncini artırır",
+    "Eklenebilmesi için Elmas veya Zümrüt gerekir",
+    "Tek seviye",
+    "1 yükseltme yuvası gerekir"
+  ]
+}

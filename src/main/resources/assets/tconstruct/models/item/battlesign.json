@@ -1,0 +1,24 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "tconstruct:item/base/battlesign",
+  "textures": {
+    "head":   "tconstruct:item/tool/battlesign/head",
+    "handle": "tconstruct:item/tool/battlesign/handle"
+  },
+  "modifier_maps": ["tconstruct:battlesign"],
+  "modifier_roots": [ "tconstruct:item/tool/battlesign/modifiers/" ],
+  "parts": [
+    { "name": "head",   "index": 0 },
+    { "name": "handle", "index": 1 }
+  ],
+  "overrides": [
+    {
+      "predicate": { "tconstruct:charging": 2 },
+      "model": "tconstruct:item/tool/battlesign/blocking"
+    },
+    {
+      "predicate": { "tconstruct:broken": 1 },
+      "model": "tconstruct:item/tool/battlesign/broken"
+    }
+  ]
+}

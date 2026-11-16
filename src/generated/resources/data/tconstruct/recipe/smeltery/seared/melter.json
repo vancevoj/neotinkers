@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "tconstruct:seared_brick",
+    "G": {
+      "neoforge:ingredient_type": "tconstruct:no_container",
+      "match": [
+        "tconstruct:seared_fuel_gauge",
+        "tconstruct:seared_ingot_gauge"
+      ]
+    }
+  },
+  "pattern": [
+    "BGB",
+    "BBB"
+  ],
+  "result": {
+    "id": "tconstruct:seared_melter"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:step_up",
+  "text": [
+    {
+      "text": "Bir ayağını ötekinin önüne koy ancak daha yükseğe."
+    }
+  ],
+  "effects": [
+    "Uzun blokları sanki medivenmiş gibi tırmanmana izin verir",
+    "Çoklu seviyeler, adım yüksekliğini her seviyede artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

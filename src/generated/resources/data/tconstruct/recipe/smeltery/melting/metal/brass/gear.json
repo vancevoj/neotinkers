@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:gears/brass"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:gears/brass",
+  "result": {
+    "amount": 360,
+    "tag": "c:molten_brass"
+  },
+  "temperature": 605,
+  "time": 107
+}

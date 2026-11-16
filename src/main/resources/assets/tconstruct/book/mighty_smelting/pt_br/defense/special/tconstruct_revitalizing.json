@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:revitalizing",
+  "text": [
+    {
+      "text": "Maçãs ornamentadas, que retrocesso.."
+    }
+  ],
+  "effects": [
+    "Pode aplicar níveis progressivamente",
+    "Máximo de 5 níveis",
+    "Requer 1 slot de defesa por nível"
+  ]
+}

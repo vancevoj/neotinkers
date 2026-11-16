@@ -1,0 +1,14 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": [
+    "minecraft:piglin_head",
+    "tconstruct:piglin_brute_head",
+    "tconstruct:zombified_piglin_head"
+  ],
+  "result": {
+    "amount": 90,
+    "tag": "c:molten_gold"
+  },
+  "temperature": 700,
+  "time": 57
+}

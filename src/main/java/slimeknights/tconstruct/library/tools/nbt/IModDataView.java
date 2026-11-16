@@ -1,0 +1,138 @@
+package slimeknights.tconstruct.library.tools.nbt;
+
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.resources.Identifier;
+import slimeknights.tconstruct.library.tools.SlotType;
+
+import javax.annotation.Nullable;
+import java.util.function.BiFunction;
+
+/**
+ * Read only view of {@link ModDataNBT}
+ */
+public interface IModDataView {
+  /** Tag type for {@link #contains(Identifier, int)} matching any numeric tag, replacement for the removed {@code Tag.TAG_ANY_NUMERIC} */
+  int TAG_ANY_NUMERIC = NbtTypeHelper.TAG_ANY_NUMERIC;
+
+  /** Empty variant of tool data */
+  IModDataView EMPTY = new IModDataView() {
+    @Override
+    public <T> T get(Identifier name, BiFunction<CompoundTag,String,T> function) {
+      return function.apply(new CompoundTag(), name.toString());
+    }
+
+    @Override
+    public boolean contains(Identifier name) {
+      return false;
+    }
+
+    @Override
+    public boolean contains(Identifier name, int type) {
+      return false;
+    }
+  };
+
+  /**
+   * Gets a namespaced key from NBT
+   * @param name      Namedspaced key
+   * @param function  Function to get data using the key
+   * @param <T>  NBT type of output
+   * @return  Data based on the function
+   */
+  <T> T get(Identifier name, BiFunction<CompoundTag,String,T> function);
+
+  /**
+   * Checks if the data contains the given tag with any type.
+   * Generally, its better to use {@link #contains(Identifier, int)}, but there are rare benefits to this method.
+   * @param name  Namespaced key
+   * @return  True if the tag is contained
+   */
+  boolean contains(Identifier name);
+
+  /**
+   * Checks if the data contains the given tag
+   * @param name  Namespaced key
+   * @param type  Tag type, see {@link Tag} for values, or {@link #TAG_ANY_NUMERIC}
+   * @return  True if the tag is contained
+   */
+  boolean contains(Identifier name, int type);
+
+  /**
+   * Gets the number of slots provided by this data. Will be 0 if this data does not support slots.
+   * @param type  Type of slot to get
+   * @return  Number of slots
+   */
+  default int getSlots(SlotType type) {
+    return 0;
+  }
+
+
+  /* Helpers */
+
+  /**
+   * Reads an generic NBT value from the mod data
+   * @param name  Name
+   * @return  Tag value, or null if missing
+   */
+  @Nullable
+  default Tag get(Identifier name) {
+    return get(name, CompoundTag::get);
+  }
+
+  /**
+   * Reads an integer from the mod data
+   * @param name  Name
+   * @return  Integer value
+   */
+  default int getInt(Identifier name) {
+    return get(name, (tag, key) -> tag.getIntOr(key, 0));
+  }
+
+  /**
+   * Reads an boolean from the mod data
+   * @param name  Name
+   * @return  Boolean value
+   */
+  default boolean getBoolean(Identifier name) {
+    return get(name, (tag, key) -> tag.getBooleanOr(key, false));
+  }
+
+  /**
+   * Reads an float from the mod data
+   * @param name  Name
+   * @return  Float value
+   */
+  default float getFloat(Identifier name) {
+    return get(name, (tag, key) -> tag.getFloatOr(key, 0));
+  }
+
+  /**
+   * Reads a string from the mod data
+   * @param name  Name
+   * @return  String value
+   */
+  default String getString(Identifier name) {
+    return get(name, (tag, key) -> tag.getStringOr(key, ""));
+  }
+
+  /**
+   * Reads a compound from the mod data
+   * @param name  Name
+   * @return  Compound value
+   */
+  default CompoundTag getCompound(Identifier name) {
+    return get(name, CompoundTag::getCompoundOrEmpty);
+  }
+
+  /**
+   * Reads a list from the mod data
+   * @param name  Name
+   * @param type  List type
+   * @return  List value
+   */
+  default ListTag getList(Identifier name, int type) {
+    return get(name, (tag, key) -> NbtTypeHelper.getList(tag, key, type));
+  }
+}

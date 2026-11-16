@@ -1,0 +1,23 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "neoforge:item/default",
+  "textures": {
+    "plating": "tconstruct:item/tool/armor/plate/helmet/plating_broken",
+    "maille": "tconstruct:item/tool/armor/plate/helmet/maille_broken"
+  },
+  "modifier_maps": [
+    "tconstruct:plate/helmet_broken",
+    "tconstruct:plate/helmet",
+    "tconstruct:armor/helmet"
+  ],
+  "parts": [
+    {
+      "name": "plating",
+      "index": 0
+    },
+    {
+      "name": "maille",
+      "index": 1
+    }
+  ]
+}

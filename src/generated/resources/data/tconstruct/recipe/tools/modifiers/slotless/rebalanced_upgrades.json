@@ -1,0 +1,26 @@
+{
+  "type": "tconstruct:swappable_modifier",
+  "allow_crystal": false,
+  "inputs": [
+    {
+      "ingredient": "#c:nuggets/rose_gold"
+    },
+    {
+      "ingredient": "minecraft:end_crystal"
+    },
+    {
+      "ingredient": "#c:nuggets/rose_gold"
+    },
+    {
+      "ingredient": "tconstruct:sky_slime_crystal_block"
+    },
+    {
+      "ingredient": "tconstruct:sky_slime_crystal_block"
+    }
+  ],
+  "result": {
+    "name": "tconstruct:rebalanced",
+    "value": "upgrades"
+  },
+  "tools": "#tconstruct:modifiable/bonus_slots"
+}

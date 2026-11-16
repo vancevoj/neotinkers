@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "tconstruct:slimesteel_ingot",
+  "key": {
+    "#": "#c:nuggets/slimesteel",
+    "*": "tconstruct:slimesteel_nugget"
+  },
+  "pattern": [
+    "###",
+    "#*#",
+    "###"
+  ],
+  "result": {
+    "id": "tconstruct:slimesteel_ingot"
+  }
+}

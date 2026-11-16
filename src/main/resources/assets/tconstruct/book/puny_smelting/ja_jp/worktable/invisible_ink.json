@@ -1,0 +1,13 @@
+{
+  "title": "不可視のインク",
+  "image": {
+    "file": "tconstruct:book/images/worktable/invisible_ink.png",
+    "width": 147,
+    "height": 64
+  },
+  "text": [
+    {
+      "text": "道具の改造がダサい？それなら、スカイスライムの瓶を1本ぶっかけてしまおう！科学的な理由により、スライムがモディファイアと反応して、効果を維持したまま改造を透明にしてくれるんだ。"
+    }
+  ]
+}

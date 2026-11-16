@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:item_part_builder",
+  "pattern": "tconstruct:tough_handle",
+  "pattern_item": "#tconstruct:casts/sand",
+  "result": "tconstruct:tough_handle_sand_cast",
+  "title_key": "tconstruct:sand_cast"
+}

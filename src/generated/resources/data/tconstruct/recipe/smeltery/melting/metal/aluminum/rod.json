@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:rods/aluminum"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:rods/aluminum",
+  "result": {
+    "amount": 45,
+    "tag": "c:molten_aluminum"
+  },
+  "temperature": 425,
+  "time": 9
+}

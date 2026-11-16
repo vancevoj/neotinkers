@@ -1,0 +1,18 @@
+{
+  "tool": "tconstruct:travelers_leggings",
+  "text": [
+    { "text": "Querida, onde estão minhas calçaaaaaaaaaaaaaas?" },
+    {
+      "text": "Viajar pelo mundo sem calças não é uma ideia muito boa, então que tal levar um par de calças para te manter aquecido e ajudá-lo na viagem!", "paragraph": true
+    }
+  ],
+  "properties": [
+    "Menos Armadura",
+    "Menos Durabilidade",
+    "2 Slots de Melhoria",
+    "2 Slots de Defesa",
+    "1 Slot de Habilidade",
+    "1 Atributo de Material",
+    "Isolante & Curada"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "neoforge:can_item_perform_ability",
+        "ability": "shears_dig"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "tconstruct:sky_slime_vine"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "tconstruct:blocks/sky_slime_vine"
+}

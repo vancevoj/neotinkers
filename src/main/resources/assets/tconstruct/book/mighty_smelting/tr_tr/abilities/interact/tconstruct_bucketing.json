@@ -1,0 +1,32 @@
+{
+  "modifier_id": "tconstruct:bucketing",
+  "text": [
+    {
+      "text": "§oBu bir kova.§r"
+    },
+    {
+      "text": "\n"
+    },
+    {
+      "text": "§lSevgili Tanrım.§r"
+    },
+    {
+      "text": "\n"
+    },
+    {
+      "text": "§oDahası var.§r"
+    },
+    {
+      "text": "\n"
+    },
+    {
+      "text": "§lYoook.§r"
+    }
+  ],
+  "effects": [
+    "Aracın artık bir kova",
+    "Tank boyutu tank yükseltmesiyle artırılabilir",
+    "Tek seviye",
+    "1 yetenek yuvası gerekir"
+  ]
+}

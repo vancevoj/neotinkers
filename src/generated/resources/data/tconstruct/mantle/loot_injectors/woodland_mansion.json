@@ -1,0 +1,29 @@
+{
+  "name": "minecraft:chests/woodland_mansion",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "tconstruct:add_tool_data",
+            "materials": [
+              {
+                "type": "tconstruct:ancient"
+              },
+              {
+                "type": "tconstruct:ancient"
+              },
+              {
+                "type": "tconstruct:ancient"
+              }
+            ]
+          },
+          "name": "tconstruct:war_pick",
+          "weight": 10
+        }
+      ],
+      "name": "main"
+    }
+  ]
+}

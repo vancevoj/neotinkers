@@ -1,0 +1,28 @@
+package slimeknights.tconstruct.library.client.book.sectiontransformer;
+
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
+import slimeknights.mantle.client.book.data.content.PageContent;
+import slimeknights.mantle.data.loadable.Loadables;
+import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.client.book.content.ContentTool;
+
+/** Injects tools into a section based on a tag */
+public class ToolTagInjectorTransformer extends AbstractTagInjectingTransformer<Item> {
+  public static final ToolTagInjectorTransformer INSTANCE = new ToolTagInjectorTransformer();
+
+  private ToolTagInjectorTransformer() {
+    super(Registries.ITEM, TConstruct.getResource("load_tools"), ContentTool.ID);
+  }
+
+  @Override
+  protected Identifier getId(Item item) {
+    return Loadables.ITEM.getKey(item);
+  }
+
+  @Override
+  protected PageContent createFallback(Item item) {
+    return new ContentTool(item);
+  }
+}

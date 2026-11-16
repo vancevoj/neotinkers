@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:firestarter",
+  "text": [
+    {
+      "text": "Tudo mudou quando o modificador incendiário chegou e atacou."
+    }
+  ],
+  "effects": [
+    "Interaja para iniciar incêndios",
+    "Nível único",
+    "Requer 1 Slot de Habilidade",
+    "Usar o Isqueiro do Tinker aumenta o raio, exigindo 1 slot de melhoria"
+  ]
+}

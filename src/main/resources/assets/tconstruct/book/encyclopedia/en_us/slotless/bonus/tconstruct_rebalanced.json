@@ -1,0 +1,16 @@
+{
+  "modifier_id": "tconstruct:rebalanced",
+  "text": [
+    {
+      "text": "Grants +1 modifier slot; type is determined by the recipe. Applying +1 ability slot makes the tool lose 1 upgrade slot."
+    },
+    {
+      "text": "Enderslime increases the level of one of the tool traits, typically the head trait.", "paragraph": true
+    }
+  ],
+  "more_text_space": true,
+  "effects": [
+    "Maximum of 1 level",
+    "Slotless"
+  ]
+}

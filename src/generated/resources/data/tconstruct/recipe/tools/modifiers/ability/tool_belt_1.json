@@ -1,0 +1,21 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "ingredient": "minecraft:leather"
+    },
+    {
+      "ingredient": "#c:ingots/iron"
+    },
+    {
+      "ingredient": "minecraft:leather"
+    }
+  ],
+  "level": 1,
+  "result": "tconstruct:tool_belt",
+  "slots": {
+    "abilities": 1
+  },
+  "tools": "#tconstruct:modifiable/armor/leggings"
+}

@@ -1,0 +1,26 @@
+{
+  "color": "FFFFF6F6",
+  "generator": {
+    "supported_stats": [
+      "tconstruct:arrow_shaft",
+      "tconstruct:ribcage",
+      "tconstruct:slimesuit_overlay",
+      "tconstruct:repair_kit"
+    ],
+    "transformer": {
+      "type": "tconstruct:recolor_sprite",
+      "color_mapping": {
+        "type": "tconstruct:grey_to_color",
+        "palette": {
+          "000": "FF000000",
+          "063": "FFF6E2CD",
+          "102": "FFF6EACD",
+          "140": "FFFFF2D5",
+          "178": "FFFFF6F6",
+          "216": "FFFFF6F6",
+          "255": "FFFFFFFF"
+        }
+      }
+    }
+  }
+}

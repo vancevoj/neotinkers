@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": "#c:raw_nuggets/cobalt",
+  "material": "tconstruct:kobold",
+  "needed": 1,
+  "value": 1
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "#": "tconstruct:seared_brick",
+    "B": "#c:glass_blocks"
+  },
+  "pattern": [
+    "#B#",
+    "BBB",
+    "#B#"
+  ],
+  "result": {
+    "id": "tconstruct:seared_fuel_gauge"
+  }
+}

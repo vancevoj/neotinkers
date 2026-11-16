@@ -1,0 +1,92 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "minecraft:range_dispatch",
+      "entries": [
+        {
+          "model": {
+            "type": "minecraft:range_dispatch",
+            "entries": [
+              {
+                "model": {
+                  "type": "tconstruct:tool",
+                  "model": "tconstruct:item/tool/melting_pan/blocking_charged"
+                },
+                "threshold": 2.0
+              }
+            ],
+            "fallback": {
+              "type": "minecraft:range_dispatch",
+              "entries": [
+                {
+                  "model": {
+                    "type": "tconstruct:tool",
+                    "model": "tconstruct:item/tool/melting_pan/blocking"
+                  },
+                  "threshold": 2.0
+                }
+              ],
+              "fallback": {
+                "type": "minecraft:range_dispatch",
+                "entries": [
+                  {
+                    "model": {
+                      "type": "tconstruct:tool",
+                      "model": "tconstruct:item/tool/melting_pan/charged"
+                    },
+                    "threshold": 1.0
+                  }
+                ],
+                "fallback": {
+                  "type": "tconstruct:tool",
+                  "model": "tconstruct:item/melting_pan"
+                },
+                "property": "tconstruct:charge"
+              },
+              "property": "tconstruct:charging"
+            },
+            "property": "tconstruct:charging"
+          },
+          "threshold": 1.0
+        }
+      ],
+      "fallback": {
+        "type": "minecraft:range_dispatch",
+        "entries": [
+          {
+            "model": {
+              "type": "tconstruct:tool",
+              "model": "tconstruct:item/tool/melting_pan/blocking"
+            },
+            "threshold": 2.0
+          }
+        ],
+        "fallback": {
+          "type": "minecraft:range_dispatch",
+          "entries": [
+            {
+              "model": {
+                "type": "tconstruct:tool",
+                "model": "tconstruct:item/tool/melting_pan/charged"
+              },
+              "threshold": 1.0
+            }
+          ],
+          "fallback": {
+            "type": "tconstruct:tool",
+            "model": "tconstruct:item/melting_pan"
+          },
+          "property": "tconstruct:charge"
+        },
+        "property": "tconstruct:charging"
+      },
+      "property": "tconstruct:charge"
+    },
+    "on_true": {
+      "type": "tconstruct:tool",
+      "model": "tconstruct:item/tool/melting_pan/broken"
+    },
+    "property": "tconstruct:broken"
+  }
+}

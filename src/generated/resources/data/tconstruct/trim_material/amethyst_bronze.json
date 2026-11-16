@@ -1,0 +1,12 @@
+{
+  "description": {
+    "color": "#C687BD",
+    "translate": "trim_material.tconstruct.format",
+    "with": [
+      {
+        "translate": "material.tconstruct.amethyst_bronze"
+      }
+    ]
+  },
+  "palette_id": "tconstruct:trim/amethyst_bronze"
+}

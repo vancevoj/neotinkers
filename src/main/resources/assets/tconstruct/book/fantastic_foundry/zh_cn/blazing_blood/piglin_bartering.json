@@ -1,0 +1,14 @@
+{
+  "title": "猪灵以物易物",
+  "image": {
+    "file": "tconstruct:book/images/bartering.png",
+    "width": 128,
+    "height": 82
+  },
+  "text": [
+    {
+      "text": "你说自己不想杀生？那也简单，我看到有些猪灵手里有提着装有烈焰血的灯笼，可能是照明 用的。你要是出个好价钱的话，兴许它们愿意 交换呢。",
+      "paragraph": true
+    }
+  ]
+}

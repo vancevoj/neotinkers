@@ -1,0 +1,119 @@
+{
+  "parent": "tconstruct:smeltery/puny_smelting",
+  "criteria": {
+    "seared_basin": {
+      "conditions": {
+        "location": {
+          "type": "minecraft:match_block",
+          "blocks": "tconstruct:seared_basin"
+        }
+      },
+      "trigger": "minecraft:placed_block"
+    },
+    "seared_faucet": {
+      "conditions": {
+        "location": {
+          "type": "minecraft:match_block",
+          "blocks": "tconstruct:seared_faucet"
+        }
+      },
+      "trigger": "minecraft:placed_block"
+    },
+    "seared_fuel_gauge": {
+      "conditions": {
+        "location": {
+          "type": "minecraft:match_block",
+          "blocks": "tconstruct:seared_fuel_gauge"
+        }
+      },
+      "trigger": "minecraft:placed_block"
+    },
+    "seared_fuel_tank": {
+      "conditions": {
+        "location": {
+          "type": "minecraft:match_block",
+          "blocks": "tconstruct:seared_fuel_tank"
+        }
+      },
+      "trigger": "minecraft:placed_block"
+    },
+    "seared_heater": {
+      "conditions": {
+        "location": {
+          "type": "minecraft:match_block",
+          "blocks": "tconstruct:seared_heater"
+        }
+      },
+      "trigger": "minecraft:placed_block"
+    },
+    "seared_ingot_gauge": {
+      "conditions": {
+        "location": {
+          "type": "minecraft:match_block",
+          "blocks": "tconstruct:seared_ingot_gauge"
+        }
+      },
+      "trigger": "minecraft:placed_block"
+    },
+    "seared_ingot_tank": {
+      "conditions": {
+        "location": {
+          "type": "minecraft:match_block",
+          "blocks": "tconstruct:seared_ingot_tank"
+        }
+      },
+      "trigger": "minecraft:placed_block"
+    },
+    "seared_melter": {
+      "conditions": {
+        "location": {
+          "type": "minecraft:match_block",
+          "blocks": "tconstruct:seared_melter"
+        }
+      },
+      "trigger": "minecraft:placed_block"
+    },
+    "seared_table": {
+      "conditions": {
+        "location": {
+          "type": "minecraft:match_block",
+          "blocks": "tconstruct:seared_table"
+        }
+      },
+      "trigger": "minecraft:placed_block"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.tconstruct.smeltery.melter.description"
+    },
+    "icon": {
+      "id": "tconstruct:seared_melter"
+    },
+    "title": {
+      "translate": "advancements.tconstruct.smeltery.melter.title"
+    }
+  },
+  "requirements": [
+    [
+      "seared_melter"
+    ],
+    [
+      "seared_table"
+    ],
+    [
+      "seared_basin"
+    ],
+    [
+      "seared_faucet"
+    ],
+    [
+      "seared_heater",
+      "seared_fuel_tank",
+      "seared_fuel_gauge",
+      "seared_ingot_tank",
+      "seared_ingot_gauge"
+    ]
+  ]
+}

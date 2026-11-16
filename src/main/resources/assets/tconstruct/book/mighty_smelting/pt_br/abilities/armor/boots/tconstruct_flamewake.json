@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:flamewake",
+  "text": [
+    {
+      "text": "Quem pensou que seria uma boa ideia combinar isqueiro do tinker com botas? Não posso pisar em lugar nenhum com segurança agora!"
+    }
+  ],
+  "effects": [
+    "Cria rastros de fogo por onde você andar",
+    "Pode aumentar a área através de expansores",
+    "Nível único",
+    "Requer 1 slot de habilidade"
+  ]
+}

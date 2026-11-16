@@ -1,0 +1,68 @@
+{
+  "modules": [
+    {
+      "type": "tconstruct:material_stats",
+      "primary_part": 0,
+      "stat_types": [
+        "tconstruct:shield_core",
+        "tconstruct:cuirass"
+      ]
+    },
+    {
+      "type": "tconstruct:default_materials",
+      "materials": [
+        {
+          "type": "tconstruct:fixed",
+          "material": "tconstruct:wood"
+        },
+        {
+          "type": "tconstruct:fixed",
+          "material": "tconstruct:leather"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:base_stats",
+      "stats": {
+        "tconstruct:block_amount": 10.0,
+        "tconstruct:block_angle": 90.0,
+        "tconstruct:durability": 200.0,
+        "tconstruct:use_item_speed": 0.8
+      }
+    },
+    {
+      "type": "tconstruct:modifier_slots",
+      "slots": {
+        "abilities": 1,
+        "defense": 2,
+        "upgrades": 2
+      }
+    },
+    {
+      "type": "tconstruct:statless_part_repair",
+      "part_index": 0,
+      "repair_amount": 100
+    },
+    {
+      "type": "tconstruct:statless_part_repair",
+      "part_index": 1,
+      "repair_amount": 200
+    },
+    {
+      "type": "tconstruct:traits",
+      "traits": [
+        {
+          "level": 1,
+          "name": "tconstruct:blocking"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:attack_interaction"
+    },
+    {
+      "type": "tconstruct:fixed_material_name",
+      "index": 0
+    }
+  ]
+}

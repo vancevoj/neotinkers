@@ -1,0 +1,19 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:wires/copper"
+    }
+  ],
+  "type": "tconstruct:casting_table",
+  "cast": "#tconstruct:casts/single_use/wire",
+  "cast_consumed": true,
+  "cooling_time": 35,
+  "fluid": {
+    "amount": 45,
+    "tag": "c:molten_copper"
+  },
+  "result": {
+    "tag": "c:wires/copper"
+  }
+}

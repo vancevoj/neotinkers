@@ -1,0 +1,27 @@
+[
+  {
+    "name": "travelers_goggles",
+    "type": "tconstruct:tool",
+    "data": "armor/goggles.json"
+  },
+  {
+    "name": "travelers_vest",
+    "type": "tconstruct:tool",
+    "data": "armor/vest.json"
+  },
+  {
+    "name": "travelers_pants",
+    "type": "tconstruct:tool",
+    "data": "armor/pants.json"
+  },
+  {
+    "name": "travelers_boots",
+    "type": "tconstruct:tool",
+    "data": "armor/boots.json"
+  },
+  {
+    "name": "travelers_shield",
+    "type": "tconstruct:tool",
+    "data": "armor/shield.json"
+  }
+]

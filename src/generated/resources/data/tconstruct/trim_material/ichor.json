@@ -1,0 +1,12 @@
+{
+  "description": {
+    "color": "#FF970D",
+    "translate": "trim_material.tconstruct.format",
+    "with": [
+      {
+        "translate": "material.tconstruct.ichor"
+      }
+    ]
+  },
+  "palette_id": "tconstruct:trim/ichor"
+}

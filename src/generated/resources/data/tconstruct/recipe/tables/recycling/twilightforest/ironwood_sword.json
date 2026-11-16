@@ -1,0 +1,23 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "twilightforest"
+    }
+  ],
+  "type": "tconstruct:part_builder_recycling",
+  "pattern": "tconstruct:venom_bottle",
+  "results": {
+    "tconstruct:ingot": {
+      "count": 2,
+      "tag": "c:ingots/ironwood"
+    }
+  },
+  "tool": {
+    "neoforge:ingredient_type": "mantle:item_name",
+    "items": [
+      "twilightforest:ironwood_sword",
+      "twilightforest:ironwood_hoe"
+    ]
+  }
+}

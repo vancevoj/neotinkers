@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "tconstruct:cobalt_ingot",
+  "ingredients": [
+    "tconstruct:cobalt_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "tconstruct:cobalt_ingot"
+  }
+}

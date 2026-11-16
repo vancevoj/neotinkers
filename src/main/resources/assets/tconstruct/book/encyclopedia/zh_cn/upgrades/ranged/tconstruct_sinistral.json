@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:sinistral",
+  "text": [
+    {
+      "text": "弩改为按下攻击键时才会发射，取代原本的交互键，且不会在潜行时装填。使得在使用 弩的同时可以使用副手的上物品。"
+    }
+  ],
+  "more_text_space": true,
+  "effects": [
+    "单个等级",
+    "需要1个升级槽"
+  ]
+}

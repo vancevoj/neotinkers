@@ -1,0 +1,19 @@
+{
+  "layers": [
+    {
+      "type": "tconstruct:first_present",
+      "options": [
+        {
+          "type": "tconstruct:dyed",
+          "prefix": "tconstruct:slime/dyed_"
+        },
+        {
+          "type": "tconstruct:material",
+          "index": 0,
+          "prefix": "tconstruct:slime/"
+        }
+      ]
+    },
+    "tconstruct:trim"
+  ]
+}

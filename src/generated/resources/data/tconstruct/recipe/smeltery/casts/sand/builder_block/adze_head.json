@@ -1,0 +1,10 @@
+{
+  "type": "tconstruct:item_part_builder",
+  "pattern": "tconstruct:adze_head",
+  "pattern_item": "#c:sands/colorless",
+  "result": {
+    "count": 4,
+    "item": "tconstruct:adze_head_sand_cast"
+  },
+  "title_key": "tconstruct:sand_cast"
+}

@@ -1,0 +1,16 @@
+{
+  "type": "tconstruct:melting",
+  "byproducts": [
+    {
+      "amount": 1000,
+      "fluid": "tconstruct:seared_stone"
+    }
+  ],
+  "ingredient": "tconstruct:seared_duct",
+  "result": {
+    "amount": 180,
+    "tag": "c:molten_gold"
+  },
+  "temperature": 700,
+  "time": 142
+}

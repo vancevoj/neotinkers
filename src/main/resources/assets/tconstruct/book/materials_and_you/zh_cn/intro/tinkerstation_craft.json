@@ -1,0 +1,7 @@
+{
+  "title": "合成工匠站",
+  "recipe": "tconstruct:tables/tinker_station",
+  "description": [
+    { "text": "希望你还有剩下一些模具，不过哪怕你把模具用完了，也还能重新合成。" }
+  ]
+}

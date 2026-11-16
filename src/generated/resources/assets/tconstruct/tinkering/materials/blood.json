@@ -1,0 +1,27 @@
+{
+  "color": "FFB80000",
+  "generator": {
+    "supported_stats": [
+      "tconstruct:slime",
+      "tconstruct:slimesuit",
+      "tconstruct:repair_kit"
+    ],
+    "transformer": {
+      "type": "tconstruct:recolor_sprite",
+      "color_mapping": {
+        "type": "tconstruct:grey_to_color",
+        "palette": {
+          "000": "FF000000",
+          "063": "FF5D0000",
+          "102": "FF750000",
+          "127": "FF820000",
+          "140": "FF930000",
+          "178": "FFA00000",
+          "193": "FFAB0000",
+          "216": "FFB80000",
+          "255": "FFE82323"
+        }
+      }
+    }
+  }
+}

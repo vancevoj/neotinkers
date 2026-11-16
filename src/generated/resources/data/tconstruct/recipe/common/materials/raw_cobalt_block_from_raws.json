@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "tconstruct:raw_cobalt_block",
+  "key": {
+    "#": "#c:raw_materials/cobalt",
+    "*": "tconstruct:raw_cobalt"
+  },
+  "pattern": [
+    "###",
+    "#*#",
+    "###"
+  ],
+  "result": {
+    "id": "tconstruct:raw_cobalt_block"
+  }
+}

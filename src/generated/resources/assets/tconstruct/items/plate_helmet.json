@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "tconstruct:tool",
+      "model": "tconstruct:item/plate_helmet"
+    },
+    "on_true": {
+      "type": "tconstruct:tool",
+      "model": "tconstruct:item/armor/plate/helmet_broken"
+    },
+    "property": "tconstruct:broken"
+  }
+}

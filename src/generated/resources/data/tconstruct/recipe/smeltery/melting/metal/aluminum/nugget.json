@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:nuggets/aluminum"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:nuggets/aluminum",
+  "result": {
+    "amount": 10,
+    "tag": "c:molten_aluminum"
+  },
+  "temperature": 425,
+  "time": 16
+}

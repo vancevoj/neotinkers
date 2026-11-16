@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:double_jump",
+  "text": [
+    {
+      "text": "Pular sobre o coelho aumenta suas habilidades e te torna muito melhor no jogo. Não se esqueça de praticar a postura deitada para obter o máximo efeito."
+    }
+  ],
+  "effects": [
+    "Permite pulo extra",
+  	"Múltiplos níveis, cada nível concede um pulo extra",
+    "Requer 1 slot de habilidade"
+  ]
+}

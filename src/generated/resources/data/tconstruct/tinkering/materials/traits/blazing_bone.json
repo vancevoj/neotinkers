@@ -1,0 +1,28 @@
+{
+  "default": [
+    {
+      "level": 1,
+      "name": "tconstruct:conducting"
+    }
+  ],
+  "perStat": {
+    "tconstruct:ammo": [
+      {
+        "level": 1,
+        "name": "tconstruct:conductive"
+      }
+    ],
+    "tconstruct:armor": [
+      {
+        "level": 1,
+        "name": "tconstruct:conductive"
+      }
+    ],
+    "tconstruct:ribcage": [
+      {
+        "level": 1,
+        "name": "tconstruct:conductive"
+      }
+    ]
+  }
+}

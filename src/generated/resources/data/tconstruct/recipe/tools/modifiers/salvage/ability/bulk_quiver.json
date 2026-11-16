@@ -1,0 +1,8 @@
+{
+  "type": "tconstruct:modifier_salvage",
+  "modifier": "tconstruct:bulk_quiver",
+  "slots": {
+    "abilities": 1
+  },
+  "tools": "#tconstruct:modifiable/ranged/bows"
+}

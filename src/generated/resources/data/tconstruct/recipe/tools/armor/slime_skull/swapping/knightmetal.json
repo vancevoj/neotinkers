@@ -1,0 +1,11 @@
+{
+  "type": "tconstruct:fixed_material_swapping",
+  "index": 0,
+  "ingredient": {
+    "ingredient": "tconstruct:end_fluid_cannon"
+  },
+  "material": "tconstruct:knightmetal",
+  "max_stack_size": 16,
+  "repair_value": 6,
+  "tools": "#tconstruct:modifiable/skulls/swappable"
+}

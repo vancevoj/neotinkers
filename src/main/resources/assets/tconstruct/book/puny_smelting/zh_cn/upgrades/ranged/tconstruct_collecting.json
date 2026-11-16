@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:collecting",
+  "text": [
+    {
+      "text": "是我的了！"
+    }
+  ],
+  "effects": [
+    "可钩取物品实体、经验 球、箭矢或掷出的工具",
+    "单个等级",
+    "需要1个升级槽"
+  ]
+}

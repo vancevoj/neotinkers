@@ -1,0 +1,11 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:trait",
+      "fixed_level": false,
+      "level": 6,
+      "name": "tconstruct:pocket"
+    }
+  ]
+}

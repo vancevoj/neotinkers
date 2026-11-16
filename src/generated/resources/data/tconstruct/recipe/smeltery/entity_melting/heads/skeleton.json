@@ -1,0 +1,14 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": [
+    "minecraft:skeleton_skull",
+    "minecraft:wither_skeleton_skull",
+    "tconstruct:stray_head"
+  ],
+  "result": {
+    "amount": 250,
+    "fluid": "minecraft:milk"
+  },
+  "temperature": 0,
+  "time": 47
+}

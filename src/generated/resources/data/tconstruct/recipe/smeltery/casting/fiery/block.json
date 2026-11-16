@@ -1,0 +1,19 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:storage_blocks/fiery"
+    }
+  ],
+  "type": "tconstruct:casting_basin",
+  "cast": "#c:storage_blocks/iron",
+  "cast_consumed": true,
+  "cooling_time": 401,
+  "fluid": {
+    "amount": 2250,
+    "tag": "tconstruct:fiery_liquid"
+  },
+  "result": {
+    "tag": "c:storage_blocks/fiery"
+  }
+}

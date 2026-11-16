@@ -1,0 +1,17 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "ceramics"
+    }
+  ],
+  "type": "tconstruct:casting_table",
+  "cast": "#tconstruct:casts/single_use/ingot",
+  "cast_consumed": true,
+  "cooling_time": 95,
+  "fluid": {
+    "amount": 250,
+    "tag": "tconstruct:molten_porcelain"
+  },
+  "result": "ceramics:porcelain_brick"
+}

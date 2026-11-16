@@ -1,0 +1,15 @@
+{
+  "type": "tconstruct:part_builder_recycling",
+  "pattern": "tconstruct:venom_bottle",
+  "results": {
+    "tconstruct:bowstring": {
+      "count": 3,
+      "item": "minecraft:string"
+    },
+    "tconstruct:rod": {
+      "count": 3,
+      "item": "minecraft:stick"
+    }
+  },
+  "tool": "minecraft:bow"
+}

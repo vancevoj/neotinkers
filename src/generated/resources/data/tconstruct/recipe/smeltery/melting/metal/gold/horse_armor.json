@@ -1,0 +1,10 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": "minecraft:golden_horse_armor",
+  "result": {
+    "amount": 630,
+    "tag": "c:molten_gold"
+  },
+  "temperature": 700,
+  "time": 151
+}

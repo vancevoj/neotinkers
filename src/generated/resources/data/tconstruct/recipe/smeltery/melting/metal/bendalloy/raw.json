@@ -1,0 +1,17 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:raw_materials/bendalloy"
+    }
+  ],
+  "type": "tconstruct:ore_melting",
+  "ingredient": "#c:raw_materials/bendalloy",
+  "rate": "metal",
+  "result": {
+    "amount": 90,
+    "tag": "c:molten_bendalloy"
+  },
+  "temperature": 100,
+  "time": 50
+}

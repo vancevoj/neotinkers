@@ -1,0 +1,31 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": false,
+  "inputs": [
+    {
+      "ingredient": "#c:ingots/rose_gold"
+    },
+    {
+      "ingredient": "minecraft:rabbit_foot"
+    },
+    {
+      "ingredient": "#c:ingots/rose_gold"
+    },
+    {
+      "ingredient": "#c:gems/diamond"
+    },
+    {
+      "ingredient": "minecraft:name_tag"
+    }
+  ],
+  "level": 3,
+  "result": "tconstruct:luck",
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:modifiable/melee/weapon",
+      "#tconstruct:modifiable/harvest",
+      "#tconstruct:modifiable/ranged/launcher"
+    ]
+  }
+}

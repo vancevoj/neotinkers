@@ -1,0 +1,34 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:conditional_mining_speed",
+      "formula": [
+        3.0,
+        6.0,
+        "$resistance",
+        "-",
+        1.5,
+        "/",
+        "^",
+        10.0,
+        "min",
+        "$level",
+        "*",
+        "$multiplier",
+        "*",
+        "$speed",
+        "+"
+      ],
+      "percent": false,
+      "require_effective": true,
+      "variables": {
+        "resistance": {
+          "type": "tconstruct:block",
+          "block_type": "tconstruct:blast_resistance",
+          "fallback": 3.0
+        }
+      }
+    }
+  ]
+}

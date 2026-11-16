@@ -1,0 +1,13 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": {
+    "neoforge:ingredient_type": "tconstruct:no_container",
+    "match": "tconstruct:copper_can"
+  },
+  "result": {
+    "amount": 90,
+    "tag": "c:molten_copper"
+  },
+  "temperature": 500,
+  "time": 50
+}

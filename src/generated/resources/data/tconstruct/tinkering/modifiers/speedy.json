@@ -1,0 +1,18 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:attribute",
+      "attribute": "minecraft:movement_speed",
+      "each_level": 0.1,
+      "operation": "add_multiplied_total",
+      "slots": [
+        "mainhand",
+        "feet",
+        "legs",
+        "chest",
+        "head"
+      ]
+    }
+  ]
+}

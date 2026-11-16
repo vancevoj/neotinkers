@@ -1,0 +1,25 @@
+{
+  "type": "tconstruct:showcase",
+  "title": "升级强化",
+  "item": {
+    "type": "forge:nbt",
+    "item": "tconstruct:creative_slot",
+    "nbt": {
+      "slot": "upgrades"
+    }
+  },
+  "tooltip": [ "升级槽图标" ],
+  "text": [
+    {
+      "text": "升级强化是改造工具的基本方式。一般是在工具上涂抹某种物质，然后“打磨”，借此提升工 具的魔法属性。比如红石，它可以让工具有更 快的速度。"
+    },
+    {
+      "text": "多数工具初始拥有升级槽的数量在3个左右，可以通过其他强化可以获得更多的升级槽。",
+      "paragraph": true
+    },
+    {
+      "text": "Thruul\u00a0M'Gon在他的《入门熔炼术》中列举了所 有可以加持在工具上的升级强化，你也可以在 《工匠大百科》中看到这份列表。",
+      "paragraph": true
+    }
+  ]
+}

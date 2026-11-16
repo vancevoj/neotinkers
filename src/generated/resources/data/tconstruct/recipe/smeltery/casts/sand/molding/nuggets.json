@@ -1,0 +1,6 @@
+{
+  "type": "tconstruct:molding_table",
+  "material": "#tconstruct:casts/sand",
+  "pattern": "#c:nuggets",
+  "result": "tconstruct:nugget_sand_cast"
+}

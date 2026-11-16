@@ -1,0 +1,9 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:punch",
+      "each_level": 1.0
+    }
+  ]
+}

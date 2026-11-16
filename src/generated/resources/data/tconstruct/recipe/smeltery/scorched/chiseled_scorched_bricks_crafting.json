@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "s": "tconstruct:scorched_bricks_slab"
+  },
+  "pattern": [
+    "s",
+    "s"
+  ],
+  "result": {
+    "id": "tconstruct:chiseled_scorched_bricks"
+  }
+}

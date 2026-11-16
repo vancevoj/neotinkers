@@ -1,0 +1,24 @@
+{
+  "perStat": {
+    "tconstruct:ammo": [
+      {
+        "level": 1,
+        "name": "tconstruct:enderclearance"
+      }
+    ],
+    "tconstruct:slime": [
+      {
+        "level": 1,
+        "name": "tconstruct:enderdodging"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:overslime"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:overslime_friend"
+      }
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "modifier_id": "tconstruct:pierce",
+  "text": [
+    {
+      "text": "工具得到了仙人掌的力量，可以穿透盔甲。"
+    },
+    {
+      "text": "别和“穿透”搞混了。",
+        "paragraph": true	  
+    }
+  ],
+  "tool_filter": "tconstruct:modifiable/ranged",
+  "effects": [
+    "取消少量护甲值",
+    "略微增加工具伤害",
+    "多个等级，每级进一步 提升效果",
+    "每级需要1个升级槽"
+  ]
+}

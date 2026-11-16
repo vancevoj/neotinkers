@@ -1,0 +1,33 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "ingredient": "#c:dusts/redstone"
+    },
+    {
+      "neoforge:ingredient_type": "tconstruct:no_container",
+      "match": "#tconstruct:tanks"
+    },
+    {
+      "ingredient": "#c:dusts/redstone"
+    },
+    {
+      "ingredient": "#c:ingots/copper"
+    },
+    {
+      "ingredient": "#c:ingots/copper"
+    }
+  ],
+  "result": "tconstruct:wetting",
+  "slots": {
+    "abilities": 1
+  },
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:modifiable/armor/leggings",
+      "#tconstruct:modifiable/shields"
+    ]
+  }
+}

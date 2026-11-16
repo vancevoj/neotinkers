@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "tconstruct:amethyst_bronze_block",
+  "key": {
+    "#": "#c:ingots/amethyst_bronze",
+    "*": "tconstruct:amethyst_bronze_ingot"
+  },
+  "pattern": [
+    "###",
+    "#*#",
+    "###"
+  ],
+  "result": {
+    "id": "tconstruct:amethyst_bronze_block"
+  }
+}

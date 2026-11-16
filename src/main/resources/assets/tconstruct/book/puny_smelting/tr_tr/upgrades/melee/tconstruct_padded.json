@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:padded",
+  "text": [
+    {
+      "text": "Birazcık pofuduk kalça kimseye zarar vermez."
+    }
+  ],
+  "effects": [
+    "Aracın savurmasını azaltır",
+    "Çoklu seviyeler, savurma her seviyede daha da azaltılır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "level_display": "tconstruct:no_levels",
+  "modules": [
+    {
+      "type": "tconstruct:cover_ground",
+      "block": "minecraft:snow",
+      "radius": {
+        "each_level": 1.0,
+        "flat": 0.5
+      }
+    }
+  ],
+  "priority": 90
+}

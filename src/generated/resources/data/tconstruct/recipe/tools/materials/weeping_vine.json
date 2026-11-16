@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": "minecraft:weeping_vines",
+  "material": "tconstruct:weeping_vine",
+  "needed": 1,
+  "value": 1
+}

@@ -1,0 +1,14 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:overshield",
+      "consumed": {
+        "each_level": 2
+      },
+      "protection": {
+        "each_level": 1.25
+      }
+    }
+  ]
+}

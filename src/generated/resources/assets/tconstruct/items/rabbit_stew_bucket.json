@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "tconstruct:fluid_container",
+    "model": "tconstruct:item/rabbit_stew_bucket"
+  }
+}

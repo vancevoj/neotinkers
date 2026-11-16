@@ -1,0 +1,12 @@
+{
+  "modifier_id": "tconstruct:recapitated",
+  "text": [
+    {
+      "text": "Yani önce onların başlarını koparmak istiyorsun ve şimdi onları geri takmak mı istiyorsun? Sen kimsin? Frankenstein?"
+    }
+  ],
+  "effects": [
+    "Bir yükseltme yuvası ekler",
+    "Tek seviye"
+  ]
+}

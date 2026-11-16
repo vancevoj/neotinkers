@@ -1,0 +1,25 @@
+{
+  "type": "tconstruct:showcase",
+  "title": "Melhorias",
+  "item": {
+    "type": "forge:nbt",
+    "item": "tconstruct:creative_slot",
+    "nbt": {
+      "slot": "upgrades"
+    }
+  },
+  "tooltip": [ "Ícone de Slot de Melhoria" ],
+  "text": [
+    {
+      "text": "As melhorias são aprimoramentos essenciais para qualquer ferramenta. Essas Geralmente são feitas aplicando um item e 'esfregando' algumas de suas qualidades mágicas, como por exemplo a redstone tornando as ferramentas mais rápidas."
+    },
+    {
+      "text": "A maioria das ferramentas começa com cerca de 3 slots de melhoria, embora seja possível obter mais slots por meio de outros tipos de modificadores."
+    },
+    {
+      "text": "No livro 'Fundições Frágeis' de Thruul M'Gon contém uma lista completa de melhorias disponíveis para ferramentas, juntamente com a 'Enciclopédia do Tinkerando'.",
+      "paragraph": true
+    }
+  ]
+}
+

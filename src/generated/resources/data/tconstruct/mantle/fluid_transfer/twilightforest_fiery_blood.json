@@ -1,0 +1,19 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "value": "twilightforest:fiery_blood"
+    }
+  ],
+  "type": "mantle:empty_item",
+  "fluid": {
+    "amount": 250,
+    "fluid": "tconstruct:fiery_liquid"
+  },
+  "input": {
+    "neoforge:ingredient_type": "mantle:item_name",
+    "items": [
+      "twilightforest:fiery_blood"
+    ]
+  }
+}

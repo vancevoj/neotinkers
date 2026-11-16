@@ -1,0 +1,19 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "neoforge:item/default",
+  "textures": {
+    "plating": "tconstruct:item/tool/armor/plate/leggings/plating",
+    "maille":  "tconstruct:item/tool/armor/plate/leggings/maille"
+  },
+  "modifier_maps": ["tconstruct:plate/leggings", "tconstruct:armor/leggings"],
+  "parts": [
+    { "name": "plating", "index": 0 },
+    { "name": "maille",  "index": 1 }
+  ],
+  "overrides": [
+    {
+      "predicate": { "tconstruct:broken": 1 },
+      "model": "tconstruct:item/armor/plate/leggings_broken"
+    }
+  ]
+}

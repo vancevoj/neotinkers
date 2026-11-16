@@ -1,0 +1,5 @@
+{
+  "type": "tconstruct:tinker_station_damaging",
+  "damage_amount": 1000,
+  "ingredient": "tconstruct:venom_bucket"
+}

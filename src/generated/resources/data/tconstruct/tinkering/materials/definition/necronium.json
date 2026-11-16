@@ -1,0 +1,19 @@
+{
+  "condition": {
+    "type": "neoforge:or",
+    "values": [
+      {
+        "type": "tconstruct:config",
+        "prop": "force_integration_materials"
+      },
+      {
+        "type": "mantle:tag_filled",
+        "tag": "c:ingots/uranium"
+      }
+    ]
+  },
+  "craftable": true,
+  "hidden": false,
+  "sortOrder": 7,
+  "tier": 3
+}

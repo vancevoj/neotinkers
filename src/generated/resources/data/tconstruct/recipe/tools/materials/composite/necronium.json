@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:ingots/uranium"
+    }
+  ],
+  "type": "tconstruct:material_fluid",
+  "fluid": {
+    "amount": 90,
+    "tag": "c:molten_uranium"
+  },
+  "input": "tconstruct:necrotic_bone",
+  "output": "tconstruct:necronium",
+  "temperature": 830
+}

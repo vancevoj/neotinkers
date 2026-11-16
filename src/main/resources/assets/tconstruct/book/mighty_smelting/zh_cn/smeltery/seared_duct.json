@@ -1,0 +1,14 @@
+{
+  "title": "焦黑输导孔",
+  "item": "tconstruct:seared_duct",
+  "text": [
+    {
+      "text": "焦黑输导孔可以指定接下来要输出的流体。在过滤槽里放入装有特定流体的铜罐或桶，就可 以选择相应的流体。",
+      "paragraph": true
+    },
+	{
+      "text": "输导孔的中央会展示当前选中的流体。",
+      "paragraph": true
+    }
+	]
+}

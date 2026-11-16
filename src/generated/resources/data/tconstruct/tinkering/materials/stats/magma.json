@@ -1,0 +1,9 @@
+{
+  "stats": {
+    "tconstruct:fletching": {},
+    "tconstruct:slime": {
+      "durability": 125,
+      "overslime_capacity": 50
+    }
+  }
+}

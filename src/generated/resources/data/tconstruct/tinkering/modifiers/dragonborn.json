@@ -1,0 +1,20 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:max_armor_attribute",
+      "allow_broken": false,
+      "attribute": "tconstruct:player.critical_damage",
+      "each_level": 0.05,
+      "held_tag": "tconstruct:modifiable/held",
+      "operation": "add_value",
+      "tooltip_style": "percent"
+    },
+    {
+      "type": "tconstruct:protection",
+      "damage_source": "mantle:can_protect",
+      "each_level": 2.0,
+      "wearing_entity": "tconstruct:airborne"
+    }
+  ]
+}

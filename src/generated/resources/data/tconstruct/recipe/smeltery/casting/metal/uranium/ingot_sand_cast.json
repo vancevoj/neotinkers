@@ -1,0 +1,19 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:ingots/uranium"
+    }
+  ],
+  "type": "tconstruct:casting_table",
+  "cast": "#tconstruct:casts/single_use/ingot",
+  "cast_consumed": true,
+  "cooling_time": 61,
+  "fluid": {
+    "amount": 90,
+    "tag": "c:molten_uranium"
+  },
+  "result": {
+    "tag": "c:ingots/uranium"
+  }
+}

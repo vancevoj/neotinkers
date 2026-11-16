@@ -1,0 +1,51 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "tconstruct:item/tool/scythe/display",
+  "textures": {
+    "head": "tconstruct:item/tool/scythe/head_broken",
+    "handle": "tconstruct:item/tool/scythe/handle",
+    "binding": "tconstruct:item/tool/scythe/binding",
+    "accessory": "tconstruct:item/tool/scythe/accessory",
+    "large_head": "tconstruct:item/tool/scythe/large/head_broken",
+    "large_handle": "tconstruct:item/tool/scythe/large/handle",
+    "large_binding": "tconstruct:item/tool/scythe/large/binding",
+    "large_accessory": "tconstruct:item/tool/scythe/large/accessory"
+  },
+  "modifier_maps": [
+    "tconstruct:scythe_broken",
+    "tconstruct:scythe"
+  ],
+  "modifier_roots": {
+    "small": [
+      "tconstruct:item/tool/scythe/modifiers/broken/",
+      "tconstruct:item/tool/scythe/modifiers/"
+    ],
+    "large": [
+      "tconstruct:item/tool/scythe/large/modifiers/broken/",
+      "tconstruct:item/tool/scythe/large/modifiers/"
+    ]
+  },
+  "large": true,
+  "large_offset": [
+    -2,
+    2
+  ],
+  "parts": [
+    {
+      "name": "accessory",
+      "index": 3
+    },
+    {
+      "name": "handle",
+      "index": 1
+    },
+    {
+      "name": "head",
+      "index": 0
+    },
+    {
+      "name": "binding",
+      "index": 2
+    }
+  ]
+}

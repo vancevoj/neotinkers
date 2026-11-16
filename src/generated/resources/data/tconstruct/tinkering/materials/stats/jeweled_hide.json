@@ -1,0 +1,12 @@
+{
+  "stats": {
+    "tconstruct:binding": {},
+    "tconstruct:bowstring": {},
+    "tconstruct:cuirass": {},
+    "tconstruct:laces": {
+      "repair_amount": 250
+    },
+    "tconstruct:maille": {},
+    "tconstruct:repair_kit": {}
+  }
+}

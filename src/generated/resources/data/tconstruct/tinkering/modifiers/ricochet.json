@@ -1,0 +1,21 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:attribute",
+      "attribute": "tconstruct:generic.knockback_multiplier",
+      "each_level": 0.2,
+      "operation": "add_multiplied_base",
+      "slots": [
+        "mainhand",
+        "offhand",
+        "feet",
+        "legs",
+        "chest",
+        "head",
+        "body",
+        "saddle"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:gears/diamond"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:gears/diamond",
+  "result": {
+    "amount": 400,
+    "fluid": "tconstruct:molten_diamond"
+  },
+  "temperature": 1450,
+  "time": 158
+}

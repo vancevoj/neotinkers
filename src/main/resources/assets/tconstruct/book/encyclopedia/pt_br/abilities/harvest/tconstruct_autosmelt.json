@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:autosmelt",
+  "text": [
+    {
+      "text": "Faz com que os itens dropados dos blocos minerados sejam derretidos, como se estivessem em uma fornalha."
+    }
+  ],
+  "more_text_space": true,
+  "effects": [
+    "Máximo de 1 nível",
+    "Requer 1 slot de habilidade"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": [
+    "minecraft:glistering_melon_slice",
+    "minecraft:golden_carrot"
+  ],
+  "result": {
+    "amount": 80,
+    "tag": "c:molten_gold"
+  },
+  "temperature": 700,
+  "time": 54
+}

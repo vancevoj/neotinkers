@@ -1,0 +1,23 @@
+{
+    "variants": {
+        "facing=north": {
+            "type": "mantle:retextured",
+            "model": "tconstruct:block/table/part_builder"
+        },
+        "facing=south": {
+            "type": "mantle:retextured",
+            "model": "tconstruct:block/table/part_builder",
+            "y": 180
+        },
+        "facing=west": {
+            "type": "mantle:retextured",
+            "model": "tconstruct:block/table/part_builder",
+            "y": 270
+        },
+        "facing=east": {
+            "type": "mantle:retextured",
+            "model": "tconstruct:block/table/part_builder",
+            "y": 90
+        }
+    }
+}

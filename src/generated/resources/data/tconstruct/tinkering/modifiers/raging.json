@@ -1,0 +1,59 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:conditional_melee_damage",
+      "formula": [
+        11.0,
+        "$health",
+        "-",
+        10.0,
+        "/",
+        "percent_clamp",
+        "$level",
+        "*",
+        2.5,
+        "*",
+        "$multiplier",
+        "*",
+        "$damage",
+        "+"
+      ],
+      "percent": false,
+      "variables": {
+        "health": {
+          "type": "tconstruct:entity",
+          "entity_type": "tconstruct:health",
+          "fallback": 0.0,
+          "which": "attacker"
+        }
+      }
+    },
+    {
+      "type": "tconstruct:conditional_stat",
+      "formula": [
+        11.0,
+        "$health",
+        "-",
+        10.0,
+        "/",
+        "percent_clamp",
+        "$level",
+        "*",
+        "$multiplier",
+        "*",
+        "$value",
+        "+"
+      ],
+      "percent": false,
+      "stat": "tconstruct:projectile_damage",
+      "variables": {
+        "health": {
+          "type": "tconstruct:entity",
+          "entity_type": "tconstruct:health",
+          "fallback": 0.0
+        }
+      }
+    }
+  ]
+}

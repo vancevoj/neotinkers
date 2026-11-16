@@ -1,0 +1,102 @@
+package slimeknights.tconstruct.library.tools.definition.module.weapon;
+
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.util.CombatHelper;
+import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.json.LevelingValue;
+import slimeknights.tconstruct.library.module.HookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
+import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
+import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
+import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
+import slimeknights.tconstruct.library.tools.item.IModifiable;
+import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
+
+import java.util.List;
+
+/** Attack logic for a sweep attack, similar to a sword */
+public record SweepWeaponAttack(LevelingValue ranges) implements MeleeHitToolHook, ToolModule {
+  public static final RecordLoadable<SweepWeaponAttack> LOADER = RecordLoadable.create(LevelingValue.ADD_TO_LEVEL.defaultField("range", LevelingValue.LEVEL, true, SweepWeaponAttack::ranges), SweepWeaponAttack::new);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<SweepWeaponAttack>defaultHooks(ToolHooks.MELEE_HIT);
+  /** Volatile data float for the percentage of sweep damage to deal */
+  public static final Identifier SWEEP_PERCENT = TConstruct.getResource("sweep_percent");
+
+  public SweepWeaponAttack(float range) {
+    this(new LevelingValue(range, 1));
+  }
+
+  /** @deprecated use {@link #ranges()} */
+  @Deprecated(forRemoval = true)
+  public float range() {
+    return ranges.flat();
+  }
+
+  @Override
+  public List<ModuleHook<?>> getDefaultHooks() {
+    return DEFAULT_HOOKS;
+  }
+
+  @Override
+  public RecordLoadable<SweepWeaponAttack> getLoader() {
+    return LOADER;
+  }
+
+  /** Gets the damage dealt by this tool, boosted properly by sweeping */
+  public static float getSweepingDamage(IToolStackView tool, float baseDamage) {
+    float percent = tool.getVolatileData().getFloat(SWEEP_PERCENT);
+    float sweepingDamage = 1;
+    if (percent > 1) {
+      sweepingDamage = baseDamage;
+    } else if (percent > 0) {
+      // don't deal more damage to sweep than main target
+      sweepingDamage = Math.min(baseDamage, percent * baseDamage + 1);
+    }
+    return sweepingDamage;
+  }
+
+  @Override
+  public void afterMeleeHit(IToolStackView tool, ToolAttackContext context, float damage) {
+    // sweep code from Player#attack(Entity)
+    // basically: no crit, no sprinting and has to stand on the ground for sweep. Also has to move regularly slowly
+    LivingEntity attacker = context.getAttacker();
+    // walkDist is gone in 26.3, use the known movement like vanilla Player#isSweepAttack
+    if (context.isFullyCharged() && !attacker.isSprinting() && !context.isCritical() && !context.isProjectile() && attacker.onGround()
+        && attacker.getKnownMovement().horizontalDistanceSqr() < Mth.square(attacker.getSpeed() * 2.5)) {
+      // loop through all nearby entities
+      double range = this.ranges.compute(tool.getVolatileData().getInt(IModifiable.EXPANDED));
+      double rangeSq = (2 + range); // TODO: why do we add 2 here? should that not be defined in the datagen?
+      rangeSq *= rangeSq;
+      // if the modifier is missing, sweeping damage will be 0, so easiest to let it fully control this
+      float sweepDamage = getSweepingDamage(tool, damage);
+      Entity target = context.getTarget();
+      Level level = attacker.level();
+      DamageSource source = context.makeDamageSource();
+      for (LivingEntity aoeTarget : level.getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(range, 0.25D, range))) {
+        if (aoeTarget != attacker && aoeTarget != target && !attacker.isAlliedTo(aoeTarget)
+            && !(aoeTarget instanceof ArmorStand armorStand && armorStand.isMarker()) && attacker.distanceToSqr(aoeTarget) < rangeSq) {
+          float angle = attacker.getYRot() * ((float) Math.PI / 180F);
+          aoeTarget.knockback(0.4F, Mth.sin(angle), -Mth.cos(angle), source, sweepDamage);
+          if (level instanceof ServerLevel server) {
+            aoeTarget.hurtServer(server, source, sweepDamage);
+          }
+        }
+      }
+
+      level.playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, attacker.getSoundSource(), 1.0F, 1.0F);
+      if (attacker instanceof Player player) {
+        // Player#sweepAttack was removed in 1.21.11
+        CombatHelper.sweepParticles(player);
+      }
+    }
+  }
+}

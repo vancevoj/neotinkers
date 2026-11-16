@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": "#c:raw_nuggets/steel",
+  "material": "tconstruct:magnetite",
+  "needed": 1,
+  "value": 1
+}

@@ -1,0 +1,27 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:attribute",
+      "attribute": "tconstruct:generic.protection_cap",
+      "each_level": 0.05,
+      "flat": 0.05,
+      "operation": "add_value",
+      "slots": [
+        "mainhand",
+        "offhand",
+        "feet",
+        "legs",
+        "chest",
+        "head",
+        "body",
+        "saddle"
+      ],
+      "tool": {
+        "type": "mantle:tag",
+        "tag": "tconstruct:modifiable/armor"
+      },
+      "tooltip_style": "percent"
+    }
+  ]
+}

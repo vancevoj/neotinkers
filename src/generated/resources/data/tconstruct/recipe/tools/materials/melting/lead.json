@@ -1,0 +1,15 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:ingots/lead"
+    }
+  ],
+  "type": "tconstruct:material_melting",
+  "input": "tconstruct:lead",
+  "result": {
+    "amount": 90,
+    "tag": "c:molten_lead"
+  },
+  "temperature": 330
+}

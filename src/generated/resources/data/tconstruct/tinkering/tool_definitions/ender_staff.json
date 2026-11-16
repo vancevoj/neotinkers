@@ -1,0 +1,68 @@
+{
+  "modules": [
+    {
+      "type": "tconstruct:base_stats",
+      "stats": {
+        "tconstruct:accuracy": 0.5,
+        "tconstruct:block_amount": 15.0,
+        "tconstruct:durability": 1520.0,
+        "tconstruct:projectile_damage": 3.0,
+        "tconstruct:use_item_speed": 0.4
+      }
+    },
+    {
+      "type": "tconstruct:modifier_slots",
+      "slots": {
+        "abilities": 2,
+        "defense": 1,
+        "upgrades": 3
+      }
+    },
+    {
+      "type": "tconstruct:traits",
+      "traits": [
+        {
+          "level": 1,
+          "name": "tconstruct:overslime_friend"
+        },
+        {
+          "level": 2,
+          "name": "tconstruct:reach"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:traits",
+      "hooks": [
+        "tconstruct:rebalanced_trait"
+      ],
+      "traits": [
+        {
+          "level": 1,
+          "name": "tconstruct:reach"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:material_repair",
+      "material": "tconstruct:slimewood",
+      "stat_type": "tconstruct:limb"
+    },
+    {
+      "type": "tconstruct:box_aoe",
+      "expansion_direction": "tconstruct:side_hit",
+      "expansions": [
+        {
+          "height": 1,
+          "width": 1
+        },
+        {
+          "depth": 2
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:dual_option_interaction"
+    }
+  ]
+}

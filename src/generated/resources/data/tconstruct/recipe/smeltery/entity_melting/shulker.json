@@ -1,0 +1,14 @@
+{
+  "type": "tconstruct:entity_melting",
+  "damage": 3,
+  "entity": {
+    "tag": "c:shulkers"
+  },
+  "result": {
+    "amount": 50,
+    "nbt": {
+      "Potion": "tconstruct:_levitation"
+    },
+    "tag": "c:potion"
+  }
+}

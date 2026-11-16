@@ -1,0 +1,43 @@
+{
+  "type": "minecraft:geode",
+  "blocks": {
+    "alternate_inner_layer_provider": {
+      "id": "tconstruct:budding_ichor_slime_crystal"
+    },
+    "cannot_replace": "#minecraft:features_cannot_replace",
+    "filling_provider": {
+      "id": "minecraft:air"
+    },
+    "inner_layer_provider": {
+      "id": "tconstruct:ichor_slime_crystal_block"
+    },
+    "inner_placements": [
+      "tconstruct:small_ichor_slime_crystal_bud",
+      "tconstruct:medium_ichor_slime_crystal_bud",
+      "tconstruct:large_ichor_slime_crystal_bud",
+      "tconstruct:ichor_slime_crystal_cluster",
+      "tconstruct:cobalt_cluster"
+    ],
+    "invalid_blocks": "#minecraft:geode_invalid_blocks",
+    "middle_layer_provider": {
+      "id": "minecraft:calcite"
+    },
+    "outer_layer_provider": {
+      "id": "minecraft:netherrack"
+    }
+  },
+  "crack": {
+    "generate_crack_chance": 0.75
+  },
+  "invalid_blocks_threshold": 2,
+  "layers": {},
+  "max_gen_offset": 24,
+  "min_gen_offset": -24,
+  "outer_wall_distance": {
+    "type": "minecraft:uniform",
+    "max_inclusive": 6,
+    "min_inclusive": 4
+  },
+  "use_alternate_layer0_chance": 0.083,
+  "use_potential_placements_chance": 0.335
+}

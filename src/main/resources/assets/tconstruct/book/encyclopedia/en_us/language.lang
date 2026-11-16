@@ -1,0 +1,69 @@
+intro=Introduction
+
+tools=Tools
+tools.group_small=Small
+tools.group_large=Broad
+tools.group_ranged=Ranged
+tools.group_ancient=Ancient
+tools.group_staff=Staffs
+tools.tconstruct.earth_staff=Earthslime
+tools.tconstruct.sky_staff=Skyslime
+tools.tconstruct.ichor_staff=Ichor
+tools.tconstruct.ender_staff=Enderslime
+armor=Armor
+
+materials_harvest=General Materials
+materials_harvest.subtext=Materials used for creating melee weapons or harvest tools.
+materials_ranged=Ranged Materials
+materials_ranged.subtext=Materials used for creating ranged weapons.
+materials_ammo=Ammo Materials
+materials_ammo.subtext=Materials used for creating arrows and shurikens.
+materials_armor=Armor Materials
+materials_armor.subtext=Materials used for creating armor and shields.
+materials_slime=Slimesuit Materials
+materials_slime.subtext=This section describes the effects of all materials used in creating a slimesuit.
+
+upgrades=Upgrades
+upgrades.subtext=Each tool gets a limited total number of upgrades slots.
+upgrades.group_general=General
+upgrades.group_harvest=Harvest
+upgrades.group_weapon=Melee
+upgrades.group_ranged=Ranged
+upgrades.group_damage=Damage Boost
+upgrades.group_armor=Armor
+upgrades.group_armor.helmet=Helmet
+upgrades.group_armor.chestplate=Chestplate
+upgrades.group_armor.leggings=Leggings
+upgrades.group_armor.boots=Boots
+upgrades.boots.tconstruct.feather_fall=Feather Fall
+# can add other modifiers using [section].[prefix].[mod_id].[modifier_id], we just use this for long names
+# you should also be able to leave off feather falling in your language and it will fallback to the language .json
+# see the section json to find the prefix, any modifier type that defines that can use it
+
+defense=Defense
+defense.subtext=Instead of material traits, armor will include defense slots to improve protection.
+defense.group_protection=Protection
+defense.group_special=Special
+
+slotless=Slotless
+slotless.subtext=Slotless modifiers do not require any slots.
+slotless.group_general=General
+slotless.group_bonus=Bonus
+slotless.group_cosmetic=Cosmetic
+
+abilities=Abilities
+abilities.subtext=Ability modifiers have fewer slots than upgrades, but are stronger per slot.
+abilities.group_general=General
+abilities.group_harvest=Harvest
+abilities.group_melee=Melee
+abilities.group_ranged=Ranged
+abilities.group_interact=Interaction
+abilities.group_armor=Armor
+abilities.group_armor.helmet=Helmet
+abilities.group_armor.chestplate=Chestplate
+abilities.group_armor.leggings=Leggings
+abilities.group_armor.boots=Boots
+abilities.group_armor.shield=Shield
+
+fluid_effects=Fluid Effects
+fluid_effects.subtext=Fluid effects define the behavior when a fluid hits a block or entity through various modifiers such as spitting, spilling, and splashing.

@@ -1,0 +1,18 @@
+{
+  "name": "minecraft:chests/nether_bridge",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "tconstruct:add_tool_data"
+          },
+          "name": "tconstruct:flint_and_brick",
+          "weight": 5
+        }
+      ],
+      "name": "main"
+    }
+  ]
+}

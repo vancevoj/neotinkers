@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": "#c:glass_panes",
+  "material": "tconstruct:glass",
+  "needed": 1,
+  "value": 1
+}

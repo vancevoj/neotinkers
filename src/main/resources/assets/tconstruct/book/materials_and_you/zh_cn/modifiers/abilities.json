@@ -1,0 +1,25 @@
+{
+  "type": "tconstruct:showcase",
+  "title": "能力强化",
+  "item": {
+    "type": "forge:nbt",
+    "item": "tconstruct:creative_slot",
+    "nbt": {
+      "slot": "abilities"
+    }
+  },
+  "tooltip": [ "能力槽图标" ],
+  "text": [
+    {
+      "text": "能力强化是相当强力的强化，它能够彻底改变工具的用途。典型的有“丝触”和“自动烧炼”， 它们可以改变工具挖掘矿物时产生的效果，还 有“双持”，它可以让工具更方便持握。"
+    },
+    {
+      "text": "绝大多数工具初始只会带有一个能力槽，最多也只可能再获得两个能力强化，因此务必慎重 考虑能力强化。",
+      "paragraph": true
+    },
+    {
+      "text": "Thruul\u00a0M'Gon在他的《大师熔炼术》中列举了所 有可以加持在工具上的能力强化，你也可以在 《工匠大百科》中看到这份列表。",
+      "paragraph": true
+    }
+  ]
+}

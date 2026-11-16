@@ -1,0 +1,11 @@
+{
+  "values": [
+    "tconstruct:item_frame",
+    "tconstruct:respiration",
+    "tconstruct:minimap",
+    {
+      "id": "tconstruct:headlight",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "level_display": "tconstruct:single_level",
+  "modules": [
+    {
+      "type": "tconstruct:tipped"
+    }
+  ]
+}

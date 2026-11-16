@@ -1,0 +1,40 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:trait",
+      "fixed_level": true,
+      "level": 1,
+      "name": "tconstruct:edible"
+    },
+    {
+      "type": "tconstruct:edible_representative_item",
+      "representative_item": "tconstruct:bacon"
+    },
+    {
+      "type": "tconstruct:edible_consume_durability",
+      "durability_usage": {
+        "each_level": 5,
+        "flat": 5
+      }
+    },
+    {
+      "type": "tconstruct:stat_boost",
+      "each_level": 1.0,
+      "operation": "add",
+      "stat": "tconstruct:hunger"
+    },
+    {
+      "type": "tconstruct:stat_boost",
+      "flat": 0.6,
+      "operation": "add",
+      "stat": "tconstruct:saturation"
+    },
+    {
+      "type": "tconstruct:stat_boost",
+      "each_level": 0.15,
+      "operation": "add",
+      "stat": "tconstruct:edible_counter_chance"
+    }
+  ]
+}

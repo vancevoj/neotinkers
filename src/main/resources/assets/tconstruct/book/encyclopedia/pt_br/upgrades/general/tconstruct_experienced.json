@@ -1,0 +1,17 @@
+{
+  "modifier_id": "tconstruct:experienced",
+  "text": [
+    {
+      "text": "Aumenta a experiência ganha ao matar mobs e quebrar blocos em 50% por nível."
+    },
+    {
+      "text": "Em armadura, aumenta a experiência em 25% por nível ao usar qualquer ferramenta",
+      "paragraph": true
+    }
+  ],
+  "more_text_space": true,
+  "effects": [
+    "Máximo de 5 níveis",
+    "Requer 1 slot de melhoria por nível"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:sweeping_edge",
+  "text": [
+    {
+      "text": "Chim chiminey, chim chim cherê, um golpe giratório é a maior sorte que um sortudo pode receber!"
+    }
+  ],
+  "effects": [
+    "Alvos do ataque de varredura recebem uma porcentagem maior do dano da ferramenta",
+    "Múltiplos níveis, cada nível aumenta ainda mais essa porcentagem",
+    "Requer 1 slot de melhoria por nível"
+  ]
+}

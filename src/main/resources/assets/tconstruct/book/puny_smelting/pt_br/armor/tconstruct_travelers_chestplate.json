@@ -1,0 +1,18 @@
+{
+  "tool": "tconstruct:travelers_chestplate",
+  "text": [
+    { "text": "Não se esqueça de esconder a etiqueta, não queira andar por aí com ela para fora." },
+    {
+      "text": "Peitorais, são importantes para proteger seus órgãos vitais torácicos. E ainda ficam muito elegantes enquanto fazem isso.", "paragraph": true
+    }
+  ],
+  "properties": [
+    "Menos Armadura",
+    "Menos Durabilidade",
+    "2 Slots de Melhoria",
+    "2 Slots de Defesa",
+    "1 Slot de Habilidade",
+    "1 Atributo de Material",
+    "Isolante & Curada"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "title": "灵浆",
+  "item": [
+    "tconstruct:ichor_slime_ball",
+    "tconstruct:ichor_congealed_slime",
+    "tconstruct:ichor_slime",
+    "tconstruct:ichor_slime_crystal",
+    "tconstruct:ichor_slime_crystal_block"
+  ],
+  "text": [
+    {
+      "text": "在熔铸炉里熔化灵浆也能得到烈焰血。但前期不建议这么做，因为灵浆本身就需要更高温度 的燃料才会熔化。当然整个循环是有净收益的， 你可以在有了稳定的资源供应后，用这种方式 增产烈焰血。",
+      "paragraph": true
+    }
+  ]
+}

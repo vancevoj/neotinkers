@@ -1,0 +1,32 @@
+{
+  "color": "FF747474",
+  "fallbacks": [
+    "crystal",
+    "rock",
+    "stick"
+  ],
+  "generator": {
+    "supported_stats": [
+      "tconstruct:head",
+      "tconstruct:handle",
+      "tconstruct:binding",
+      "tconstruct:repair_kit"
+    ],
+    "transformer": {
+      "type": "tconstruct:recolor_sprite",
+      "color_mapping": {
+        "type": "tconstruct:grey_to_color",
+        "palette": {
+          "000": "FF000000",
+          "063": "FF1B2632",
+          "102": "FF353641",
+          "140": "FF3D3E4C",
+          "178": "FF5C5C5C",
+          "216": "FF747474",
+          "255": "FF898989"
+        }
+      }
+    },
+    "variant": true
+  }
+}

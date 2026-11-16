@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:geore_blocks/iron"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:geore_blocks/iron",
+  "result": {
+    "amount": 360,
+    "tag": "c:molten_iron"
+  },
+  "temperature": 800,
+  "time": 120
+}

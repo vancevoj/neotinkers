@@ -1,0 +1,13 @@
+{
+  "title": "Geodos de Slime-do-Céu",
+  "image": {
+    "file": "tconstruct:book/images/geodes/skyslime.png",
+    "width": 180,
+    "height": 96
+  },
+  "text": [
+    {
+      "text": "Geodos de Slime-do-Céu são encontrados em cavernas próximas à superfície, e raramente já vi um na própria superfície, o que me faz acreditar que possam ter origens espaciais. Por alguma razão, esses geodos parecem promover o crescimento de certos tipos de musgo nas proximidades."
+    }
+  ]
+}

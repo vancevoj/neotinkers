@@ -1,0 +1,15 @@
+{
+  "tool": "tconstruct:vein_hammer",
+  "text": [
+    { "text": "O Martelo de Mineração minera blocos de pedra e blocos conectados do mesmo tipo, até 2 blocos de distância." },
+    { "text": "Cada expansor aumenta a distância máxima de um bloco em 1.", "paragraph": true }
+  ],
+  "properties": [
+    "+3 Dano de Ataque",
+    "125% de Ataque Multiplicado",
+    "0.85 Velocidade de Ataque",
+    "30% de Mineração Multiplicada",
+    "500% de Durabilidade Multiplicada",
+    "Perfurante II"
+  ]
+}

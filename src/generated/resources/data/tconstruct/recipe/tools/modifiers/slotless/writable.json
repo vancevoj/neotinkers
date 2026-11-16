@@ -1,0 +1,12 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "ingredient": "minecraft:writable_book"
+    }
+  ],
+  "level": 1,
+  "result": "tconstruct:writable",
+  "tools": "#tconstruct:modifiable/bonus_slots"
+}

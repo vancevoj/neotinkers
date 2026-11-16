@@ -1,0 +1,48 @@
+{
+  "level_display": "tconstruct:no_levels",
+  "modules": [
+    {
+      "type": "tconstruct:rarity",
+      "rarity": "uncommon"
+    },
+    {
+      "type": "tconstruct:stat_boost",
+      "flat": 0.5,
+      "operation": "multiply_base",
+      "stat": "tconstruct:durability"
+    },
+    {
+      "type": "tconstruct:repair",
+      "flat": 0.5
+    },
+    {
+      "type": "tconstruct:stat_boost",
+      "flat": 1.0,
+      "operation": "add",
+      "stat": "tconstruct:armor_toughness"
+    },
+    {
+      "type": "tconstruct:stat_boost",
+      "flat": 0.25,
+      "operation": "multiply_conditional",
+      "stat": "tconstruct:attack_damage"
+    },
+    {
+      "type": "tconstruct:stat_boost",
+      "flat": 0.25,
+      "operation": "multiply_conditional",
+      "stat": "tconstruct:mining_speed"
+    },
+    {
+      "type": "tconstruct:set_stat",
+      "stat": "tconstruct:harvest_tier",
+      "value": "minecraft:iron"
+    },
+    {
+      "type": "tconstruct:stat_boost",
+      "flat": 0.1,
+      "operation": "add",
+      "stat": "tconstruct:accuracy"
+    }
+  ]
+}

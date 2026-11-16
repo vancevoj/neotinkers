@@ -1,0 +1,13 @@
+{
+  "title": "Moldes de Ouro",
+  "image": {
+    "file": "tconstruct:book/images/gold_pick.png",
+    "width": 170,
+    "height": 90
+  },
+  "text": [
+    {
+      "text": "Moldes de ouro são reutilizáveis. Para fazer um, basta colocar uma peça de ferramenta em uma mesa de fundição e despejar o equivalente a um lingote de ouro fundido sobre ela. A peça de ferramenta é consumida no processo."
+    }
+  ]
+}

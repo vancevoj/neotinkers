@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": "#c:blackstone",
+  "material": "tconstruct:rock#blackstone",
+  "needed": 1,
+  "value": 1
+}

@@ -1,0 +1,18 @@
+{
+  "values": [
+    "tconstruct:wood",
+    "tconstruct:flint",
+    "tconstruct:rock",
+    "tconstruct:bone",
+    "tconstruct:leather",
+    "tconstruct:string",
+    "tconstruct:gold",
+    "tconstruct:slimewood",
+    "tconstruct:nahuatl",
+    "tconstruct:obsidian",
+    "tconstruct:darkthread",
+    "tconstruct:steel",
+    "tconstruct:ancient",
+    "#tconstruct:nether/gated"
+  ]
+}

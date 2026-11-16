@@ -1,0 +1,11 @@
+{
+  "type": "tconstruct:entity_melting",
+  "damage": 2,
+  "entity": {
+    "tag": "c:blazes"
+  },
+  "result": {
+    "amount": 20,
+    "fluid": "tconstruct:blazing_blood"
+  }
+}

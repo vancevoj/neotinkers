@@ -1,0 +1,11 @@
+{
+  "modifier_id": "tconstruct:knockback",
+  "text": [
+    {
+      "text": "全ての武器に(+1×レベル)のノックバック補正がかかります。ここでの1はMobを約2ブロック分飛ばす効果です。ほとんどの道具のノックバックの初期値は0.4です。"
+    }
+  ],
+  "more_text_space": true,
+  "tool_filter": "tconstruct:modifiable/armor",
+  "effects": ["最大3レベル", "レベルごとにアップグレードスロットが1つ必要"]
+}

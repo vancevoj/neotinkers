@@ -1,0 +1,30 @@
+{
+  "redirect": [
+    {
+      "condition": {
+        "type": "mantle:tag_filled",
+        "tag": "c:ingots/lead"
+      },
+      "id": "tconstruct:lead"
+    },
+    {
+      "condition": {
+        "type": "neoforge:or",
+        "values": [
+          {
+            "type": "mantle:tag_filled",
+            "tag": "c:ingots/invar"
+          },
+          {
+            "type": "mantle:tag_filled",
+            "tag": "c:ingots/nickel"
+          }
+        ]
+      },
+      "id": "tconstruct:invar"
+    },
+    {
+      "id": "tconstruct:iron"
+    }
+  ]
+}

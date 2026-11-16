@@ -1,0 +1,13 @@
+{
+  "level_display": "tconstruct:single_level",
+  "modules": [
+    {
+      "type": "tconstruct:mob_disguise",
+      "entity": "minecraft:piglin"
+    },
+    {
+      "type": "tconstruct:rarity",
+      "rarity": "uncommon"
+    }
+  ]
+}

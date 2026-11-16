@@ -1,0 +1,31 @@
+intro=Introdução
+
+gadgets=Aparelhos
+
+modifiers=Modificadores Estranhos
+
+exploration=Exploração
+exploration.necrotic_bones=Osso Necrosado
+
+exploration.skyslime_island=Slime-do-Céu
+exploration.earthslime_island=Slime-da-Terra
+exploration.clay_island=Argila
+exploration.blood_island=Sangue
+exploration.enderslime_island=Slime-do-Ender
+
+exploration.skyslime_geode=Geodo de Slime-do-Céu
+exploration.earthslime_geode=Geodo de Slime-da-Terra
+exploration.ichor_geode=Geodo de Icor
+exploration.enderslime_geode=Geodo de Slime-do-Ender
+
+armor=Armadura de Slime
+armor.subtext=Misturar slime com várias partes de mobs resulta em um conjunto de armadura interessante. Não é a mais defensiva, mas pode realmente melhorar suas habilidades.
+
+staffs=Cajados
+staffs.subtext=Combinar cristais de slime e madeira de slime ajuda na fabricação de ferramentas muito flexíveis. Só é preciso um pouco de metal para manter tudo junto.
+
+ancient_tools=Ferramentas Antigas
+ancient_tools.subtext=Ferramentas antigas são encontradas raramente em saques pelo mundo. Sua construção material parece aleatória e não pode ser alterada, mas podem ser modificadas como qualquer outra ferramenta.
+
+materials=Materiais de Crânio
+materials.subtext=Colocar um desses crânios em uma bacia de fundição e adicionar slime-do-ender pode melhorar sua utilidade como capacete.

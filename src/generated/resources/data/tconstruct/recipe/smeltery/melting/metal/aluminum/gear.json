@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:gears/aluminum"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:gears/aluminum",
+  "result": {
+    "amount": 360,
+    "tag": "c:molten_aluminum"
+  },
+  "temperature": 425,
+  "time": 94
+}

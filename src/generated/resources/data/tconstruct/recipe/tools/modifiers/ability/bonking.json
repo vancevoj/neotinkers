@@ -1,0 +1,34 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "check_trait_level": true,
+  "inputs": [
+    {
+      "ingredient": "minecraft:weeping_vines"
+    },
+    {
+      "ingredient": "tconstruct:ichor_slime_crystal"
+    },
+    {
+      "ingredient": "minecraft:weeping_vines"
+    },
+    {
+      "ingredient": "tconstruct:ichor_congealed_slime"
+    },
+    {
+      "ingredient": "tconstruct:ichor_congealed_slime"
+    }
+  ],
+  "level": 1,
+  "result": "tconstruct:bonking",
+  "slots": {
+    "abilities": 1
+  },
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:intersection",
+    "children": [
+      "#tconstruct:modifiable/durability",
+      "#tconstruct:modifiable/interactable/charge"
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "neoforge:item/default",
+  "textures": {
+    "slime": "tconstruct:item/tool/armor/slime/helmet/slime_broken"
+  },
+  "modifier_maps": [
+    "tconstruct:slime/helmet_broken",
+    "tconstruct:slime/helmet",
+    "tconstruct:armor/helmet"
+  ],
+  "parts": [
+    {
+      "name": "slime",
+      "index": 1
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "tconstruct:pattern",
+    "S": "minecraft:bamboo"
+  },
+  "pattern": [
+    "SSS",
+    " S ",
+    "SBS"
+  ],
+  "result": {
+    "id": "tconstruct:bamboo_armor_stand"
+  }
+}

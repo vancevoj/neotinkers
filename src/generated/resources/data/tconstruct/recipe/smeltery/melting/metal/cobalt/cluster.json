@@ -1,0 +1,10 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": "tconstruct:cobalt_cluster",
+  "result": {
+    "amount": 40,
+    "tag": "c:molten_cobalt"
+  },
+  "temperature": 950,
+  "time": 162
+}

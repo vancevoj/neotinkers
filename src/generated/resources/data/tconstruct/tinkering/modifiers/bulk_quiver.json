@@ -1,0 +1,21 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:quiver_inventory",
+      "pattern": "tconstruct:arrow",
+      "slots": {
+        "each_level": 2
+      }
+    },
+    {
+      "type": "tconstruct:bulk_quiver",
+      "check_standard_arrows": true
+    },
+    {
+      "type": "tconstruct:inventory_menu",
+      "on_key": "any"
+    }
+  ],
+  "priority": 60
+}

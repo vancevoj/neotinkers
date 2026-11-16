@@ -1,0 +1,25 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "check_trait_level": true,
+  "inputs": [
+    {
+      "ingredient": "#c:feathers"
+    },
+    {
+      "ingredient": "#c:ingots/copper"
+    }
+  ],
+  "level": 1,
+  "result": "tconstruct:brushing",
+  "slots": {
+    "abilities": 1
+  },
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:intersection",
+    "children": [
+      "#tconstruct:modifiable/durability",
+      "#tconstruct:modifiable/interactable/right"
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:constant_enchantment",
+      "level": 1,
+      "name": "minecraft:swift_sneak"
+    }
+  ]
+}

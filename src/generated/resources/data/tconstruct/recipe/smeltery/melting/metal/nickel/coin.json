@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:coins/nickel"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:coins/nickel",
+  "result": {
+    "amount": 30,
+    "tag": "c:molten_nickel"
+  },
+  "temperature": 950,
+  "time": 43
+}

@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:item/generated",
+  "layers": [
+    {
+      "color": "FF7FCC19"
+    }
+  ],
+  "loader": "mantle:item_layer",
+  "textures": {
+    "layer0": "tconstruct:block/clear_stained_glass"
+  }
+}

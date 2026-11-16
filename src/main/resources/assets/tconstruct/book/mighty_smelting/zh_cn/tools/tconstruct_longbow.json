@@ -1,0 +1,16 @@
+{
+  "tool": "tconstruct:longbow",
+  "text": [
+    {
+      "text": "适合坚守阵地、全力迎敌的战士们使用。"
+    },
+    {
+      "text": "比普通弓长，比长长弓短。",
+	  "paragraph": true
+    }
+  ],
+  "properties": [
+    "速度较慢，但更强劲",
+	  "专为高伤害设计"
+  ]
+}

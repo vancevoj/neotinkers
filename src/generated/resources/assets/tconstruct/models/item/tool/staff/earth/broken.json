@@ -1,0 +1,29 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "tconstruct:item/base/staff",
+  "textures": {
+    "tool": "tconstruct:item/tool/staff/earth_broken",
+    "large_tool": "tconstruct:item/tool/staff/earth_large_broken"
+  },
+  "large": true,
+  "modifier_maps": [
+    "tconstruct:staff/earth/broken",
+    "tconstruct:staff/earth",
+    "tconstruct:staff/broken",
+    "tconstruct:staff"
+  ],
+  "modifier_roots": {
+    "small": [
+      "tconstruct:item/tool/staff/modifiers/earth/broken/",
+      "tconstruct:item/tool/staff/modifiers/earth/",
+      "tconstruct:item/tool/staff/modifiers/broken/",
+      "tconstruct:item/tool/staff/modifiers/"
+    ],
+    "large": [
+      "tconstruct:item/tool/staff/large_modifiers/earth/broken/",
+      "tconstruct:item/tool/staff/large_modifiers/earth/",
+      "tconstruct:item/tool/staff/large_modifiers/broken/",
+      "tconstruct:item/tool/staff/large_modifiers/"
+    ]
+  }
+}

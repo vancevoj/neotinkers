@@ -1,0 +1,14 @@
+{
+  "variants": {
+    "age=0,hanging=false": { "model": "tconstruct:block/slime/sapling/ender" },
+    "age=1,hanging=false": { "model": "tconstruct:block/slime/sapling/ender" },
+    "age=2,hanging=false": { "model": "tconstruct:block/slime/sapling/ender" },
+    "age=3,hanging=false": { "model": "tconstruct:block/slime/sapling/ender" },
+    "age=4,hanging=false": { "model": "tconstruct:block/slime/sapling/ender" },
+    "age=0,hanging=true":  { "model": "tconstruct:block/slime/sapling/ender_hanging/0" },
+    "age=1,hanging=true":  { "model": "tconstruct:block/slime/sapling/ender_hanging/1" },
+    "age=2,hanging=true":  { "model": "tconstruct:block/slime/sapling/ender_hanging/2" },
+    "age=3,hanging=true":  { "model": "tconstruct:block/slime/sapling/ender_hanging/3" },
+    "age=4,hanging=true":  { "model": "tconstruct:block/slime/sapling/ender_hanging/4" }
+  }
+}

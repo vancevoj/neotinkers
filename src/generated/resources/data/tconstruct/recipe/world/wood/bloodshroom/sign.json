@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "sign",
+  "key": {
+    "#": "tconstruct:bloodshroom_planks",
+    "X": "#c:rods/wooden"
+  },
+  "pattern": [
+    "###",
+    "###",
+    " X "
+  ],
+  "result": {
+    "count": 3,
+    "id": "tconstruct:bloodshroom_sign"
+  }
+}

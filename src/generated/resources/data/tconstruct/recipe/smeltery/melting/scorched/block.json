@@ -1,0 +1,21 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:scorched_blocks",
+      [
+        "tconstruct:scorched_ladder",
+        "tconstruct:scorched_lamp",
+        "tconstruct:scorched_bricks_stairs",
+        "tconstruct:scorched_road_stairs"
+      ]
+    ]
+  },
+  "result": {
+    "amount": 1000,
+    "fluid": "tconstruct:scorched_stone"
+  },
+  "temperature": 500,
+  "time": 100
+}

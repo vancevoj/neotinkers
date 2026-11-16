@@ -1,0 +1,13 @@
+{
+  "title": "精致物品展示框",
+  "image": {
+    "file": "tconstruct:book/images/fancy_frames.png",
+    "width": 140,
+    "height": 82
+  },
+  "text": [
+    {
+      "text": "稀有的金属可以做成独特品味的物品展示框。"
+    }
+  ]
+}

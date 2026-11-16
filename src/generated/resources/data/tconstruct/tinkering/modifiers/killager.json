@@ -1,0 +1,23 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:conditional_melee_damage",
+      "each_level": 2.0,
+      "percent": false,
+      "target": {
+        "type": "mantle:or",
+        "predicates": [
+          {
+            "type": "mantle:mob_type",
+            "mobs": "minecraft:illager"
+          },
+          {
+            "type": "mantle:tag",
+            "tag": "tconstruct:killagers"
+          }
+        ]
+      }
+    }
+  ]
+}

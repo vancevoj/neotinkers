@@ -1,0 +1,16 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "check_trait_level": true,
+  "inputs": [
+    {
+      "ingredient": "minecraft:hopper"
+    }
+  ],
+  "level": 1,
+  "result": "tconstruct:collecting",
+  "slots": {
+    "upgrades": 1
+  },
+  "tools": "#tconstruct:modifiable/fishing_rods"
+}

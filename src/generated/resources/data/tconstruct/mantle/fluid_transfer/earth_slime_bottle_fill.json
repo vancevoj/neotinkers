@@ -1,0 +1,9 @@
+{
+  "type": "mantle:fill_item",
+  "fluid": {
+    "amount": 250,
+    "tag": "c:slime"
+  },
+  "input": "minecraft:glass_bottle",
+  "result": "tconstruct:earth_slime_bottle"
+}

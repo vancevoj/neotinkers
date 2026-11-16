@@ -1,0 +1,15 @@
+{
+  "modifier_id": "tconstruct:slurping",
+  "text": [
+    {
+      "text": "He was number one!"
+    }
+  ],
+  "tool_filter": "tconstruct:modifiable/armor/helmets",
+  "effects": [
+    "Drink fluids stored in the helmet",
+    "Keybind is used to drink",
+    "Requires 1 ability slot per level",
+    "Higher levels drink more fluid for stronger effects"
+  ]
+}

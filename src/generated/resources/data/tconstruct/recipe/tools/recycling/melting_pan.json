@@ -1,0 +1,11 @@
+{
+  "type": "tconstruct:part_builder_tool_recycling",
+  "parts": [
+    "tconstruct:repair_kit",
+    "tconstruct:bow_limb"
+  ],
+  "pattern": "tconstruct:venom_bottle",
+  "tools": {
+    "ingredient": "tconstruct:melting_pan"
+  }
+}

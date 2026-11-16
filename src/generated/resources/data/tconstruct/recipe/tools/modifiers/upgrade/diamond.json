@@ -1,0 +1,15 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "ingredient": "#c:gems/diamond"
+    }
+  ],
+  "level": 1,
+  "result": "tconstruct:diamond",
+  "slots": {
+    "upgrades": 1
+  },
+  "tools": "#tconstruct:modifiable/durability"
+}

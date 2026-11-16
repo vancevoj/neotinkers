@@ -1,0 +1,15 @@
+intro=Introdução
+
+melee_harvest_materials=Materiais de Coleta e Combate de Tier 1
+melee_harvest_materials.subtext=Esses materiais podem ser colocados no montador de peças para fabricar peças de ferramentas para armas de combate ou ferramentas de coleta.  
+
+ranged_materials=Materiais de Longo Alcance de Tier 1
+ranged_materials.subtext=Esses materiais podem ser colocados no montador de peças para fabricar peças de ferramentas para armas de longo alcance, como arcos.  
+
+tools=Ferramentas  
+
+armor=Armadura Básica
+armor.subtext=A armadura básica oferece proteção simples sem a necessidade de caçar recursos ou construir máquinas. Isso proporcionará uma defesa limitada, mas ainda há muitas oportunidades para melhorar sua armadura! Que coisas divertidas você vai criar?  
+
+modifiers=Modificadores
+further_reading=Leitura Adicional

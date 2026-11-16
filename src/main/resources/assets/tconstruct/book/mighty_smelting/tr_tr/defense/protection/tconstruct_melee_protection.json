@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:melee_protection",
+  "text": [
+    {
+      "text": "Taşınabilir yumruklama torbası."
+    }
+
+  ],
+  "effects": [
+    "Kılıçlardan, silahsız saldırılardan ve dahasından gelen hasarı azaltır",
+    "Çoklu seviyeler, hasarı her seviyede daha da azaltır.",
+    "Seviye başına 1 savunma yuvası gerekir"
+  ]
+}

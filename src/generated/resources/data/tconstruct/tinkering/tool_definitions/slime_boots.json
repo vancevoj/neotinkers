@@ -1,0 +1,66 @@
+{
+  "modules": [
+    {
+      "type": "tconstruct:material_stats",
+      "primary_part": 1,
+      "stat_types": [
+        "tconstruct:laces",
+        {
+          "scale": 1.3,
+          "stat": "tconstruct:slime"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:material_traits",
+      "hooks": [
+        "tconstruct:trim_trait"
+      ],
+      "material_index": 0,
+      "stat_type": "tconstruct:laces"
+    },
+    {
+      "type": "tconstruct:default_materials",
+      "materials": [
+        {
+          "type": "tconstruct:fixed",
+          "material": "tconstruct:skyslime_vine"
+        },
+        {
+          "type": "tconstruct:fixed",
+          "material": "tconstruct:blood"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:tool_parts",
+      "parts": [
+        "tconstruct:laces"
+      ]
+    },
+    {
+      "type": "tconstruct:modifier_slots",
+      "slots": {
+        "abilities": 2,
+        "upgrades": 3
+      }
+    },
+    {
+      "type": "tconstruct:traits",
+      "traits": [
+        {
+          "level": 1,
+          "name": "tconstruct:bouncy"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:unique_material_name",
+      "index": 1
+    },
+    {
+      "type": "tconstruct:fixed_material_name",
+      "index": 0
+    }
+  ]
+}

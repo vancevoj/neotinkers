@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material_melting",
+  "input": "tconstruct:earthslime",
+  "result": {
+    "amount": 250,
+    "tag": "c:slime"
+  },
+  "temperature": 50
+}

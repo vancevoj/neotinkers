@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "tconstruct:scorched_brick",
+    "G": {
+      "neoforge:ingredient_type": "tconstruct:no_container",
+      "match": [
+        "tconstruct:scorched_ingot_gauge",
+        "tconstruct:scorched_fuel_gauge"
+      ]
+    }
+  },
+  "pattern": [
+    "BGB",
+    "BBB"
+  ],
+  "result": {
+    "id": "tconstruct:scorched_alloyer"
+  }
+}

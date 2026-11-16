@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:reflecting",
+  "text": [
+    {
+      "text": "Your shield is also your trampoline."
+    }
+  ],
+  "effects": [
+    "Bounces projectiles for 2 seconds after blocking",
+    "Multiple levels, each adding 2 seconds",
+    "First level requires 1 ability slot",
+    "Consecutive levels 1 ability slot"
+  ]
+}

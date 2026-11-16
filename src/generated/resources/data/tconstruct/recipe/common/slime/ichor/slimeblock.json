@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "slime_blocks",
+  "key": {
+    "#": "#c:slimeball/ichor"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "tconstruct:ichor_slime"
+  }
+}

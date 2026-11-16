@@ -1,0 +1,47 @@
+[
+  {
+    "name": "index",
+    "type": "mantle:index",
+    "data": "gadgets/index.json"
+  },
+  {
+    "name": "cake",
+    "type": "mantle:image_text",
+    "data": "gadgets/cake.json"
+  },
+  {
+    "name": "piggybackpack",
+    "type": "mantle:image_text",
+    "data": "gadgets/piggybackpack.json"
+  },
+  {
+    "name": "hidden",
+    "type": "mantle:image_text",
+    "data": "gadgets/melvin.json"
+  },
+  {
+    "name": "armor_stand",
+    "type": "mantle:image_text",
+    "data": "gadgets/armor_stand.json"
+  },
+  {
+    "name": "armor_stand_details",
+    "type": "mantle:text",
+    "data": "gadgets/armor_stand_details.json"
+  },
+  {
+    "name": "fancy_frames",
+    "type": "mantle:image_text",
+    "data": "gadgets/fancy_frame.json"
+  },
+  {
+    "name": "fancy_frame_details",
+    "type": "mantle:text",
+    "data": "gadgets/fancy_frame_details.json"
+  },
+  {
+    "name": "fluid_cannon",
+    "type": "mantle:showcase",
+    "data": "gadgets/fluid_cannon.json"
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": "#c:leathers",
+  "material": "tconstruct:leather",
+  "needed": 1,
+  "value": 1
+}

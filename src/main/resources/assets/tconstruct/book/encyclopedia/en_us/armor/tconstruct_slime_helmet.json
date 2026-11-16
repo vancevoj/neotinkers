@@ -1,0 +1,14 @@
+{
+  "tool": "tconstruct:slime_helmet",
+  "text": [
+    { "text": "The slimeskull is a helmet that copies abilities from monsters. It is created from pouring slime on a mob head, with the head type determining the effects." }
+  ],
+  "properties": [
+    "Low defense",
+    "3 Upgrade Slots",
+    "0 Defense Slots",
+    "2 Ability Slots",
+    "Slime & Skull Traits",
+    "Mob Disguise"
+  ]
+}

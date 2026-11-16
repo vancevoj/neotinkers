@@ -1,0 +1,15 @@
+{
+  "type": "mantle:crafting_shaped_retextured",
+  "category": "redstone",
+  "key": {
+    "#": "#tconstruct:foundry_bricks",
+    "C": "#c:ingots/gold"
+  },
+  "pattern": [
+    "C#C"
+  ],
+  "result": {
+    "id": "tconstruct:scorched_duct"
+  },
+  "texture": "#tconstruct:foundry_bricks"
+}

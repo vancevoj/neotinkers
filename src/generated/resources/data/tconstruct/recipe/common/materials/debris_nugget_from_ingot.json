@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "tconstruct:debris_nugget",
+  "ingredients": [
+    "minecraft:netherite_scrap"
+  ],
+  "result": {
+    "count": 9,
+    "id": "tconstruct:debris_nugget"
+  }
+}

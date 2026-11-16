@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "ensorcellation:soulbound",
+      "required": false
+    },
+    {
+      "id": "enderzoology:soulbound",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "title": "Guia para Fundição",
+  "text": [
+    {
+      "text": "3: Aqui você pode ver seu combustível. Passar o cursor sobre ele mostrará a quantidade exata e o tipo."
+    },
+    {
+      "text": "Em ambos 2 e 3, clicar com o botão esquerdo em um item de fluido tentará encher o item do tanque, enquanto clicar com o botão direito tentará despejar o item no tanque.",
+      "paragraph": true
+    },
+    {
+      "text": "4: Este slot permite encher ou despejar rapidamente um item no tanque principal, seguindo o mesmo comportamento de clicar em um dreno com o item. No 5: te permite restringir isso apenas para encher ou apenas para drenar. Após a interação, o resultado será movido para 6.",
+      "paragraph": true
+    }
+  ]
+}
+

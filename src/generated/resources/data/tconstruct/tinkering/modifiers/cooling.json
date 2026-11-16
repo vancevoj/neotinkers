@@ -1,0 +1,11 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:conditional_melee_damage",
+      "each_level": 1.6,
+      "percent": false,
+      "target": "mantle:fire_immune"
+    }
+  ]
+}

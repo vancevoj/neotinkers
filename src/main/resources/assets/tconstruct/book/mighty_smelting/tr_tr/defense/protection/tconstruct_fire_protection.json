@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:fire_protection",
+  "text": [
+    {
+      "text": "Ateş ve alevlerin içinden."
+    }
+  ],
+  "effects": [
+    "Ateş hasarını ve yanma süresini azaltır",
+    "Çoklu seviyeler, hasarı ve yanma süresini her seviyede daha da azaltır.",
+    "Seviye başına 1 savunma yuvası gerekir"
+  ]
+}

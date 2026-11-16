@@ -1,0 +1,15 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "ingredient": "#c:gems/emerald"
+    }
+  ],
+  "level": 1,
+  "result": "tconstruct:emerald",
+  "slots": {
+    "upgrades": 1
+  },
+  "tools": "#tconstruct:modifiable/durability"
+}

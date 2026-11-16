@@ -1,0 +1,19 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "ingredient": "minecraft:echo_shard"
+    }
+  ],
+  "level": 1,
+  "result": "tconstruct:soulbound",
+  "slots": {
+    "upgrades": 1
+  },
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:difference",
+    "base": "#tconstruct:modifiable",
+    "subtracted": "#tconstruct:modifiable/single_use"
+  }
+}

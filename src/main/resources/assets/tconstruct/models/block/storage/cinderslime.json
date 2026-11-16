@@ -1,0 +1,22 @@
+{
+  "loader": "neoforge:composite",
+  "parent": "block/block",
+  "textures": {
+    "particle": "tconstruct:block/storage/cinderslime"
+  },
+  "children": {
+    "metal": {
+      "parent": "tconstruct:block/template/cube_all_14",
+      "textures": {
+        "all": "tconstruct:block/storage/cinderslime_gold"
+      }
+    },
+    "slime": {
+      "parent": "block/cube_all",
+      "textures": {
+        "all": "tconstruct:block/storage/cinderslime_slime"
+      }
+    }
+  }
+}
+

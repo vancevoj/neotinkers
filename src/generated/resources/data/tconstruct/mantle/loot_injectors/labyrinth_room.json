@@ -1,0 +1,57 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "twilightforest"
+    }
+  ],
+  "name": "twilightforest:chests/labyrinth_room",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "tconstruct:add_tool_data",
+            "materials": [
+              {
+                "type": "tconstruct:ancient"
+              },
+              {
+                "type": "tconstruct:ancient"
+              },
+              {
+                "type": "tconstruct:ancient"
+              }
+            ]
+          },
+          "name": "tconstruct:minotaur_axe"
+        }
+      ],
+      "name": "pool1"
+    },
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "tconstruct:add_tool_data",
+            "materials": [
+              {
+                "type": "tconstruct:ancient"
+              },
+              {
+                "type": "tconstruct:ancient"
+              },
+              {
+                "type": "tconstruct:ancient"
+              }
+            ]
+          },
+          "name": "tconstruct:minotaur_axe"
+        }
+      ],
+      "name": "pool2"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "tconstruct:material",
+    "model": "tconstruct:item/fake_ingot"
+  }
+}

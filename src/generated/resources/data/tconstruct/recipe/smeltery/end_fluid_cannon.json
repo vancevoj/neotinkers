@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "#c:ingots/knightmetal",
+    "R": "#c:dusts/redstone",
+    "T": "minecraft:shulker_shell"
+  },
+  "pattern": [
+    " R ",
+    "CTC",
+    "CCC"
+  ],
+  "result": {
+    "id": "tconstruct:end_fluid_cannon"
+  }
+}

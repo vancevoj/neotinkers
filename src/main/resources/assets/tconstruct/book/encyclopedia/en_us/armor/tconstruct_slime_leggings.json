@@ -1,0 +1,15 @@
+{
+  "tool": "tconstruct:slime_leggings",
+  "text": [
+    { "text": "The slimeshell improves storage and grants useful unique bonuses." },
+    { "text": " They are created by pouring slime on a shell." }
+  ],
+  "properties": [
+    "Low defense",
+    "3 Upgrade Slots",
+    "0 Defense Slots",
+    "2 Ability Slots",
+    "Slime & Shell Traits",
+    "Shell Storage"
+  ]
+}

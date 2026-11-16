@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "group": "slime_blocks",
+  "key": {
+    "#": "#c:slimeball/sky"
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "id": "tconstruct:sky_slime"
+  }
+}

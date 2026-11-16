@@ -1,0 +1,14 @@
+{
+  "title": "제련소 GUI",
+  "image": {
+    "file": "tconstruct:book/images/smeltergui.png",
+    "width": 179,
+    "height": 74
+  },
+  "text": [
+    {
+      "text": "기본적인 제련소 GUI다. 간단하지.",
+      "paragraph": true
+    }
+    ]
+}

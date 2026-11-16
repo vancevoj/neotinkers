@@ -1,0 +1,92 @@
+{
+  "level_display": {
+    "type": "tconstruct:unique",
+    "first_unique": false,
+    "unique_until": 3
+  },
+  "modules": [
+    {
+      "type": "tconstruct:constant_enchantment",
+      "level": 1,
+      "name": "minecraft:fortune",
+      "tool": {
+        "type": "mantle:tag",
+        "tag": "tconstruct:modifiable/harvest"
+      }
+    },
+    {
+      "type": "tconstruct:armor_harvest_enchantment",
+      "level": 1,
+      "name": "minecraft:fortune",
+      "slots": [
+        "feet",
+        "legs",
+        "chest",
+        "head"
+      ],
+      "tool": {
+        "type": "mantle:tag",
+        "tag": "tconstruct:modifiable/armor/worn"
+      }
+    },
+    {
+      "type": "tconstruct:weapon_looting",
+      "level": 1,
+      "tool": {
+        "type": "mantle:or",
+        "predicates": [
+          {
+            "type": "mantle:set",
+            "items": [
+              "minecraft:air"
+            ]
+          },
+          {
+            "type": "mantle:tag",
+            "tag": "tconstruct:modifiable/melee"
+          }
+        ]
+      }
+    },
+    {
+      "type": "tconstruct:armor_looting",
+      "level": 1,
+      "slots": [
+        "feet",
+        "legs",
+        "chest",
+        "head"
+      ],
+      "tool": {
+        "type": "mantle:tag",
+        "tag": "tconstruct:modifiable/armor/worn"
+      }
+    },
+    {
+      "type": "tconstruct:stat_boost",
+      "each_level": 1.0,
+      "operation": "add",
+      "stat": "tconstruct:sea_luck"
+    },
+    {
+      "type": "tconstruct:attribute",
+      "attribute": "minecraft:luck",
+      "each_level": 1.0,
+      "operation": "add_value",
+      "slots": [
+        "mainhand",
+        "offhand",
+        "feet",
+        "legs",
+        "chest",
+        "head",
+        "body",
+        "saddle"
+      ],
+      "tool": {
+        "type": "mantle:tag",
+        "tag": "tconstruct:modifiable/armor/worn"
+      }
+    }
+  ]
+}

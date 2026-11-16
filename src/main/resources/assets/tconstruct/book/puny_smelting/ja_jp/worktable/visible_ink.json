@@ -1,0 +1,13 @@
+{
+  "title": "可視のインク",
+  "image": {
+    "file": "tconstruct:book/images/worktable/visible_ink.png",
+    "width": 147,
+    "height": 64
+  },
+  "text": [
+    {
+      "text": "あっ、気が変わって、あの醜い改造を見たい？優柔不断なあなたにとって幸いなことに、牛乳をひと桶注ぐだけで、その修飾子が再び見えるようになります。"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "tconstruct:netherite_scrap",
+  "key": {
+    "#": "#c:nuggets/netherite_scrap",
+    "*": "tconstruct:debris_nugget"
+  },
+  "pattern": [
+    "###",
+    "#*#",
+    "###"
+  ],
+  "result": {
+    "id": "minecraft:netherite_scrap"
+  }
+}

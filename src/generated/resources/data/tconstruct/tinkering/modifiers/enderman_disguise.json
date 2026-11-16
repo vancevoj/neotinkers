@@ -1,0 +1,13 @@
+{
+  "level_display": "tconstruct:single_level",
+  "modules": [
+    {
+      "type": "tconstruct:mob_disguise",
+      "entity": "minecraft:enderman"
+    },
+    {
+      "type": "tconstruct:volatile_flag",
+      "flag": "tconstruct:endermask"
+    }
+  ]
+}

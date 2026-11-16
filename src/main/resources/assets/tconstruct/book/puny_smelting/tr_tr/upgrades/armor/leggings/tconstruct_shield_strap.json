@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:shield_strap",
+  "text": [
+    {
+      "text": "O koru, o saldı, ama en önemlisi o meşaleleri geri get."
+    }
+  ],
+  "effects": [
+    "Fazladan bir öbür el yuvası verir",
+    "Pantolonla etkileşime girmek öbür elin değişmesini sağlar",
+    "Çoklu seviyeler, +1 yuva her seviyede verilir",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "type": "mantle:crafting_shaped_retextured",
+  "category": "redstone",
+  "key": {
+    "#": "#tconstruct:foundry_bricks",
+    "C": "tconstruct:obsidian_pane"
+  },
+  "pattern": [
+    "C",
+    "#",
+    "C"
+  ],
+  "result": {
+    "id": "tconstruct:scorched_chute"
+  },
+  "texture": "#tconstruct:foundry_bricks"
+}

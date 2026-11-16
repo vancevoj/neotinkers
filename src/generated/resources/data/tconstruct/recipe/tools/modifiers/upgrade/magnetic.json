@@ -1,0 +1,23 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "ingredient": "minecraft:compass"
+    }
+  ],
+  "level": {
+    "max": 5
+  },
+  "result": "tconstruct:magnetic",
+  "slots": {
+    "upgrades": 1
+  },
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:modifiable/melee/weapon",
+      "#tconstruct:modifiable/harvest"
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "tconstruct:item_part_builder",
+  "pattern": "tconstruct:broad_axe_head",
+  "pattern_item": "#c:sands/red",
+  "result": {
+    "count": 4,
+    "item": "tconstruct:broad_axe_head_red_sand_cast"
+  },
+  "title_key": "tconstruct:sand_cast"
+}

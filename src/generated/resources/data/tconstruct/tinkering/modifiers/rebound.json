@@ -1,0 +1,27 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:conditional_power",
+      "formula": [
+        "$bounces",
+        0.5,
+        "*",
+        "$level",
+        "*",
+        "$multiplier",
+        "*",
+        "$damage",
+        "+"
+      ],
+      "percent": false,
+      "variables": {
+        "bounces": {
+          "type": "tconstruct:persistent_data",
+          "fallback": 1.0,
+          "key": "tconstruct:bounce"
+        }
+      }
+    }
+  ]
+}

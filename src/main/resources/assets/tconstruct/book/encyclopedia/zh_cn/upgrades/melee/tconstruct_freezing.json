@@ -1,0 +1,15 @@
+{
+    "modifier_id": "tconstruct:freezing",
+    "text": [
+      {
+        "text": "冰冻击中的生物4秒（每级延长4秒），造成持续伤害，同时令目标减速。"
+      }
+    ],
+    "more_text_space": true,
+    "tool_filter": "tconstruct:modifiable/melee",
+    "effects": [
+      "最高3级",
+      "与“怒火”相性不佳",
+      "每级需要1个升级槽"
+    ]
+  }

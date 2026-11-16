@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:padded",
+  "text": [
+    {
+      "text": "Um pouco de acolchoado nunca fez mal a ninguém."
+    }
+  ],
+  "effects": [
+    "Reduz o recuo da ferramenta",
+    "Múltiplos níveis, cada nível reduz ainda mais o recuo",
+    "Requer 1 slot de melhoria por nível"
+  ]
+}

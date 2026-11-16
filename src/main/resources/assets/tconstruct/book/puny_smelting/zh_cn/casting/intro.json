@@ -1,0 +1,11 @@
+{
+  "title": "铸造",
+  "image": {
+    "file": "tconstruct:book/images/sandcast.png"
+  },
+  "text": [
+    {
+      "text": "工匠，现在你已经熔炼了一些金属，并且学会了如何转移它们。现在还有最后一步，把它们 做成工具部件！"
+    }
+  ]
+}

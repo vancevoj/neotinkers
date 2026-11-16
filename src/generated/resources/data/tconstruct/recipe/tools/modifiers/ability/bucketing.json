@@ -1,0 +1,33 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "ingredient": [
+        "tconstruct:seared_faucet",
+        "tconstruct:scorched_faucet"
+      ]
+    },
+    {
+      "ingredient": "minecraft:bucket"
+    },
+    {
+      "ingredient": [
+        "tconstruct:seared_faucet",
+        "tconstruct:scorched_faucet"
+      ]
+    },
+    {
+      "ingredient": "#c:ingots/steel"
+    },
+    {
+      "ingredient": "#c:ingots/steel"
+    }
+  ],
+  "level": 1,
+  "result": "tconstruct:bucketing",
+  "slots": {
+    "abilities": 1
+  },
+  "tools": "#tconstruct:modifiable/interactable"
+}

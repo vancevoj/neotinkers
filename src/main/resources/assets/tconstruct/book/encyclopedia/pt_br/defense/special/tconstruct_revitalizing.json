@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:revitalizing",
+  "text": [
+    {
+      "text": "Aumenta a vida máxima em 1 coração por nível."
+    }
+  ],
+  "more_text_space": true,
+  "effects": [
+    "Pode aplicar níveis progressivamente",
+    "Requer 1 slot de defesa por nível"
+  ]
+}

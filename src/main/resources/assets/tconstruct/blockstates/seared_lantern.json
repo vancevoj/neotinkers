@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "hanging=false": { "type": "tconstruct:tank", "model": "tconstruct:block/smeltery/tank/lantern" },
+    "hanging=true": { "type": "tconstruct:tank", "model": "tconstruct:block/smeltery/tank/lantern_hanging" }
+  }
+}

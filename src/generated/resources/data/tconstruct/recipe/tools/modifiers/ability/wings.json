@@ -1,0 +1,16 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "check_trait_level": true,
+  "inputs": [
+    {
+      "ingredient": "minecraft:elytra"
+    }
+  ],
+  "level": 1,
+  "result": "tconstruct:wings",
+  "slots": {
+    "abilities": 2
+  },
+  "tools": "#tconstruct:modifiable/armor/chestplate"
+}

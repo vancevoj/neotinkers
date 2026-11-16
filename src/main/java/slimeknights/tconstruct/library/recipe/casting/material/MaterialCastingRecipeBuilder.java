@@ -1,0 +1,195 @@
+package slimeknights.tconstruct.library.recipe.casting.material;
+
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+import net.minecraft.advancements.AdvancementHolder;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
+import slimeknights.mantle.data.loadable.Loadables;
+import slimeknights.mantle.data.predicate.IJsonPredicate;
+import slimeknights.mantle.recipe.data.AbstractRecipeBuilder;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
+import slimeknights.mantle.recipe.helper.TypeAwareRecipeSerializer;
+import slimeknights.mantle.recipe.ingredient.EmptyIngredient;
+import slimeknights.tconstruct.common.recipe.LoadableFinishedRecipe;
+import slimeknights.tconstruct.library.json.predicate.material.MaterialPredicate;
+import slimeknights.tconstruct.library.materials.definition.MaterialVariantId;
+import slimeknights.tconstruct.library.recipe.casting.material.ToolCastingRecipe.CastPurpose;
+import slimeknights.tconstruct.library.recipe.ingredient.MaterialIngredient;
+import slimeknights.tconstruct.library.tools.item.IModifiable;
+import slimeknights.tconstruct.library.tools.part.IMaterialItem;
+import slimeknights.tconstruct.smeltery.TinkerSmeltery;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+@SuppressWarnings({"unused", "WeakerAccess"})
+@Accessors(chain = true)
+@RequiredArgsConstructor(staticName = "castingRecipe")
+public class MaterialCastingRecipeBuilder extends AbstractRecipeBuilder<MaterialCastingRecipeBuilder> {
+  @Nullable
+  private final IMaterialItem result;
+  @Nullable
+  private final IModifiable resultTool;
+  /** Registered serializer, must be type aware. Since 26.1 serializers are records, see {@link LoadableFinishedRecipe#typeAware(RecipeSerializer)} */
+  private final RecipeSerializer<? extends AbstractMaterialCastingRecipe> recipeSerializer;
+  private Ingredient cast = EmptyIngredient.VANILLA;
+  @Setter
+  private int itemCost = 0;
+  private CastPurpose castPurpose = CastPurpose.CATALYST;
+  private boolean switchSlots = false;
+  /**
+   * If true, tool swapping recipes (from {@link #basinRecipe(IModifiable)} or {@link #tableRecipe(IModifiable)}) will not generate a part swapping recipe.
+   * Can use {@link PartSwapCastingRecipeBuilder} to manually create one as a separate JSON.
+   */
+  @Setter
+  private boolean fluidSwapping = true;
+  @Setter
+  private IJsonPredicate<MaterialVariantId> allowedMaterials = MaterialPredicate.ANY;
+  /** Extra materials for tool casting. Has no impact on part casting. */
+  private final List<MaterialVariantId> extraMaterials = new ArrayList<>();
+
+  /**
+   * Creates a new material casting recipe for an basin recipe
+   * @param result            Material item result
+   * @return  Builder instance
+   */
+  public static MaterialCastingRecipeBuilder basinRecipe(IMaterialItem result) {
+    return castingRecipe(result, null, TinkerSmeltery.basinMaterialSerializer.get());
+  }
+
+  /**
+   * Creates a new material casting recipe for an table recipe
+   * @param result            Material item result
+   * @return  Builder instance
+   */
+  public static MaterialCastingRecipeBuilder tableRecipe(IMaterialItem result) {
+    return castingRecipe(result, null, TinkerSmeltery.tableMaterialSerializer.get());
+  }
+
+  /**
+   * Creates a new material casting recipe for an basin recipe
+   * @param result            Material item result
+   * @return  Builder instance
+   */
+  public static MaterialCastingRecipeBuilder basinRecipe(IModifiable result) {
+    return castingRecipe(null, result, TinkerSmeltery.basinToolSerializer.get());
+  }
+
+  /**
+   * Creates a new material casting recipe for an table recipe
+   * @param result            Material item result
+   * @return  Builder instance
+   */
+  public static MaterialCastingRecipeBuilder tableRecipe(IModifiable result) {
+    return castingRecipe(null, result, TinkerSmeltery.tableToolSerializer.get());
+  }
+
+  /**
+   * Set the cast to the given ingredient
+   * @param cast      Ingredient
+   * @param purpose   Function the cast performs. For tool casting, see {@link #setCast(Ingredient, boolean)}.
+   * @return  Builder instance
+   */
+  public MaterialCastingRecipeBuilder setCast(Ingredient cast, CastPurpose purpose) {
+    this.cast = cast;
+    this.castPurpose = purpose;
+    return this;
+  }
+
+  /**
+   * Set the cast to the given ingredient
+   * @param cast      Ingredient
+   * @param consumed  If true, cast is consumed. For tool casting, see {@link #setCast(Ingredient, CastPurpose)}.
+   * @return  Builder instance
+   */
+  @SuppressWarnings("deprecation")
+  public MaterialCastingRecipeBuilder setCast(Ingredient cast, boolean consumed) {
+    // TODO 1.21: switch MAYBE_MATERIAL to CONSUMED
+    return setCast(cast, consumed ? CastPurpose.MAYBE_MATERIAL : CastPurpose.CATALYST);
+  }
+
+  /**
+   * Sets the cast to the given item.
+   * @param item      Cast item
+   * @param purpose   Function the cast performs. For part casting, see {@link #setCast(ItemLike, boolean)}.
+   * @return  Builder instance
+   */
+  public MaterialCastingRecipeBuilder setCast(ItemLike item, CastPurpose purpose) {
+    return this.setCast(Ingredient.of(item), purpose);
+  }
+
+  /**
+   * Sets the cast to the given item
+   * @param item      Cast item
+   * @param consumed  If true, cast is consumed. For tool casting, see {@link #setCast(ItemLike, CastPurpose)}.
+   * @return  Builder instance
+   */
+  public MaterialCastingRecipeBuilder setCast(ItemLike item, boolean consumed) {
+    return this.setCast(Ingredient.of(item), consumed);
+  }
+
+  /**
+   * Sets the cast to the given tag
+   * @param tag       Cast tag
+   * @param consumed  If true, cast is consumed. For tool casting, see {@link #setCast(Ingredient, CastPurpose)}.
+   * @return  Builder instance
+   */
+  public MaterialCastingRecipeBuilder setCast(TagKey<Item> tag, boolean consumed) {
+    return this.setCast(IngredientHelper.tag(tag), consumed);
+  }
+
+  /**
+   * Sets the cast to the given tool part with the proper ingredient type
+   * @param part      Cast part item
+   * @param first     If true, the part is the first material. If false it is the second
+   * @return  Builder instance
+   */
+  public MaterialCastingRecipeBuilder setPart(ItemLike part, boolean first) {
+    return this.setCast(MaterialIngredient.of(part).toVanilla(), first ? CastPurpose.FIRST_MATERIAL : CastPurpose.SECOND_MATERIAL);
+  }
+
+  /**
+   * Set output of recipe to be put into the input slot.
+   * Mostly used for cast creation
+   */
+  public MaterialCastingRecipeBuilder setSwitchSlots() {
+    this.switchSlots = true;
+    return this;
+  }
+
+  /** Adds a material to set after the end of the parts list */
+  public MaterialCastingRecipeBuilder addExtraMaterial(MaterialVariantId material) {
+    extraMaterials.add(material);
+    return this;
+  }
+
+  @Override
+  public void save(RecipeOutput output) {
+    this.save(output, Loadables.ITEM.getKey(Objects.requireNonNull(this.result).asItem()));
+  }
+
+  @Override
+  public void save(RecipeOutput output, Identifier id) {
+    if (this.itemCost <= 0) {
+      throw new IllegalStateException("Material casting recipes require a positive amount of fluid");
+    }
+    AdvancementHolder advancement = this.buildOptionalAdvancement(output, id, "casting");
+    TypeAwareRecipeSerializer<? extends AbstractMaterialCastingRecipe> serializer = LoadableFinishedRecipe.typeAware(recipeSerializer);
+    if (result != null) {
+      output.accept(recipeKey(id), new MaterialCastingRecipe(serializer, id, group, cast, itemCost, result, allowedMaterials, castPurpose != CastPurpose.CATALYST, switchSlots), advancement);
+    } else if (resultTool != null) {
+      output.accept(recipeKey(id), new ToolCastingRecipe(serializer, id, group, cast, itemCost, castPurpose, resultTool, allowedMaterials, extraMaterials, fluidSwapping), advancement);
+    } else {
+      throw new IllegalArgumentException("Must have either result or result tool");
+    }
+  }
+}

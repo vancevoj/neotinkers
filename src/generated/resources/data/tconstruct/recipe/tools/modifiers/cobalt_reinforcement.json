@@ -1,0 +1,11 @@
+{
+  "type": "tconstruct:casting_table",
+  "cast": "tconstruct:pattern",
+  "cast_consumed": true,
+  "cooling_time": 65,
+  "fluid": {
+    "amount": 90,
+    "tag": "c:molten_cobalt"
+  },
+  "result": "tconstruct:cobalt_reinforcement"
+}

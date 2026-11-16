@@ -1,0 +1,15 @@
+{
+    "modifier_id": "tconstruct:glowing",
+    "text": [
+      {
+        "text": "令人眼前一亮。"
+      }
+    ],
+    "tool_filter": "tconstruct:modifiable/armor/boots",
+    "effects": [
+      "点亮走过的黑暗区域",
+      "消耗耐久度放置荧光球",
+      "单个等级",
+      "需要1个能力槽"
+    ]
+  }

@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:firestarter",
+  "text": [
+    {
+      "text": "放火烧山，牢底坐穿。"
+    }
+  ],
+  "effects": [
+    "交互以点火",
+    "单个等级",
+    "需要1个能力槽"
+  ]
+}

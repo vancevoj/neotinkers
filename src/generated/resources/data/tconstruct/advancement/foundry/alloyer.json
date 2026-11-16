@@ -1,0 +1,111 @@
+{
+  "parent": "tconstruct:foundry/fantastic_foundry",
+  "criteria": {
+    "scorched_alloyer": {
+      "conditions": {
+        "location": {
+          "type": "minecraft:match_block",
+          "blocks": "tconstruct:scorched_alloyer"
+        }
+      },
+      "trigger": "minecraft:placed_block"
+    },
+    "scorched_basin": {
+      "conditions": {
+        "location": {
+          "type": "minecraft:match_block",
+          "blocks": "tconstruct:scorched_basin"
+        }
+      },
+      "trigger": "minecraft:placed_block"
+    },
+    "scorched_faucet": {
+      "conditions": {
+        "location": {
+          "type": "minecraft:match_block",
+          "blocks": "tconstruct:scorched_faucet"
+        }
+      },
+      "trigger": "minecraft:placed_block"
+    },
+    "scorched_fuel_gauge": {
+      "conditions": {
+        "location": {
+          "type": "minecraft:match_block",
+          "blocks": "tconstruct:scorched_fuel_gauge"
+        }
+      },
+      "trigger": "minecraft:placed_block"
+    },
+    "scorched_fuel_tank": {
+      "conditions": {
+        "location": {
+          "type": "minecraft:match_block",
+          "blocks": "tconstruct:scorched_fuel_tank"
+        }
+      },
+      "trigger": "minecraft:placed_block"
+    },
+    "scorched_ingot_gauge": {
+      "conditions": {
+        "location": {
+          "type": "minecraft:match_block",
+          "blocks": "tconstruct:scorched_ingot_gauge"
+        }
+      },
+      "trigger": "minecraft:placed_block"
+    },
+    "scorched_ingot_tank": {
+      "conditions": {
+        "location": {
+          "type": "minecraft:match_block",
+          "blocks": "tconstruct:scorched_ingot_tank"
+        }
+      },
+      "trigger": "minecraft:placed_block"
+    },
+    "scorched_table": {
+      "conditions": {
+        "location": {
+          "type": "minecraft:match_block",
+          "blocks": "tconstruct:scorched_table"
+        }
+      },
+      "trigger": "minecraft:placed_block"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.tconstruct.foundry.alloyer.description"
+    },
+    "icon": {
+      "id": "tconstruct:scorched_alloyer"
+    },
+    "title": {
+      "translate": "advancements.tconstruct.foundry.alloyer.title"
+    }
+  },
+  "requirements": [
+    [
+      "scorched_alloyer"
+    ],
+    [
+      "scorched_faucet"
+    ],
+    [
+      "scorched_table"
+    ],
+    [
+      "scorched_basin"
+    ],
+    [
+      "scorched_fuel_tank",
+      "scorched_fuel_gauge"
+    ],
+    [
+      "scorched_ingot_tank",
+      "scorched_ingot_gauge"
+    ]
+  ]
+}

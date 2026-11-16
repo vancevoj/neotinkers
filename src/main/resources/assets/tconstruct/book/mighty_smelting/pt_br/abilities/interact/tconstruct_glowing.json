@@ -1,0 +1,15 @@
+{
+  "modifier_id": "tconstruct:glowing",
+  "text": [
+    {
+      "text": "Essa é uma ideia brilhante."
+    }
+  ],
+  "tool_filter": "tconstruct:modifiable/interactable",
+  "effects": [
+    "Interaja para colocar brilho",
+    "Colocar brilhos consome durabilidade",
+    "Nível único",
+    "Requer 1 slot de habilidade"
+  ]
+}

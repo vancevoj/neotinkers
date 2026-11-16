@@ -1,0 +1,17 @@
+{
+  "tool": "tconstruct:dagger",
+  "text": [
+    {
+      "text": "The dagger is a quick weapon with low damage. It can be used to attack from either hand for double the daggers."
+    },
+    {
+      "text": "In addition to combat, daggers are effective at mining many plants and glass blocks.", "paragraph": true
+    }
+  ],
+  "properties": [
+    "Low Damage",
+	"High Speed",
+    "Able to use in off-hand",
+    "Stacks to 2 when crafting and modifying"
+  ]
+}

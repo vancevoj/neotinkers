@@ -1,0 +1,30 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "ingredient": "#c:wither_bones"
+    },
+    {
+      "ingredient": "tconstruct:ichor_congealed_slime"
+    },
+    {
+      "ingredient": "minecraft:ghast_tear"
+    }
+  ],
+  "level": {
+    "max": 5
+  },
+  "result": "tconstruct:necrotic",
+  "slots": {
+    "upgrades": 1
+  },
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:modifiable/melee",
+      "#tconstruct:modifiable/ranged/bows",
+      "#tconstruct:modifiable/fishing_rods"
+    ]
+  }
+}

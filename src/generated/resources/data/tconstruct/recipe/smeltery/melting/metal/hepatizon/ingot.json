@@ -1,0 +1,10 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": "#c:ingots/hepatizon",
+  "result": {
+    "amount": 90,
+    "tag": "c:molten_hepatizon"
+  },
+  "temperature": 1400,
+  "time": 78
+}

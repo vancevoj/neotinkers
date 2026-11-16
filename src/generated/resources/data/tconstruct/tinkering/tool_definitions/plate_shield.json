@@ -1,0 +1,67 @@
+{
+  "modules": [
+    {
+      "type": "tconstruct:material_stats",
+      "primary_part": 1,
+      "stat_types": [
+        "tconstruct:shield_core",
+        "tconstruct:plating_shield"
+      ]
+    },
+    {
+      "type": "tconstruct:tool_parts",
+      "parts": [
+        "tconstruct:shield_core"
+      ]
+    },
+    {
+      "type": "tconstruct:default_materials",
+      "materials": [
+        {
+          "type": "tconstruct:random",
+          "tier": {
+            "max": 2,
+            "min": 1
+          }
+        },
+        {
+          "type": "tconstruct:random",
+          "tier": {
+            "max": 2,
+            "min": 1
+          }
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:base_stats",
+      "stats": {
+        "tconstruct:block_amount": 100.0,
+        "tconstruct:block_angle": 180.0
+      }
+    },
+    {
+      "type": "tconstruct:modifier_slots",
+      "slots": {
+        "defense": 3,
+        "upgrades": 2
+      }
+    },
+    {
+      "type": "tconstruct:traits",
+      "traits": [
+        {
+          "level": 1,
+          "name": "tconstruct:blocking"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:attack_interaction"
+    },
+    {
+      "type": "tconstruct:fixed_material_name",
+      "index": 1
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "level_display": "tconstruct:pluses",
+  "modules": [
+    {
+      "type": "tconstruct:inventory",
+      "pattern": "tconstruct:tool_belt",
+      "slots": {
+        "each_level": 1,
+        "flat": 3
+      }
+    },
+    {
+      "type": "tconstruct:tool_belt",
+      "on_key": [
+        "normal",
+        "control"
+      ]
+    },
+    {
+      "type": "tconstruct:inventory_menu",
+      "on_key": "shift"
+    }
+  ],
+  "priority": 85
+}

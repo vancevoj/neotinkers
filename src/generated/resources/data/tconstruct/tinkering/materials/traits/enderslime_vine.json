@@ -1,0 +1,24 @@
+{
+  "default": [
+    {
+      "level": 1,
+      "name": "tconstruct:enderporting"
+    },
+    {
+      "level": 1,
+      "name": "tconstruct:overslime_friend"
+    }
+  ],
+  "perStat": {
+    "tconstruct:armor": [
+      {
+        "level": 1,
+        "name": "tconstruct:enderdodging"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:overslime_friend"
+      }
+    ]
+  }
+}

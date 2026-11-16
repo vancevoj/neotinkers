@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:gears/constantan"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:gears/constantan",
+  "result": {
+    "amount": 360,
+    "tag": "c:molten_constantan"
+  },
+  "temperature": 920,
+  "time": 128
+}

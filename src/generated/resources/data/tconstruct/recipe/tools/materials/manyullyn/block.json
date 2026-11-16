@@ -1,0 +1,11 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": "#c:storage_blocks/manyullyn",
+  "leftover": {
+    "count": 1,
+    "tag": "c:ingots/manyullyn"
+  },
+  "material": "tconstruct:manyullyn",
+  "needed": 1,
+  "value": 9
+}

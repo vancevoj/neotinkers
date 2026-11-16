@@ -1,0 +1,17 @@
+{
+  "modifier_id": "tconstruct:dragonborn",
+  "text": [
+    {
+      "text": "Concede +8% de resistência enquanto estiver no ar. O limite é de 80% em todo o conjunto, ou seja, 8 níveis."
+    },
+    {
+      "text": "Melhora o dano de ataque enquanto estiver no ar em 5% por nível da peça de nível mais alto.", "paragraph": true
+    }
+  ],
+  "more_text_space": true,
+  "effects": [
+    "Pode aplicar níveis progressivamente",
+    "Requer 1 slot de defesa por nível"
+  ]
+}
+

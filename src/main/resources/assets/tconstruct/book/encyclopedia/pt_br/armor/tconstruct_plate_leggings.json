@@ -1,0 +1,12 @@
+{
+  "tool": "tconstruct:plate_leggings",
+  "text": [
+    { "text": "As Calças de Placa são calças defensivas, com alta proteção, poucos slots de habilidade e muitos slots de defesa." }
+  ],
+  "properties": [
+    "Status controlados pelo material",
+    "2 Slots de Melhoria",
+    "3 Slots de Defesa",
+    "2 Atributos de Material"
+  ]
+}

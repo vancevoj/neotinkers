@@ -1,0 +1,29 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "tconstruct:config",
+      "prop": "slimy_loot_chests"
+    }
+  ],
+  "name": "minecraft:chests/nether_bridge",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "max": 4,
+              "min": 2
+            }
+          },
+          "name": "tconstruct:blood_slime_grass_seeds",
+          "weight": 5
+        }
+      ],
+      "name": "main"
+    }
+  ]
+}

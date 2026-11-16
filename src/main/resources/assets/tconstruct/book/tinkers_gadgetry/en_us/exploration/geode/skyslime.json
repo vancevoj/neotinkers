@@ -1,0 +1,13 @@
+{
+  "title": "Skyslime Geodes",
+  "image": {
+    "file": "tconstruct:book/images/geodes/skyslime.png",
+    "width": 180,
+    "height": 96
+  },
+  "text": [
+    {
+      "text": "Skyslime geodes are found underground at higher elevations. They used to be common near the surface suggesting origins in space. These geodes promote moss growth, and sometimes contain bits of steel."
+    }
+  ]
+}

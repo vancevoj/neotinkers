@@ -1,0 +1,40 @@
+{
+  "block_effects": [
+    {
+      "type": "tconstruct:explosion",
+      "block_interaction": "keep",
+      "damage": {
+        "each_level": 3.0
+      },
+      "knockback": {
+        "flat": 1.0
+      },
+      "place_fire": true,
+      "radius": {
+        "each_level": 1.0,
+        "flat": 1.0
+      }
+    }
+  ],
+  "entity_effects": [
+    {
+      "type": "tconstruct:explosion",
+      "block_interaction": "keep",
+      "damage": {
+        "each_level": 3.0
+      },
+      "knockback": {
+        "flat": 1.0
+      },
+      "place_fire": true,
+      "radius": {
+        "each_level": 1.0,
+        "flat": 1.0
+      }
+    }
+  ],
+  "fluid": {
+    "amount": 20,
+    "tag": "tconstruct:molten_queens_slime"
+  }
+}

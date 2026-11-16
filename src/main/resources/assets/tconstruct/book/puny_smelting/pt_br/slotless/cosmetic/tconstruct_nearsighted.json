@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:nearsighted",
+  "text": [
+    {
+      "text": "Você precisará abandonar as ferramentas de pedregulho, eventualmente."
+    }
+  ],
+  "effects": [
+    "Aumenta o FOV sobre a ferramenta segurada ou a armadura utilizada",
+    "Múltiplos níveis",
+    "Sem slot"
+  ]
+}

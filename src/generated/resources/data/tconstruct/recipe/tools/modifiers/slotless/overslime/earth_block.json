@@ -1,0 +1,6 @@
+{
+  "type": "tconstruct:overslime_modifier",
+  "ingredient": "minecraft:slime_block",
+  "restore_amount": 180,
+  "tools": "#tconstruct:modifiable/durability"
+}

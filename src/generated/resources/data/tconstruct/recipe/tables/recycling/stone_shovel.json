@@ -1,0 +1,8 @@
+{
+  "type": "tconstruct:part_builder_recycling",
+  "pattern": "tconstruct:venom_bottle",
+  "results": {
+    "tconstruct:block": "minecraft:cobblestone"
+  },
+  "tool": "minecraft:stone_shovel"
+}

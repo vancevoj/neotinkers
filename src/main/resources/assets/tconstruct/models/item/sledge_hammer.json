@@ -1,0 +1,38 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "tconstruct:item/base/tall",
+  "textures": {
+    "head":   "tconstruct:item/tool/sledge_hammer/head",
+    "handle": "tconstruct:item/tool/sledge_hammer/handle",
+    "back":   "tconstruct:item/tool/sledge_hammer/back",
+    "front":  "tconstruct:item/tool/sledge_hammer/front",
+
+    "large_head":   "tconstruct:item/tool/sledge_hammer/large/head",
+    "large_handle": "tconstruct:item/tool/sledge_hammer/large/handle",
+    "large_back":   "tconstruct:item/tool/sledge_hammer/large/back",
+    "large_front":  "tconstruct:item/tool/sledge_hammer/large/front"
+  },
+  "modifier_maps": ["tconstruct:sledge_hammer"],
+  "modifier_roots": {
+    "small": [ "tconstruct:item/tool/sledge_hammer/modifiers/" ],
+    "large": [ "tconstruct:item/tool/sledge_hammer/large/modifiers/" ]
+  },
+  "large": true,
+  "large_offset": [-2, 2],
+  "parts": [
+    { "name": "handle", "index": 1 },
+    { "name": "head",   "index": 0 },
+    { "name": "back",   "index": 2 },
+    { "name": "front",  "index": 3 }
+  ],
+  "overrides": [
+    {
+      "predicate": { "tconstruct:charging": 2 },
+      "model": "tconstruct:item/tool/sledge_hammer/blocking"
+    },
+    {
+      "predicate": { "tconstruct:broken": 1 },
+      "model": "tconstruct:item/tool/sledge_hammer/broken"
+    }
+  ]
+}

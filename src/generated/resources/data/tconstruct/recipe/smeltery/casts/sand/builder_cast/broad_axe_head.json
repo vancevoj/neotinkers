@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:item_part_builder",
+  "pattern": "tconstruct:broad_axe_head",
+  "pattern_item": "#tconstruct:casts/sand",
+  "result": "tconstruct:broad_axe_head_sand_cast",
+  "title_key": "tconstruct:sand_cast"
+}

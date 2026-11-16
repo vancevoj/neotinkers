@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:overslime",
+  "text": [
+    {
+      "text": "Essa melhoria é um pouco exagerada, você não acha?"
+    }
+  ],
+  "effects": [
+    "Adiciona uma barra de slimebilidade, consumida antes da durabilidade",
+    "Recarregada com bolas de slime, ou frascos na bancada de trabalho",
+    "A capacidade é aumentada por muitos materiais da ferramenta",
+    "Aplica debuff em ferramentas sem materiais de slime"
+  ]
+}

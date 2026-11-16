@@ -1,0 +1,22 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "value": "mekanism:steel_shield"
+    }
+  ],
+  "type": "tconstruct:damagable_melting",
+  "ingredient": {
+    "neoforge:ingredient_type": "mantle:item_name",
+    "items": [
+      "mekanism:steel_shield"
+    ]
+  },
+  "result": {
+    "amount": 540,
+    "tag": "c:molten_steel",
+    "unit_size": 10
+  },
+  "temperature": 950,
+  "time": 159
+}

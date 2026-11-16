@@ -1,0 +1,9 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:soulspeed",
+      "flat": 1
+    }
+  ]
+}

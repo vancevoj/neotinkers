@@ -1,0 +1,39 @@
+package slimeknights.tconstruct.smeltery.client.screen;
+
+import net.minecraft.client.gui.screens.MenuScreens.ScreenConstructor;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import slimeknights.mantle.client.screen.BackgroundContainerScreen;
+import slimeknights.mantle.data.loadable.Loadables;
+import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.smeltery.menu.SingleItemContainerMenu;
+
+import javax.annotation.Nullable;
+
+/**
+ * Screen factory for the single item container, one container for multiple backgrounds
+ */
+public class SingleItemScreenFactory implements ScreenConstructor<SingleItemContainerMenu,BackgroundContainerScreen<SingleItemContainerMenu>> {
+  private static final int HEIGHT = 133;
+  private static final Identifier DEFAULT = TConstruct.getResource("textures/gui/blank.png");
+
+  /**
+   * Gets the background path for the given tile
+   * @param tile  Tile
+   * @return  Background path
+   */
+  private static Identifier getBackground(@Nullable BlockEntity tile) {
+    if (tile != null) {
+      Identifier id = Loadables.BLOCK_ENTITY_TYPE.getKey(tile.getType());
+      return id.withPath("textures/gui/" + id.getPath() + ".png");
+    }
+    return DEFAULT;
+  }
+
+  @Override
+  public BackgroundContainerScreen<SingleItemContainerMenu> create(SingleItemContainerMenu container, Inventory inventory, Component name) {
+    return new BackgroundContainerScreen<>(container, inventory, name, HEIGHT, getBackground(container.getTile()));
+  }
+}

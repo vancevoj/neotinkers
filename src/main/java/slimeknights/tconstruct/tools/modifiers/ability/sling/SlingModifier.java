@@ -1,0 +1,90 @@
+package slimeknights.tconstruct.tools.modifiers.ability.sling;
+
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemUseAnimation;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.ModifierHooks;
+import slimeknights.tconstruct.library.modifiers.hook.build.ConditionalStatModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.interaction.GeneralInteractionModifierHook;
+import slimeknights.tconstruct.library.modifiers.hook.interaction.InteractionSource;
+import slimeknights.tconstruct.library.modifiers.hook.interaction.UsingToolModifierHook;
+import slimeknights.tconstruct.library.modifiers.impl.NoLevelsModifier;
+import slimeknights.tconstruct.library.module.ModuleHookMap.Builder;
+import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
+import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
+import slimeknights.tconstruct.library.tools.stat.ToolStats;
+import slimeknights.tconstruct.tools.TinkerModifiers;
+import slimeknights.tconstruct.tools.modules.interaction.sling.SlingModule;
+
+/** @deprecated use {@link SlingModule} */
+@Deprecated(forRemoval = true)
+public abstract class SlingModifier extends NoLevelsModifier implements GeneralInteractionModifierHook, UsingToolModifierHook {
+  @Override
+  protected void registerHooks(Builder builder) {
+    builder.addHook(this, ModifierHooks.GENERAL_INTERACT, ModifierHooks.TOOL_USING);
+  }
+
+  @Override
+  public InteractionResult onToolUse(IToolStackView tool, ModifierEntry modifier, Player player, InteractionHand hand, InteractionSource source) {
+    if (!tool.isBroken() && source == InteractionSource.RIGHT_CLICK) {
+      GeneralInteractionModifierHook.startUsingWithDrawtime(tool, modifier.getId(), player, hand, 1.5f);
+      return InteractionResult.SUCCESS;
+    }
+    return InteractionResult.PASS;
+  }
+
+  @Override
+  public int getUseDuration(IToolStackView tool, ModifierEntry modifier) {
+    return 72000;
+  }
+
+  @Override
+  public ItemUseAnimation getUseAction(IToolStackView tool, ModifierEntry modifier) {
+    return ModifierUtil.blockWhileCharging(tool, ItemUseAnimation.BOW);
+  }
+
+  /** Gets the current charge amount for this tool */
+  protected float getCharge(IToolStackView tool, ModifierEntry entry, int timeLeft) {
+    return GeneralInteractionModifierHook.getToolCharge(tool, getUseDuration(tool, entry) - timeLeft);
+  }
+
+  /** Gets the scaled power to apply as a force multiplier. This is equivalent to 50% of power times velocity. */
+  protected float getPower(IToolStackView tool, LivingEntity living) {
+    return SlingModule.getPower(tool, living);
+  }
+
+  /** @deprecated use {@link #getCharge(IToolStackView, ModifierEntry, int)} and {@link #getPower(IToolStackView, LivingEntity)} */
+  @SuppressWarnings("removal")
+  @Deprecated(forRemoval = true)
+  protected float getForce(IToolStackView tool, ModifierEntry entry, LivingEntity living, int timeLeft, boolean applyKnockback) {
+    float charge = getCharge(tool, entry, timeLeft);
+    // if using knockback, boost projectile damage by 0.5 per level, that is a 25% boost, same as power
+    float knockback = 0;
+    if (applyKnockback) {
+      knockback = tool.getModifierLevel(TinkerModifiers.knockback.getId()) / 2f;
+    }
+    float force = charge
+                  * (ConditionalStatModifierHook.getModifiedStat(tool, living, ToolStats.PROJECTILE_DAMAGE) + knockback) / 2f
+                  * ConditionalStatModifierHook.getModifiedStat(tool, living, ToolStats.VELOCITY);
+    // knockback also means we should apply padded, divide per level
+    if (applyKnockback) {
+      force /= Math.pow(2, tool.getModifierLevel(TinkerModifiers.padded.getId()));
+    }
+    return force;
+  }
+
+  /** @deprecated handled by the knockback modifier now. Feel free to recreate if you need it though. */
+  @SuppressWarnings("unused")
+  @Deprecated(forRemoval = true)
+  public static float scaleKnockback(LivingEntity target, float knockback) {
+    return knockback;
+  }
+
+  /** Checks if this modifier is the one actively being used. Used for failure sound effects. */
+  public static boolean isActive(IToolStackView tool, ModifierEntry modifier, ModifierEntry activeModifier) {
+    return ModifierUtil.isActiveModifier(tool, modifier, activeModifier);
+  }
+}

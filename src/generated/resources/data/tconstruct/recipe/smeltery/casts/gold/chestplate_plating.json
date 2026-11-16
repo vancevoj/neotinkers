@@ -1,0 +1,21 @@
+{
+  "type": "tconstruct:casting_table",
+  "cast": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "tconstruct:chestplate_plating_dummy",
+      {
+        "neoforge:ingredient_type": "tconstruct:material",
+        "match": "tconstruct:chestplate_plating"
+      }
+    ]
+  },
+  "cast_consumed": true,
+  "cooling_time": 57,
+  "fluid": {
+    "amount": 90,
+    "tag": "c:molten_gold"
+  },
+  "result": "tconstruct:chestplate_plating_cast",
+  "switch_slots": true
+}

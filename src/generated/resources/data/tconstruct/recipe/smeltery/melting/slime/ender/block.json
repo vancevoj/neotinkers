@@ -1,0 +1,10 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": "tconstruct:ender_slime",
+  "result": {
+    "amount": 2250,
+    "fluid": "tconstruct:ender_slime"
+  },
+  "temperature": 70,
+  "time": 95
+}

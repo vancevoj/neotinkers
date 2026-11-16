@@ -1,0 +1,35 @@
+intro=Tanıtım
+entity_melting=Varlık Ergitimi
+melee_harvest_materials=3. Düzey Yakın Menzilli Çıkarım Malzemeleri
+melee_harvest_materials.subtext=Bu malzemeler alaşımlamayla oluşturulup sonra yakın menzilli silahların veya çıkarım araçlarının araç parçalarına dökümlenebilir.
+ranged_materials=3. Düzey Uzun Menzilli Malzemeleri 
+ranged_materials.subtext=Bu malzemeler alaşımlamayla oluşturulup sonra yay gibi uzun menzilli silahların araç parçalarına dökümlenebilir.
+
+tools=Koca Araçlar
+tools.subtext=Koca araçların hepsinin üretimi için onarıcının örsünün kullanılmasına gerek duyuyor
+
+armor=Yavuz Zırh
+armor.subtext=Alaşımlar zırh üretimi için daha geniş aralıktaki malzemelerin kapısını aralar. Bu gezginin donanımı gibi yalın takımları aşan ek olarak yetenekler sağlar.
+
+smeltery=Kallama Ocağı
+
+abilities=Yetenekler
+abilities.subtext=Yetenekler yükseltmelerden çok daha güçlüdür ama ayrıca sınırlı sayıda yuvası vardır.
+
+abilities.group_general=Genel
+abilities.group_harvest=Çıkarım
+abilities.group_melee=Yakın Menzilli
+abilities.group_ranged=Uzun Menzilli
+abilities.group_interact=Etkileşim
+abilities.group_armor=Zırh
+abilities.group_armor.helmet=Kask
+abilities.group_armor.chestplate=Göğüslük
+abilities.group_armor.leggings=Pantolon
+abilities.group_armor.boots=Bot
+abilities.group_armor.shield=Kalkan
+upgrades.subtext=Araçlar yükseltmeler ile iyileştirilebilirlerdir, gerçi araç başına yalnızca sınırlı sayıda uygulanabilir.
+
+defense=Savunma
+defense.subtext=Savunma değiştiricileri yalnızca zırhlara savunma yuvaları kullanarak uygulanabilir
+defense.group_protection=Koruma
+defense.group_special=Özel

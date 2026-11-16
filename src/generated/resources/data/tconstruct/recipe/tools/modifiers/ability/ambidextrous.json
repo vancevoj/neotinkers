@@ -1,0 +1,28 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "check_trait_level": true,
+  "inputs": [
+    {
+      "ingredient": "minecraft:leather"
+    },
+    {
+      "ingredient": "#c:gems/diamond"
+    },
+    {
+      "ingredient": "minecraft:leather"
+    },
+    {
+      "ingredient": "#c:strings"
+    },
+    {
+      "ingredient": "#c:strings"
+    }
+  ],
+  "level": 1,
+  "result": "tconstruct:ambidextrous",
+  "slots": {
+    "abilities": 1
+  },
+  "tools": "#tconstruct:modifiable/melee/unarmed"
+}

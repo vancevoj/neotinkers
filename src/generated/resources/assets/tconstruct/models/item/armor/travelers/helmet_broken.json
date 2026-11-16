@@ -1,0 +1,26 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "neoforge:item/default",
+  "textures": {
+    "base": "tconstruct:item/tool/armor/travelers/goggles/base_broken",
+    "cuirass": "tconstruct:item/tool/armor/travelers/goggles/cuirass_broken",
+    "metal": "tconstruct:item/tool/armor/travelers/goggles/metal_broken"
+  },
+  "modifier_maps": [
+    "tconstruct:travelers/goggles_broken",
+    "tconstruct:travelers/goggles"
+  ],
+  "parts": [
+    {
+      "name": "base"
+    },
+    {
+      "name": "cuirass",
+      "index": 1
+    },
+    {
+      "name": "metal",
+      "index": 0
+    }
+  ]
+}

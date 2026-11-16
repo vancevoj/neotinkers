@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:springing",
+  "text": [
+    {
+      "text": "Gün ışığını kurtarma zamanının ilk parçası."
+    }
+  ],
+  "effects": [
+    "Bakılan yönde fırlamak için yükle",
+    "Fırlatma hızını güç veya savurma ile artırılabilir",
+    "Tek seviye",
+    "1 yetenek yuvası gerekir"
+  ]
+}

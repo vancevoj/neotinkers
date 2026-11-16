@@ -1,0 +1,18 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:nuggets/lumium"
+    }
+  ],
+  "type": "tconstruct:casting_table",
+  "cast": "#tconstruct:casts/multi_use/nugget",
+  "cooling_time": 23,
+  "fluid": {
+    "amount": 10,
+    "tag": "c:molten_lumium"
+  },
+  "result": {
+    "tag": "c:nuggets/lumium"
+  }
+}

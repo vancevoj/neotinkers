@@ -1,0 +1,38 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "tconstruct:item/base/tall",
+  "textures": {
+    "head":    "tconstruct:item/tool/excavator/head",
+    "handle":  "tconstruct:item/tool/excavator/handle",
+    "grip":    "tconstruct:item/tool/excavator/grip",
+    "binding": "tconstruct:item/tool/excavator/binding",
+    
+    "large_head":    "tconstruct:item/tool/excavator/large/head",
+    "large_handle":  "tconstruct:item/tool/excavator/large/handle",
+    "large_grip":    "tconstruct:item/tool/excavator/large/grip",
+    "large_binding": "tconstruct:item/tool/excavator/large/binding"
+  },
+  "modifier_maps": ["tconstruct:excavator"],
+  "modifier_roots": {
+    "small": [ "tconstruct:item/tool/excavator/modifiers/" ],
+    "large": [ "tconstruct:item/tool/excavator/large/modifiers/" ]
+  },
+  "large": true,
+  "large_offset": [-2, 2],
+  "parts": [
+    { "name": "handle",  "index": 1 },
+    { "name": "head",    "index": 0 },
+    { "name": "grip",    "index": 3 },
+    { "name": "binding", "index": 2 }
+  ],
+  "overrides": [
+    {
+      "predicate": { "tconstruct:charging": 2 },
+      "model": "tconstruct:item/tool/excavator/blocking"
+    },
+    {
+      "predicate": { "tconstruct:broken": 1 },
+      "model": "tconstruct:item/tool/excavator/broken"
+    }
+  ]
+}

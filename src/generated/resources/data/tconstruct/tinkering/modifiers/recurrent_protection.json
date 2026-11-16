@@ -1,0 +1,14 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:recurrent_protection",
+      "duration": {
+        "each_level": 100
+      },
+      "percent": {
+        "flat": 0.5
+      }
+    }
+  ]
+}

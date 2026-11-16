@@ -1,0 +1,23 @@
+{
+  "color": "FFAA0F01",
+  "generator": {
+    "supported_stats": [
+      "tconstruct:arrow_head"
+    ],
+    "transformer": {
+      "type": "tconstruct:recolor_sprite",
+      "color_mapping": {
+        "type": "tconstruct:grey_to_color",
+        "palette": {
+          "000": "FF000000",
+          "063": "FF2D0000",
+          "102": "FF410500",
+          "140": "FF720000",
+          "178": "FF720000",
+          "216": "FFAA0F01",
+          "255": "FFFF0000"
+        }
+      }
+    }
+  }
+}

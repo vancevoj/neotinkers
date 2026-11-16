@@ -1,0 +1,26 @@
+{
+  "default": [
+    {
+      "level": 1,
+      "name": "tconstruct:looting"
+    }
+  ],
+  "perStat": {
+    "tconstruct:laces": [
+      {
+        "level": 1,
+        "name": "tconstruct:looter"
+      }
+    ],
+    "tconstruct:skull": [
+      {
+        "level": 1,
+        "name": "tconstruct:balm_of_sssss"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:cave_spider_disguise"
+      }
+    ]
+  }
+}

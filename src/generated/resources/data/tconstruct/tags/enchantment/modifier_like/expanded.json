@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "cyclic:excavate",
+      "required": false
+    },
+    {
+      "id": "ensorcellation:excavating",
+      "required": false
+    },
+    {
+      "id": "ensorcellation:furrowing",
+      "required": false
+    }
+  ]
+}

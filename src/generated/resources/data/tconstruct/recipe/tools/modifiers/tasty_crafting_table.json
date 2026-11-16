@@ -1,0 +1,6 @@
+{
+  "type": "tconstruct:crafting_modifier_repair",
+  "ingredient": "tconstruct:bacon",
+  "modifier": "tconstruct:tasty",
+  "repair_amount": 25
+}

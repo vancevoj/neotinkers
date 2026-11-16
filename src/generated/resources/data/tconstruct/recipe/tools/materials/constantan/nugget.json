@@ -1,0 +1,13 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:nuggets/constantan"
+    }
+  ],
+  "type": "tconstruct:material",
+  "ingredient": "#c:nuggets/constantan",
+  "material": "tconstruct:constantan",
+  "needed": 9,
+  "value": 1
+}

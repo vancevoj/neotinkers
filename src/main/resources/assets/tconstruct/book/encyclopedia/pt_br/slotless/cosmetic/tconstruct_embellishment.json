@@ -1,0 +1,17 @@
+{
+  "modifier_id": "tconstruct:embellishment",
+  "text": [
+    {
+      "text": "Permite alterar a aparência do trajes de slime, cajados e escudos."
+    },
+    {
+      "text": "O slime usa blocos de slime congelado, enquanto os cajados e escudos usam embelezamentos de madeira",
+      "paragraph": true
+    }
+  ],
+  "more_text_space": true,
+  "effects": [
+    "Multiúso",
+    "Sem Slots"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "description": {
+    "color": "#60496B",
+    "translate": "trim_material.tconstruct.format",
+    "with": [
+      {
+        "translate": "material.tconstruct.hepatizon"
+      }
+    ]
+  },
+  "palette_id": "tconstruct:trim/hepatizon"
+}

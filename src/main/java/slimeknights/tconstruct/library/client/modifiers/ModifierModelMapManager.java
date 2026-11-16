@@ -1,0 +1,271 @@
+package slimeknights.tconstruct.library.client.modifiers;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
+import net.minecraft.IdentifierException;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.GsonHelper;
+import net.neoforged.fml.ModLoader;
+import slimeknights.mantle.data.listener.MergingJsonDataLoader;
+import slimeknights.mantle.data.loadable.field.ContextKey;
+import slimeknights.mantle.util.JsonHelper;
+import slimeknights.mantle.util.typed.TypedMap;
+import slimeknights.mantle.util.typed.TypedMapBuilder;
+import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.library.client.modifiers.ModifierModelMapManager.Builder;
+import slimeknights.tconstruct.library.client.modifiers.model.ModifierModel;
+import slimeknights.tconstruct.library.client.modifiers.model.ModifierModelLoadable;
+import slimeknights.tconstruct.library.modifiers.ModifierId;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+/**
+ * Manager for getting modifier models
+ */
+public class ModifierModelMapManager extends MergingJsonDataLoader<Builder> {
+  /** Folder for the modifier models */
+  public static final String FOLDER = "tinkering/modifiers/sprites";
+  /** Instance of this manager */
+  public static final ModifierModelMapManager INSTANCE = new ModifierModelMapManager();
+
+  /** List of loaded models */
+  private Map<Identifier, ModifierModelMap> models = new HashMap<>();
+
+  private ModifierModelMapManager() {
+    super(JsonHelper.DEFAULT_GSON, FOLDER, id -> new Builder());
+  }
+
+  @Override
+  public void prepareSharedState(SharedState state) {
+    // run before any listener reloads instead of the second stage, tool models need the maps while baking
+    if (!ModLoader.hasErrors()) {
+      this.onResourceManagerReload(state.resourceManager());
+    }
+  }
+
+  @Override
+  public CompletableFuture<Void> reload(SharedState state, Executor backgroundExecutor, PreparationBarrier barrier, Executor gameExecutor) {
+    // already loaded in prepareSharedState
+    return barrier.wait(null);
+  }
+
+  /** Builder for a given tool model */
+  protected static class Builder {
+    private final Map<String, JsonElement> constant = new LinkedHashMap<>();
+    private final Map<ModifierId, JsonElement> modifiers = new LinkedHashMap<>();
+  }
+
+  /** Inserts the given element into the map */
+  private static <T> void insert(Map<T, JsonElement> map, T key, JsonElement value, String errorPrefix, Identifier id) {
+    // null means discard this model
+    if (value.isJsonNull()) {
+      map.remove(key);
+    } else {
+      map.put(key, value);
+    }
+  }
+
+  @Override
+  protected void parse(Builder builder, Identifier id, JsonElement element) throws JsonSyntaxException {
+    JsonObject json = GsonHelper.convertToJsonObject(element, id.toString());
+
+    // fixed entries merge at a top level
+    if (json.has("constant")) {
+      for (Entry<String, JsonElement> entry : GsonHelper.getAsJsonObject(json, "constant").entrySet()) {
+        insert(builder.constant, entry.getKey(), entry.getValue(), "constant key", id);
+      }
+    }
+
+    // each entry in the set is a modifier to model pair. We only merge at the top level
+    if (json.has("modifiers")) {
+      for (Entry<String, JsonElement> entry : GsonHelper.getAsJsonObject(json, "modifiers").entrySet()) {
+        ModifierId modifier = ModifierId.tryParse(entry.getKey());
+        if (modifier == null) {
+          TConstruct.LOG.error("Invalid modifier ID {} while parsing modifier models {}", entry.getKey(), id);
+        } else {
+          insert(builder.modifiers, modifier, entry.getValue(), "modifier", id);
+        }
+      }
+    }
+  }
+
+  /** Creates context for constant key parsing */
+  private static TypedMap context(Identifier file, String key) {
+    return TypedMapBuilder.builder()
+      .put(ContextKey.ID, file)
+      .put(ContextKey.DEBUG, "Model Map " + file + " for constant key " + key)
+      .build();
+  }
+
+  /** Creates context for modifier parsing */
+  private static TypedMap context(Identifier file, ModifierId modifier) {
+    return TypedMapBuilder.builder()
+      .put(ContextKey.ID, file)
+      .put(ModifierId.CONTEXT_KEY, modifier)
+      .put(ContextKey.DEBUG, "Model Map " + file + " for Modifier " + modifier)
+      .build();
+  }
+
+  /** Parses the given model from the map */
+  private static <T> void parseModel(Map<T, ModifierModel> map, T key, JsonElement value, String errorPrefix, Identifier id, BiFunction<Identifier, T,TypedMap> context) {
+    try {
+      // if it's an object, it's a single model
+      ModifierModel model = ModifierModelLoadable.COMPACT.convert(value, key.toString(), context.apply(id, key));
+      map.put(key, model);
+    } catch (JsonSyntaxException | IdentifierException e) {
+      TConstruct.LOG.error("Failed to parse modifier model map {} for {} {}", id, errorPrefix, key, e);
+    }
+  }
+
+  @Override
+  protected void finishLoad(Map<Identifier, Builder> map, ResourceManager manager) {
+    BiFunction<Identifier,String,TypedMap> constantContext = ModifierModelMapManager::context;
+    BiFunction<Identifier,ModifierId,TypedMap> modifierContext = ModifierModelMapManager::context;
+
+    Map<Identifier, ModifierModelMap> modelMaps = new HashMap<>();
+    for (Entry<Identifier, Builder> file : map.entrySet()) {
+      Identifier id = file.getKey();
+      Map<String, ModifierModel> constant = new HashMap<>();
+      Map<ModifierId, ModifierModel> modifiers = new HashMap<>();
+      for (Entry<String,JsonElement> entry : file.getValue().constant.entrySet()) {
+        parseModel(constant, entry.getKey(), entry.getValue(), "constant key", id, constantContext);
+      }
+      for (Entry<ModifierId,JsonElement> entry : file.getValue().modifiers.entrySet()) {
+        parseModel(modifiers, entry.getKey(), entry.getValue(), "modifier", id, modifierContext);
+      }
+      // ensure we actually managed to parse something
+      ModifierModelMap modelMap = ModifierModelMap.create(modifiers, constant);
+      if (modelMap != ModifierModelMap.EMPTY) {
+        modelMaps.put(id, modelMap);
+      }
+    }
+    this.models = Map.copyOf(modelMaps);
+  }
+
+  @Override
+  public void onResourceManagerReload(ResourceManager manager) {
+    long time = System.nanoTime();
+    super.onResourceManagerReload(manager);
+    TConstruct.LOG.info("{} modifier model maps in {} ms", this.models.size(), (System.nanoTime() - time) / 1000000f);
+  }
+
+
+  /* Helpers */
+
+  /** Models in this blacklist are skipped from the legacy system. Used to prevent singletons that don't check textures from causing legacy warnings on every tools */
+  @SuppressWarnings("deprecation")
+  private static final Set<IUnbakedModifierModel> LEGACY_BLACKLIST = new HashSet<>();
+  /** Predicate for removing empty modifier models */
+  private static final Predicate<Entry<?,? extends IBakedModifierModel>> EMPTY_ENTRY = entry -> entry.getValue() == ModifierModel.EMPTY;
+  /** Predicate for removing empty modifier maps */
+  private static final Predicate<ModifierModelMap> NOT_EMPTY_MAP = map -> !map.isEmpty();
+  /** Consumer that ignores the modifier IDs */
+  private static final Consumer<Set<ModifierId>> IGNORE = ids -> {};
+
+  /** Blacklists the given model from being included in the legacy system */
+  @SuppressWarnings("deprecation")
+  public static void legacyBlacklist(IUnbakedModifierModel model) {
+    LEGACY_BLACKLIST.add(model);
+  }
+
+  /** Gets a map of modifier models for the given tool */
+  public ModifierModelMap getModelsForTool(Function<Material, TextureAtlasSprite> spriteGetter, List<Identifier> options) {
+    return getModelsForTool(spriteGetter, options, IGNORE);
+  }
+
+  /** Gets a map of modifier models for the given tool */
+  private ModifierModelMap getModelsForTool(Function<Material, TextureAtlasSprite> spriteGetter, List<Identifier> options, Consumer<Set<ModifierId>> seenModifiers) {
+    // quick exit: no options
+    if (options.isEmpty()) {
+      return ModifierModelMap.EMPTY;
+    }
+    // fetch options, filter to just those that exist
+    List<ModifierModelMap> maps = options.stream().map(id -> this.models.getOrDefault(id, ModifierModelMap.EMPTY)).filter(NOT_EMPTY_MAP).toList();
+    if (maps.isEmpty()) {
+      return ModifierModelMap.EMPTY;
+    }
+    // if only one is requested, reuse that instance
+    ModifierModelMap modelMap;
+    if (maps.size() == 1) {
+      modelMap = maps.get(0);
+      seenModifiers.accept(modelMap.modifiers().keySet());
+    } else {
+      Map<String, ModifierModel> constant = new HashMap<>();
+      Map<ModifierId, IBakedModifierModel> modifiers = new HashMap<>();
+      // loop backwards as we want the first that appears to take priority
+      for (int i = maps.size() - 1; i >= 0; i--) {
+        ModifierModelMap optionMap = maps.get(i);
+        if (optionMap != null) {
+          constant.putAll(optionMap.constant());
+          modifiers.putAll(optionMap.modifiers());
+        }
+      }
+      // grab the modifier set before removing empty, so empty can suppress legacy
+      seenModifiers.accept(modifiers.keySet());
+      // remove empty models, we might have some if we were overriding for something like broken
+      constant.entrySet().removeIf(EMPTY_ENTRY);
+      modifiers.entrySet().removeIf(EMPTY_ENTRY);
+      modelMap = ModifierModelMap.create(modifiers, constant);
+    }
+    // validate all model textures
+    for (ModifierModel model : modelMap.sortedConstant()) {
+      model.validate(spriteGetter);
+    }
+    for (IBakedModifierModel model : modelMap.modifiers().values()) {
+      // we loaded this map in so know the type
+      ((ModifierModel)model).validate(spriteGetter);
+    }
+    return modelMap;
+  }
+
+  /** Gets a map of modifier models for the given tool, considering the legacy model system */
+  @SuppressWarnings("deprecation")
+  public ModifierModelMap getModelsForTool(Function<Material, TextureAtlasSprite> spriteGetter, List<Identifier> options, List<Identifier> smallRoots, List<Identifier> largeRoots, Identifier modelLocation) {
+    Set<ModifierId> seenModifiers = new HashSet<>();
+    ModifierModelMap models = getModelsForTool(spriteGetter, options, seenModifiers::addAll);
+    // if not using the legacy system, we are done
+    if (smallRoots.isEmpty() && largeRoots.isEmpty()) {
+      return models;
+    }
+    Map<ModifierId, IBakedModifierModel> legacy = ModifierModelManager.getModelsForTool(spriteGetter, smallRoots, largeRoots, seenModifiers, options.isEmpty() ? Set.of() : LEGACY_BLACKLIST);
+    // nothing on the old system? nothing to do
+    if (legacy.isEmpty()) {
+      return models;
+    }
+    // if nothing is on the new system, just return the legacy one with a warning
+    if (models.isEmpty()) {
+      TConstruct.LOG.warn("Tool model {} is using deprecated system for modifier models instead of modifier model maps for {}", modelLocation, legacy.keySet());
+      return ModifierModelMap.create(legacy, Map.of());
+    }
+    // have both so we need to combine
+    Map<ModifierId, IBakedModifierModel> builder = new HashMap<>(models.modifiers());
+    Set<ModifierId> legacyIds = new HashSet<>();
+    for (Entry<ModifierId, IBakedModifierModel> entry : legacy.entrySet()) {
+      ModifierId id = entry.getKey();
+      if (builder.putIfAbsent(id, entry.getValue()) == null) {
+        legacyIds.add(id);
+      }
+    }
+    // only warn of legacy usage if we have legacy models
+    if (!legacyIds.isEmpty()) {
+      TConstruct.LOG.warn("Tool model {} is using deprecated system for modifier models instead of modifier model maps for {}", modelLocation, legacyIds);
+    }
+    return models.withModifiers(builder);
+  }
+}

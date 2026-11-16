@@ -1,0 +1,12 @@
+{
+  "description": {
+    "color": "#C4D6AE",
+    "translate": "trim_material.tconstruct.format",
+    "with": [
+      {
+        "translate": "material.tconstruct.knightmetal"
+      }
+    ]
+  },
+  "palette_id": "tconstruct:trim/knightmetal"
+}

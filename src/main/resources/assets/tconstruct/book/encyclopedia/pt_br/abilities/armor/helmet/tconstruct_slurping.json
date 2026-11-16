@@ -1,0 +1,18 @@
+{
+  "modifier_id": "tconstruct:slurping",
+  "text": [
+    {
+      "text": "Permite beber o fluido contido no capacete para ativar efeitos usando a tecla de atalho do capacete, como incendiar-se, remover efeitos negativos ou restaurar a fome."
+    },
+    {
+      "text": "Níveis mais altos consomem mais fluido para realizar efeitos mais fortes.", "paragraph": true
+    }
+  ],
+  "tool_filter": "tconstruct:modifiable/armor",
+  "more_text_space": true,
+  "effects": [
+    "Sem nível máximo",
+    "Requer 1 slot de habilidade por nível",
+    "Preencha usando a ferramenta em um tanque de fluido"
+  ]
+}

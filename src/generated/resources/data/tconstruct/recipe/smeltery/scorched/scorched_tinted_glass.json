@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "G": "#c:glass_blocks/tinted",
+    "b": "tconstruct:scorched_brick"
+  },
+  "pattern": [
+    " b ",
+    "bGb",
+    " b "
+  ],
+  "result": {
+    "id": "tconstruct:scorched_tinted_glass"
+  }
+}

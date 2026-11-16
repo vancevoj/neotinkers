@@ -1,0 +1,14 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "tconstruct:tool",
+      "model": "tconstruct:item/slime_helmet"
+    },
+    "on_true": {
+      "type": "tconstruct:tool",
+      "model": "tconstruct:item/armor/slime/helmet_broken"
+    },
+    "property": "tconstruct:broken"
+  }
+}

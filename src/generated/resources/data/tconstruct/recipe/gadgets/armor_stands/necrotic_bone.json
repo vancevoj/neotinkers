@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "tconstruct:blazewood_slab",
+    "S": "#c:wither_bones"
+  },
+  "pattern": [
+    "SSS",
+    " S ",
+    "SBS"
+  ],
+  "result": {
+    "id": "tconstruct:necrotic_bone_armor_stand"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "default": [
+    {
+      "level": 1,
+      "name": "tconstruct:nightmare_protection"
+    }
+  ],
+  "perStat": {
+    "tconstruct:shell": [
+      {
+        "level": 1,
+        "name": "tconstruct:dreambound"
+      }
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "modifier_id": "tconstruct:pierce",
+  "text": [
+    {
+      "text": "道具はサボテンの力を手に入れ、防具を貫通して攻撃できます。"
+    },
+    {
+      "text": "串刺しと混同しないように。",
+      "paragraph": true
+    }
+  ],
+  "tool_filter": "tconstruct:modifiable/ranged",
+  "effects": [
+    "矢が防御を少し無効化する",
+    "複数回適用でき、レベルが上がると効果時間が伸びる",
+    "レベルごとにアップグレードスロットが1つ必要"
+  ]
+}

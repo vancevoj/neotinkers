@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:offhanded",
+  "text": [
+    {
+      "text": "最冷淡的强化。"
+    }
+  ],
+  "effects": [
+    "副手占用时禁用交互",
+    "第2级彻底禁用交互",
+    "无需槽位"
+  ]
+}

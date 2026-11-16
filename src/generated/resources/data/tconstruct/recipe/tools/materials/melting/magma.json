@@ -1,0 +1,9 @@
+{
+  "type": "tconstruct:material_melting",
+  "input": "tconstruct:magma",
+  "result": {
+    "amount": 250,
+    "tag": "c:magma"
+  },
+  "temperature": 300
+}

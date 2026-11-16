@@ -1,0 +1,34 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "check_trait_level": true,
+  "inputs": [
+    {
+      "ingredient": "minecraft:lightning_rod"
+    },
+    {
+      "ingredient": "minecraft:creeper_head"
+    },
+    {
+      "ingredient": "minecraft:lightning_rod"
+    },
+    {
+      "ingredient": "minecraft:lightning_rod"
+    },
+    {
+      "ingredient": "minecraft:lightning_rod"
+    }
+  ],
+  "level": 1,
+  "result": "tconstruct:channeling",
+  "slots": {
+    "abilities": 1
+  },
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:modifiable/melee/weapon",
+      "#tconstruct:modifiable/fishing_rods"
+    ]
+  }
+}

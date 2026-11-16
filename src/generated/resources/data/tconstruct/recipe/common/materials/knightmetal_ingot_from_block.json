@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "tconstruct:knightmetal_ingot",
+  "ingredients": [
+    "tconstruct:knightmetal_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "tconstruct:knightmetal_ingot"
+  }
+}

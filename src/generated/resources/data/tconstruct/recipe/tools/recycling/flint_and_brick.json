@@ -1,0 +1,8 @@
+{
+  "type": "tconstruct:part_builder_recycling",
+  "pattern": "tconstruct:venom_bottle",
+  "results": {
+    "tconstruct:shard": "minecraft:flint"
+  },
+  "tool": "tconstruct:flint_and_brick"
+}

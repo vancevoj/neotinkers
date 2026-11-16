@@ -1,0 +1,8 @@
+{
+  "level_display": "tconstruct:no_levels",
+  "modules": [
+    {
+      "type": "tconstruct:throwing"
+    }
+  ]
+}

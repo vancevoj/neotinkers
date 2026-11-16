@@ -1,0 +1,32 @@
+{
+  "criteria": {
+    "crafted_book": {
+      "conditions": {
+        "items": [
+          {
+            "items": "tconstruct:materials_and_you"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "tconstruct:gui/advancement_background",
+    "description": {
+      "translate": "advancements.tconstruct.tools.materials_and_you.description"
+    },
+    "icon": {
+      "id": "tconstruct:materials_and_you"
+    },
+    "title": {
+      "translate": "advancements.tconstruct.tools.materials_and_you.title"
+    }
+  },
+  "requirements": [
+    [
+      "crafted_book"
+    ]
+  ]
+}

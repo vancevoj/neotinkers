@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:storage_blocks/raw_platinum"
+    }
+  ],
+  "type": "tconstruct:ore_melting",
+  "byproducts": [
+    {
+      "amount": 810,
+      "rate": "metal",
+      "tag": "c:molten_gold"
+    }
+  ],
+  "ingredient": "#c:storage_blocks/raw_platinum",
+  "rate": "metal",
+  "result": {
+    "amount": 810,
+    "tag": "c:molten_platinum"
+  },
+  "temperature": 970,
+  "time": 393
+}

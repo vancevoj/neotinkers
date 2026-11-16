@@ -1,0 +1,18 @@
+{
+  "perStat": {
+    "tconstruct:ammo": [
+      {
+        "level": 1,
+        "name": "tconstruct:amorphous"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:smashing_ammo"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:spilling_rod"
+      }
+    ]
+  }
+}

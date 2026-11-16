@@ -1,0 +1,21 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "value": "allomancy:cadmium_flakes"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": {
+    "neoforge:ingredient_type": "mantle:item_name",
+    "items": [
+      "allomancy:cadmium_flakes"
+    ]
+  },
+  "result": {
+    "amount": 30,
+    "tag": "c:molten_cadmium"
+  },
+  "temperature": 294,
+  "time": 24
+}

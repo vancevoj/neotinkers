@@ -1,0 +1,37 @@
+{
+  "name": "minecraft:gameplay/fishing/treasure",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "modifier": [
+            {
+              "type": "tconstruct:add_tool_data",
+              "materials": [
+                {
+                  "type": "tconstruct:ancient"
+                },
+                {
+                  "type": "tconstruct:ancient"
+                },
+                {
+                  "type": "tconstruct:ancient"
+                }
+              ]
+            },
+            {
+              "type": "mantle:set_fluid",
+              "fluid": {
+                "amount": 1000,
+                "id": "minecraft:lava"
+              }
+            }
+          ],
+          "name": "tconstruct:swasher"
+        }
+      ],
+      "name": "main"
+    }
+  ]
+}

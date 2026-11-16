@@ -1,0 +1,12 @@
+{
+  "description": {
+    "color": "#959595",
+    "translate": "trim_material.tconstruct.format",
+    "with": [
+      {
+        "translate": "material.tconstruct.steel"
+      }
+    ]
+  },
+  "palette_id": "tconstruct:trim/steel"
+}

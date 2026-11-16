@@ -1,0 +1,15 @@
+{
+  "modifier_id": "tconstruct:crystalshot",
+  "text": [
+    {
+      "text": "Dokunma üzerinde kristallerin büyümesine neden olabilir."
+    }
+  ],
+  "effects": [
+    "Oklar yerine kristaller ateşler",
+    "Cephaneye gerek duymaz, ek dayanıklılık tüketir",
+    "Üretiminde kullanılan kristale göre renk değiştirir",
+    "Tek seviye",
+    "1 yetenek yuvası gerekir"
+  ]
+}

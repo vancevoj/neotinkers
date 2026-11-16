@@ -1,0 +1,84 @@
+package slimeknights.tconstruct.library.tools.definition.module.weapon;
+
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import slimeknights.mantle.data.loadable.record.RecordLoadable;
+import slimeknights.mantle.util.CombatHelper;
+import slimeknights.tconstruct.library.json.LevelingValue;
+import slimeknights.tconstruct.library.module.HookProvider;
+import slimeknights.tconstruct.library.module.ModuleHook;
+import slimeknights.tconstruct.library.tools.context.ToolAttackContext;
+import slimeknights.tconstruct.library.tools.definition.module.ToolHooks;
+import slimeknights.tconstruct.library.tools.definition.module.ToolModule;
+import slimeknights.tconstruct.library.tools.helper.ToolAttackUtil;
+import slimeknights.tconstruct.library.tools.item.IModifiable;
+import slimeknights.tconstruct.library.tools.nbt.IToolStackView;
+
+import java.util.List;
+
+/** Deals damage in a circle around the primary target */
+public record CircleWeaponAttack(LevelingValue diameters) implements MeleeHitToolHook, ToolModule {
+  public static final RecordLoadable<CircleWeaponAttack> LOADER = RecordLoadable.create(LevelingValue.ADD_TO_LEVEL.defaultField("diameter", LevelingValue.LEVEL, true, CircleWeaponAttack::diameters), CircleWeaponAttack::new);
+  private static final List<ModuleHook<?>> DEFAULT_HOOKS = HookProvider.<CircleWeaponAttack>defaultHooks(ToolHooks.MELEE_HIT);
+
+  public CircleWeaponAttack(float diameter) {
+    this(new LevelingValue(diameter, 1));
+  }
+
+  /** @deprecated use {@link #diameters()} */
+  @Deprecated(forRemoval = true)
+  public float diameter() {
+    return diameters.flat();
+  }
+
+  @Override
+  public List<ModuleHook<?>> getDefaultHooks() {
+    return DEFAULT_HOOKS;
+  }
+
+  @Override
+  public RecordLoadable<CircleWeaponAttack> getLoader() {
+    return LOADER;
+  }
+
+  @Override
+  public void afterMeleeHit(IToolStackView tool, ToolAttackContext context, float damage) {
+    if (context.isExtraAttack()) return;
+    // no need for fully charged for scythe sweep, easier than sword sweep
+    // basically sword sweep logic, just deals full damage to all entities (and full effects)
+    // but also takes more durability loss
+    double range = diameters.compute(tool.getVolatileData().getInt(IModifiable.EXPANDED));
+    // allow having no range until modified with range
+    if (range > 0) {
+      double rangeSq = range * range;
+      LivingEntity attacker = context.getAttacker();
+      Entity target = context.getTarget();
+      Level level = attacker.level();
+      for (LivingEntity aoeTarget : level.getEntitiesOfClass(LivingEntity.class, target.getBoundingBox().inflate(range, 0.25D, range))) {
+        if (tool.isBroken()) {
+          break;
+        }
+        if (aoeTarget != attacker && aoeTarget != target && !attacker.isAlliedTo(aoeTarget) && ToolAttackUtil.isAttackable(attacker, aoeTarget)
+            && !(aoeTarget instanceof ArmorStand stand && stand.isMarker()) && target.distanceToSqr(aoeTarget) < rangeSq) {
+          float angle = attacker.getYRot() * ((float)Math.PI / 180F);
+          // 26.2 knockback takes the damage source and damage, the target attack has not happened yet so pass the primary attack
+          aoeTarget.knockback(0.4F, Mth.sin(angle), -Mth.cos(angle), context.makeDamageSource(), damage);
+          // TODO: do we want to bring back the behavior where circle returns success if any AOE target is hit?
+          ToolAttackUtil.performAttack(tool, context.withAOETarget(aoeTarget));
+        }
+      }
+
+      level.playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, attacker.getSoundSource(), 1.0F, 1.0F);
+      Player player = context.getPlayerAttacker();
+      if (!context.isProjectile() && player != null) {
+        // Player#sweepAttack was removed in 1.21.11
+        CombatHelper.sweepParticles(player);
+      }
+    }
+  }
+}

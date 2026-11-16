@@ -1,0 +1,11 @@
+{
+  "type": "tconstruct:table_casting_part_swapping",
+  "index": 0,
+  "item_cost": 2,
+  "tools": [
+    "tconstruct:travelers_helmet",
+    "tconstruct:travelers_chestplate",
+    "tconstruct:travelers_leggings",
+    "tconstruct:travelers_boots"
+  ]
+}

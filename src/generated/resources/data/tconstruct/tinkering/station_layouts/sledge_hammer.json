@@ -1,0 +1,49 @@
+{
+  "icon": {
+    "components": {
+      "tconstruct:tool_data": {
+        "tic_display": 1,
+        "tic_materials": [
+          "tconstruct:ui_render#head",
+          "tconstruct:ui_render#handle",
+          "tconstruct:ui_render#extra",
+          "tconstruct:ui_render#large",
+          "tconstruct:ui_render#extra_large"
+        ]
+      }
+    },
+    "item": "tconstruct:sledge_hammer"
+  },
+  "input_slots": [
+    {
+      "filter": "tconstruct:hammer_head",
+      "icon": "tconstruct:hammer_head",
+      "translation_key": "item.tconstruct.hammer_head",
+      "x": 44,
+      "y": 29
+    },
+    {
+      "filter": "tconstruct:tough_handle",
+      "icon": "tconstruct:tough_handle",
+      "translation_key": "item.tconstruct.tough_handle",
+      "x": 21,
+      "y": 52
+    },
+    {
+      "filter": "tconstruct:large_plate",
+      "icon": "tconstruct:large_plate",
+      "translation_key": "item.tconstruct.large_plate",
+      "x": 50,
+      "y": 48
+    },
+    {
+      "filter": "tconstruct:large_plate",
+      "icon": "tconstruct:large_plate",
+      "translation_key": "item.tconstruct.large_plate",
+      "x": 25,
+      "y": 20
+    }
+  ],
+  "sortIndex": 12,
+  "translation_key": "item.tconstruct.sledge_hammer"
+}

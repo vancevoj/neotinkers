@@ -1,0 +1,15 @@
+{
+  "modifier_id": "tconstruct:freezing",
+  "text": [
+    {
+      "text": "被击中的生物冰冻4秒（每级延长4秒），受到持续伤害，且速度减慢。"
+    }
+  ],
+  "more_text_space": true,
+  "tool_filter": "tconstruct:modifiable/ranged",
+  "effects": [
+    "最高3级",
+    "与“怒火”相性不佳",
+    "每级需要1个升级槽"
+  ]
+}

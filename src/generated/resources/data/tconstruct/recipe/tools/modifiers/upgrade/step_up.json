@@ -1,0 +1,29 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "ingredient": "minecraft:leather"
+    },
+    {
+      "ingredient": "minecraft:golden_carrot"
+    },
+    {
+      "ingredient": "minecraft:leather"
+    },
+    {
+      "ingredient": "minecraft:scaffolding"
+    },
+    {
+      "ingredient": "minecraft:scaffolding"
+    }
+  ],
+  "level": {
+    "max": 2
+  },
+  "result": "tconstruct:step_up",
+  "slots": {
+    "upgrades": 1
+  },
+  "tools": "#tconstruct:modifiable/armor/leggings"
+}

@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "tconstruct:seared_bricks",
+  "result": {
+    "id": "tconstruct:seared_bricks_wall"
+  }
+}

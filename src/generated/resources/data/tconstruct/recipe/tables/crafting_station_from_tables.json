@@ -1,0 +1,23 @@
+{
+  "type": "mantle:crafting_shaped_retextured",
+  "key": {
+    "p": "tconstruct:pattern",
+    "w": {
+      "neoforge:ingredient_type": "neoforge:difference",
+      "base": "#tconstruct:tables",
+      "subtracted": "tconstruct:crafting_station"
+    }
+  },
+  "pattern": [
+    "p",
+    "w"
+  ],
+  "result": {
+    "id": "tconstruct:crafting_station"
+  },
+  "texture": {
+    "neoforge:ingredient_type": "neoforge:difference",
+    "base": "#tconstruct:tables",
+    "subtracted": "tconstruct:crafting_station"
+  }
+}

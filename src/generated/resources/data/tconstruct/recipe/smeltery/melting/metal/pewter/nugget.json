@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:nuggets/pewter"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:nuggets/pewter",
+  "result": {
+    "amount": 10,
+    "tag": "c:molten_pewter"
+  },
+  "temperature": 400,
+  "time": 15
+}

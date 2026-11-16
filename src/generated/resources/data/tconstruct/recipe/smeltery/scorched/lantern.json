@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "tconstruct:scorched_brick",
+    "C": "#c:ingots/iron",
+    "P": "tconstruct:scorched_glass_pane"
+  },
+  "pattern": [
+    " C ",
+    "PPP",
+    "BBB"
+  ],
+  "result": {
+    "count": 3,
+    "id": "tconstruct:scorched_lantern"
+  }
+}

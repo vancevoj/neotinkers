@@ -1,0 +1,33 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "ingredient": [
+        "tconstruct:seared_channel",
+        "tconstruct:scorched_channel"
+      ]
+    },
+    {
+      "neoforge:ingredient_type": "tconstruct:no_container",
+      "match": "#tconstruct:tanks"
+    },
+    {
+      "ingredient": [
+        "tconstruct:seared_channel",
+        "tconstruct:scorched_channel"
+      ]
+    },
+    {
+      "ingredient": "#c:ingots/copper"
+    },
+    {
+      "ingredient": "#c:ingots/copper"
+    }
+  ],
+  "result": "tconstruct:spilling",
+  "slots": {
+    "abilities": 1
+  },
+  "tools": "#tconstruct:modifiable/melee"
+}

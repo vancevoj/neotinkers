@@ -1,0 +1,14 @@
+{
+  "title": "Vidro Chamuscado",
+  "item": "tconstruct:scorched_glass",
+  "text": [
+    {
+      "text": "Para observar suas maravilhas de materiais sendo derretidos, e sem comprometer sua fundição fantástica, você pode usar este vidro. Vale lembrar que ele não armazena fluido como os tanques.",
+      "paragraph": true
+    },
+    {
+      "text": "O vidro não pode ser usado no piso da fundição.",
+      "paragraph": true
+    }
+  ]
+}

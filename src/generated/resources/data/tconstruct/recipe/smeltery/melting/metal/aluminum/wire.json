@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:wires/aluminum"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:wires/aluminum",
+  "result": {
+    "amount": 45,
+    "tag": "c:molten_aluminum"
+  },
+  "temperature": 425,
+  "time": 9
+}

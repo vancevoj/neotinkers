@@ -1,0 +1,13 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:ingots/pewter"
+    }
+  ],
+  "type": "tconstruct:material",
+  "ingredient": "#c:ingots/pewter",
+  "material": "tconstruct:pewter",
+  "needed": 1,
+  "value": 1
+}

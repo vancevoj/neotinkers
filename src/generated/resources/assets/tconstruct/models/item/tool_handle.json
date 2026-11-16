@@ -1,0 +1,7 @@
+{
+  "parent": "neoforge:item/default",
+  "loader": "tconstruct:material",
+  "textures": {
+    "texture": "tconstruct:item/tool/parts/tool_handle"
+  }
+}

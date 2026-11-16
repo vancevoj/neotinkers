@@ -1,0 +1,29 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_combination_filled",
+      "ignore": "tconstruct:non_singular_ore_rates",
+      "match": "c:ores/diamond"
+    }
+  ],
+  "type": "tconstruct:ore_melting",
+  "byproducts": [
+    {
+      "amount": 90,
+      "fluid": "tconstruct:molten_debris",
+      "rate": "metal"
+    }
+  ],
+  "ingredient": {
+    "neoforge:ingredient_type": "neoforge:difference",
+    "base": "#c:ores/diamond",
+    "subtracted": "#tconstruct:non_singular_ore_rates"
+  },
+  "rate": "gem",
+  "result": {
+    "amount": 100,
+    "fluid": "tconstruct:molten_diamond"
+  },
+  "temperature": 1450,
+  "time": 197
+}

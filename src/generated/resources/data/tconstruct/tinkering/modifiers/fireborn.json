@@ -1,0 +1,19 @@
+{
+  "level_display": "tconstruct:single_level",
+  "modules": [
+    {
+      "type": "tconstruct:enchantment_ignoring_protection",
+      "level": {
+        "flat": 7
+      },
+      "name": "minecraft:fire_protection"
+    },
+    {
+      "type": "tconstruct:effect_immunity",
+      "effect": "tconstruct:conductive",
+      "max_level": {
+        "each_level": 1
+      }
+    }
+  ]
+}

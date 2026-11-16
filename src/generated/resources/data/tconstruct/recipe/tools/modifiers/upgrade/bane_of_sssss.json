@@ -1,0 +1,15 @@
+{
+  "type": "tconstruct:incremental_modifier",
+  "allow_crystal": true,
+  "amount_per_item": 1,
+  "input": "minecraft:fermented_spider_eye",
+  "level": {
+    "max": 5
+  },
+  "needed_per_level": 15,
+  "result": "tconstruct:bane_of_sssss",
+  "slots": {
+    "upgrades": 1
+  },
+  "tools": "#tconstruct:modifiable/melee"
+}

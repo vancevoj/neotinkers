@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "#": "tconstruct:seared_brick",
+    "C": "#c:ingots/copper"
+  },
+  "pattern": [
+    "#C#",
+    "   ",
+    "#C#"
+  ],
+  "result": {
+    "id": "tconstruct:seared_chute"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "title": "合成模具",
+  "recipe": "tconstruct:tables/pattern",
+  "grid_size": "small",
+  "description": [
+    { "text": "制作工具前，你需要准备很多模具；制作工具部件和部件制造台都要用到模具。" }
+  ]
+}

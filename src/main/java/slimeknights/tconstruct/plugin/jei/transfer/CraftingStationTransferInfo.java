@@ -1,0 +1,87 @@
+package slimeknights.tconstruct.plugin.jei.transfer;
+
+import mezz.jei.api.constants.RecipeTypes;
+import mezz.jei.api.recipe.transfer.IRecipeTransferInfo;
+import mezz.jei.api.recipe.types.IRecipeType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.ShapedRecipe;
+import slimeknights.mantle.client.SafeClientAccess;
+import slimeknights.tconstruct.tables.TinkerTables;
+import slimeknights.tconstruct.tables.menu.CraftingStationContainerMenu;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * Class to dynamically provide the right slot count to JEI
+ */
+public class CraftingStationTransferInfo implements IRecipeTransferInfo<CraftingStationContainerMenu, RecipeHolder<CraftingRecipe>> {
+  @Override
+  public Class<? extends CraftingStationContainerMenu> getContainerClass() {
+    return CraftingStationContainerMenu.class;
+  }
+
+  @Override
+  public Optional<MenuType<CraftingStationContainerMenu>> getMenuType() {
+    return Optional.of(TinkerTables.craftingStationContainer.get());
+  }
+
+  @Override
+  public IRecipeType<RecipeHolder<CraftingRecipe>> getRecipeType() {
+    return RecipeTypes.CRAFTING;
+  }
+
+  @Override
+  public List<Slot> getInventorySlots(CraftingStationContainerMenu container, RecipeHolder<CraftingRecipe> recipe) {
+    List<Slot> slots = new ArrayList<>();
+
+    // 36 for player inventory
+    int totalSize = container.slots.size();
+    int sideInventoryEnd = totalSize - 36;
+
+    // first, add all inventory slots, ensures they are first for emptying the table
+    for (int i = sideInventoryEnd; i < totalSize; i++) {
+      slots.add(container.getSlot(i));
+    }
+
+    // next, add side inventory. shouldn't be a problem due to the blacklist
+    // 10 slots for the crafting table
+    Player player = SafeClientAccess.getPlayer();
+    if (player != null) {
+      for (int i = 10; i < sideInventoryEnd; i++) {
+        Slot slot = container.getSlot(i);
+        // skip slots with no item, we don't want JEI putting stuff in empty slots as that's confusing
+        if (slot.hasItem() && slot.allowModification(player)) {
+          slots.add(container.getSlot(i));
+        }
+      }
+    }
+    return slots;
+  }
+
+  @Override
+  public List<Slot> getRecipeSlots(CraftingStationContainerMenu container, RecipeHolder<CraftingRecipe> recipe) {
+    List<Slot> slots = new ArrayList<>();
+    for (int i = 0; i < 9; i++) {
+      slots.add(container.getSlot(i));
+    }
+    return slots;
+  }
+
+  @Override
+  public boolean canHandle(CraftingStationContainerMenu container, RecipeHolder<CraftingRecipe> holder) {
+    // NeoForge 1.21.1 removed IShapedRecipe; vanilla ShapedRecipe exposes width/height directly. Non-shaped
+    // (shapeless / modded) recipes fall through and are accepted if they fit the 3x3 grid by ingredient count.
+    // 1.21.2: recipes no longer list ingredients, the placement info has them (empty for recipes that cannot be placed, as getIngredients was)
+    CraftingRecipe recipe = holder.value();
+    if (recipe instanceof ShapedRecipe shaped) {
+      return shaped.getWidth() <= 3 && shaped.getHeight() <= 3;
+    }
+    return recipe.placementInfo().ingredients().size() <= 9;
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Features",
+  "text": [
+    { "text": "• Gives +3 nuggets or +1 gem per ore (by default)", "linebreak": true },
+    { "text": "• Mass melting capabilities", "linebreak": true },
+    { "text": "• Can hold multiple metals", "linebreak": true },
+    { "text": "• Extendable capacity", "linebreak": true },
+    { "text": "• Able to alloy", "linebreak": true },
+    { "text": "• Fuel efficiency depends on size", "linebreak": true },
+    { "text": "• Able to melt mobs to get their precious materials", "linebreak": true },
+    { "text": "• Ideal for smelting lots of materials at once" }
+  ]
+}

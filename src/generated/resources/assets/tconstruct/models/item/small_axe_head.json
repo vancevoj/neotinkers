@@ -1,0 +1,11 @@
+{
+  "parent": "neoforge:item/default",
+  "loader": "tconstruct:material",
+  "offset": [
+    -2,
+    3
+  ],
+  "textures": {
+    "texture": "tconstruct:item/tool/hand_axe/head"
+  }
+}

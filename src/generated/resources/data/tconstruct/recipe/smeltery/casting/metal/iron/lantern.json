@@ -1,0 +1,11 @@
+{
+  "type": "tconstruct:casting_table",
+  "cast": "minecraft:torch",
+  "cast_consumed": true,
+  "cooling_time": 57,
+  "fluid": {
+    "amount": 80,
+    "tag": "c:molten_iron"
+  },
+  "result": "minecraft:lantern"
+}

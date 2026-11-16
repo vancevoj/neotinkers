@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:swiftstrike",
+  "text": [
+    {
+      "text": "Ametisti kırdığında ne hoş bir \"şıngırtı\" sesi çıkıyor."
+    }
+  ],
+  "effects": [
+    "Saldırı hızını artırır",
+    "Çoklu seviyeler, hızı her seviyede az daha artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "type": "tconstruct:multilevel_modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "amount_needed": 4,
+      "ingredient": "tconstruct:sky_congealed_slime"
+    },
+    {
+      "amount_needed": 4,
+      "ingredient": "tconstruct:ichor_congealed_slime"
+    },
+    {
+      "amount_needed": 4,
+      "ingredient": "tconstruct:sky_congealed_slime"
+    },
+    {
+      "amount_needed": 4,
+      "ingredient": "tconstruct:earth_congealed_slime"
+    },
+    {
+      "amount_needed": 4,
+      "ingredient": "tconstruct:earth_congealed_slime"
+    }
+  ],
+  "levels": [
+    {
+      "level": 1,
+      "slots": {
+        "abilities": 1
+      }
+    },
+    {
+      "level": {
+        "max": 3,
+        "min": 2
+      },
+      "slots": {
+        "upgrades": 1
+      }
+    }
+  ],
+  "result": "tconstruct:reflecting",
+  "tools": "#tconstruct:modifiable/shields"
+}

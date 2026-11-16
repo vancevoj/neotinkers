@@ -1,0 +1,15 @@
+{
+  "tool": "tconstruct:scythe",
+  "text": [
+    {
+      "text": "A Foice é a maior amiga dos aventureiros. Prefere explorar selvas densas, mergulhar em cavernas profundas infestadas de aranhas ou apenas colher suas plantações? A foice sempre estará ao seu lado para cortar o que for preciso."
+    }
+  ],
+  "properties": [
+    "Ferramenta avançada de coleta",
+    "Coleta e aragem em área 3x3",
+    "Eficaz em todos os tipos de folhagem",
+    "Capaz de efeito de ataque em área"
+  ]
+}
+

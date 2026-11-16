@@ -1,0 +1,10 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": "#c:ingots/amethyst_bronze",
+  "result": {
+    "amount": 90,
+    "tag": "c:molten_amethyst_bronze"
+  },
+  "temperature": 820,
+  "time": 61
+}

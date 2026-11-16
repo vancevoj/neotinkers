@@ -1,0 +1,35 @@
+{
+  "block_effects": [
+    {
+      "type": "tconstruct:place_block",
+      "block": "minecraft:fire",
+      "sound": "minecraft:item.firecharge.use"
+    }
+  ],
+  "entity_effects": [
+    {
+      "type": "tconstruct:conditional",
+      "effect": {
+        "type": "tconstruct:damage",
+        "damage": 1.0,
+        "damage_type": {
+          "melee": "tconstruct:fluid_fire_melee",
+          "ranged": "tconstruct:fluid_fire_ranged"
+        }
+      },
+      "target": {
+        "type": "mantle:inverted",
+        "inverted_type": "mantle:fire_immune"
+      }
+    },
+    {
+      "type": "tconstruct:fire",
+      "action": "add",
+      "time": 4
+    }
+  ],
+  "fluid": {
+    "amount": 50,
+    "fluid": "minecraft:lava"
+  }
+}

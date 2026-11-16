@@ -1,0 +1,24 @@
+{
+  "level_display": "tconstruct:single_level",
+  "modules": [
+    {
+      "type": "tconstruct:modifier_slot",
+      "each_level": 1,
+      "name": "upgrades"
+    },
+    {
+      "type": "tconstruct:requirements",
+      "requirement": {
+        "type": "tconstruct:has_modifier",
+        "check": "upgrades",
+        "level": 0,
+        "modifier": {
+          "type": "tconstruct:single",
+          "modifier": "tconstruct:forecast"
+        }
+      },
+      "translation_key": "modifier.tconstruct.resurrected.requirements"
+    }
+  ],
+  "show_in_tooltips": "bonus_slot"
+}

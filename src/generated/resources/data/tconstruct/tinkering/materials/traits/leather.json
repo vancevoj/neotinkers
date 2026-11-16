@@ -1,0 +1,26 @@
+{
+  "default": [
+    {
+      "level": 1,
+      "name": "tconstruct:tanned"
+    }
+  ],
+  "perStat": {
+    "tconstruct:laces": [
+      {
+        "level": 1,
+        "name": "tconstruct:rugged"
+      }
+    ],
+    "tconstruct:skull": [
+      {
+        "level": 1,
+        "name": "tconstruct:consecrated_skull"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:zombie_disguise"
+      }
+    ]
+  }
+}

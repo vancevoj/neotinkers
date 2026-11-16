@@ -1,0 +1,16 @@
+{
+  "modifier_id": "tconstruct:slurping",
+  "text": [
+    {
+      "text": "Ele era o número um!"
+    }
+  ],
+  "tool_filter": "tconstruct:modifiable/armor",
+  "effects": [
+    "Bebe fluidos armazenados no capacete",
+    "Tecla de Atalho é usada para beber",
+    "Requer 1 slot de habilidade por nível",
+    "Níveis mais altos consomem mais fluido para efeitos mais fortes"
+  ]
+}
+

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "tconstruct:seared_bricks",
+    "C": "#c:chests/wooden",
+    "b": "tconstruct:seared_brick",
+    "c": "#tconstruct:casts/gold"
+  },
+  "pattern": [
+    " c ",
+    "bCb",
+    "bBb"
+  ],
+  "result": {
+    "id": "tconstruct:cast_chest"
+  }
+}

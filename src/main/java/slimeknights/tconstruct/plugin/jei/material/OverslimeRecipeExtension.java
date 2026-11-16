@@ -1,0 +1,107 @@
+package slimeknights.tconstruct.plugin.jei.material;
+
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
+import mezz.jei.api.gui.ingredient.ICraftingGridHelper;
+import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
+import mezz.jei.api.recipe.IFocus;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.category.extensions.vanilla.crafting.ICraftingCategoryExtension;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
+import slimeknights.mantle.plugin.jei.MantleJEIConstants;
+import slimeknights.mantle.recipe.helper.IngredientHelper;
+import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.common.TinkerTags;
+import slimeknights.tconstruct.library.modifiers.ModifierEntry;
+import slimeknights.tconstruct.library.modifiers.modules.capacity.OverslimeModule;
+import slimeknights.tconstruct.library.recipe.modifiers.adding.IDisplayModifierRecipe;
+import slimeknights.tconstruct.library.recipe.modifiers.adding.OverslimeCraftingTableRecipe;
+import slimeknights.tconstruct.library.recipe.modifiers.adding.OverslimeModifierRecipe;
+import slimeknights.tconstruct.library.tools.helper.ModifierUtil;
+import slimeknights.tconstruct.library.tools.nbt.ToolStack;
+import slimeknights.tconstruct.plugin.jei.util.CategoryUtil;
+import slimeknights.tconstruct.tools.TinkerModifiers;
+
+import java.awt.Color;
+import java.util.List;
+
+import static slimeknights.tconstruct.library.recipe.modifiers.adding.IDisplayModifierRecipe.withModifiers;
+
+/**
+ * Logic for showing the overslime recipe in the crafting table tab.
+ * JEI 19 crafting extensions are stateless and receive the {@link RecipeHolder} on each call, so the display data is computed in the hook methods.
+ */
+public class OverslimeRecipeExtension implements ICraftingCategoryExtension<OverslimeCraftingTableRecipe> {
+  private static final String KEY_AMOUNT = TConstruct.makeTranslationKey("recipe", "modifier.amount");
+  private static final String KEY_TOOLTIP = TConstruct.makeTranslationKey("recipe", "overslime.tooltip");
+
+  @Override
+  public List<SlotDisplay> getIngredients(RecipeHolder<OverslimeCraftingTableRecipe> holder) {
+    // resolve through the display stacks, as the default tools ingredient is a tag created before tags bind
+    OverslimeCraftingTableRecipe recipe = holder.value();
+    return List.of(CategoryUtil.displayOf(IngredientHelper.getStacks(recipe.getTools())), CategoryUtil.displayOf(IngredientHelper.getStacks(recipe.getIngredient())));
+  }
+
+  @Override
+  public void setRecipe(RecipeHolder<OverslimeCraftingTableRecipe> holder, IRecipeLayoutBuilder builder, ICraftingGridHelper craftingGridHelper, IFocusGroup focuses) {
+    OverslimeCraftingTableRecipe recipe = holder.value();
+    builder.setShapeless();
+    // the ingredient that applies overslime, used on focusing
+    List<ItemStack> ingredient = IngredientHelper.getStacks(recipe.getIngredient());
+    List<List<ItemStack>> inputStacks = null;
+    List<ItemStack> resultStacks = null;
+
+    // if focusing on a tool, make that tool the
+    IFocus<ItemStack> focus = focuses.getItemStackFocuses().findFirst().orElse(null);
+    if (focus != null && focus.getRole() != RecipeIngredientRole.OUTPUT) {
+      ItemStack focusStack = focus.getTypedValue().getIngredient();
+      if (focusStack.is(TinkerTags.Items.DURABILITY) && ModifierUtil.getModifierLevel(focusStack, TinkerModifiers.overslime.getId()) > 0) {
+        inputStacks = List.of(List.of(focusStack.copyWithCount(1)), ingredient);
+        ItemStack result = focusStack.copyWithCount(1);
+        ToolStack tool = ToolStack.from(result);
+        OverslimeModule.INSTANCE.addAmount(tool, recipe.getRestoreAmount());
+        resultStacks = List.of(result);
+      }
+    }
+    // no usable focus, display all tools
+    if (inputStacks == null) {
+      List<ModifierEntry> result = List.of(OverslimeModifierRecipe.RESULT);
+      Ingredient tools = recipe.getTools();
+      // this recipe requires inputs to have overslime
+      List<ItemStack> toolsWithoutOverslime = IngredientHelper.getStacks(tools).stream().map(IDisplayModifierRecipe.MAP_TOOL_STACK_FOR_RENDERING)
+        .map(stack -> withModifiers(stack, 1, result))
+        .toList();
+      // result is the same but with overslime
+      int restoreAmount = recipe.getRestoreAmount();
+      List<ItemStack> toolsWithOverslime = IngredientHelper.getStacks(tools).stream().map(IDisplayModifierRecipe.MAP_TOOL_STACK_FOR_RENDERING)
+        .map(stack -> withModifiers(stack, 1, result, data -> OverslimeModule.INSTANCE.setAmountRaw(data, restoreAmount)))
+        .toList();
+      inputStacks = List.of(toolsWithoutOverslime, ingredient);
+      resultStacks = toolsWithOverslime;
+    }
+
+    // build the grid
+    // need to recreate a lot of this to change the slot types
+    // TODO: worth considering making the first input slot a catalyst, just requires reimplementing the slot creation
+    List<IRecipeSlotBuilder> inputs = craftingGridHelper.createAndSetInputs(builder, inputStacks, 2, 2);
+    IRecipeSlotBuilder output = builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 95, 19).setOutputSlotBackground().addItemStacks(resultStacks);
+    if (inputs.size() < 9) {
+      TConstruct.LOG.error("Failed to create focus link for {} as the layout {} is not 3x3", holder.id(), builder.getClass().getName());
+    } else {
+      builder.createFocusLink(inputs.get(MantleJEIConstants.getCraftingIndex(0, 2, 2)), output);
+    }
+  }
+
+  @Override
+  public void createRecipeExtras(RecipeHolder<OverslimeCraftingTableRecipe> holder, IRecipeExtrasBuilder builder, ICraftingGridHelper craftingGridHelper, IFocusGroup focuses) {
+    int restoreAmount = holder.value().getRestoreAmount();
+    builder.addText(Component.translatable(KEY_AMOUNT, restoreAmount), 57, 9)
+      .setPosition(60, 44).setColor(Color.GRAY.getRGB())
+      .setTooltip(Component.translatable(KEY_TOOLTIP, restoreAmount));
+  }
+}

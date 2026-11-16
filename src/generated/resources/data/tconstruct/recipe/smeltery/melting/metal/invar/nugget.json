@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:nuggets/invar"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:nuggets/invar",
+  "result": {
+    "amount": 10,
+    "tag": "c:molten_invar"
+  },
+  "temperature": 900,
+  "time": 21
+}

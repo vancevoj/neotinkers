@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:dusts/netherite"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:dusts/netherite",
+  "result": {
+    "amount": 90,
+    "tag": "c:molten_netherite"
+  },
+  "temperature": 1250,
+  "time": 55
+}

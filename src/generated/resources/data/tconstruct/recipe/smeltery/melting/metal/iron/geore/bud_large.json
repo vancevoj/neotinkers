@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:geore_large_buds/iron"
+    }
+  ],
+  "type": "tconstruct:ore_melting",
+  "byproducts": [
+    {
+      "amount": 270,
+      "rate": "metal",
+      "tag": "c:molten_steel"
+    }
+  ],
+  "ingredient": "#c:geore_large_buds/iron",
+  "rate": "metal",
+  "result": {
+    "amount": 270,
+    "tag": "c:molten_iron"
+  },
+  "temperature": 800,
+  "time": 120
+}

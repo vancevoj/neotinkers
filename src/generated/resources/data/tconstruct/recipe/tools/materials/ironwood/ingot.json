@@ -1,0 +1,13 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:ingots/ironwood"
+    }
+  ],
+  "type": "tconstruct:material",
+  "ingredient": "#c:ingots/ironwood",
+  "material": "tconstruct:ironwood",
+  "needed": 1,
+  "value": 1
+}

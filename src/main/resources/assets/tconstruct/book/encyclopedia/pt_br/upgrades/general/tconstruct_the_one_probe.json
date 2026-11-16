@@ -1,0 +1,17 @@
+{
+  "modifier_id": "tconstruct:the_one_probe",
+  "text": [
+    {
+      "text": "Mostra informações sobre o bloco visado, assim como o item examinado"
+    },
+    {
+      "text": "É preciso usar o capacete para obter informações ou segurar a ferramenta em uma das mãos.",
+      "paragraph": true
+    }
+  ],
+  "more_text_space": true,
+  "effects": [
+    "Nível único",
+    "Requer 1 slot de melhoria"
+  ]
+}

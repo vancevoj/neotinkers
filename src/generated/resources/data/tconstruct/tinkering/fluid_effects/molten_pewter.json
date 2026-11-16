@@ -1,0 +1,65 @@
+{
+  "block_effects": [
+    {
+      "type": "tconstruct:mob_effect_cloud",
+      "effects": [
+        {
+          "effect": "minecraft:strength",
+          "level": 1,
+          "time": 140
+        }
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "type": "neoforge:or",
+      "values": [
+        {
+          "type": "tconstruct:config",
+          "prop": "force_integration_materials"
+        },
+        {
+          "type": "mantle:tag_filled",
+          "tag": "c:ingots/pewter"
+        },
+        {
+          "type": "mantle:tag_filled",
+          "tag": "c:ingots/tin"
+        },
+        {
+          "type": "mantle:tag_filled",
+          "tag": "c:ingots/lead"
+        }
+      ]
+    }
+  ],
+  "entity_effects": [
+    {
+      "type": "tconstruct:conditional",
+      "effect": {
+        "type": "tconstruct:damage",
+        "damage": 3.0,
+        "damage_type": {
+          "melee": "tconstruct:fluid_fire_melee",
+          "ranged": "tconstruct:fluid_fire_ranged"
+        }
+      },
+      "target": {
+        "type": "mantle:inverted",
+        "inverted_type": "mantle:fire_immune"
+      }
+    },
+    {
+      "type": "tconstruct:mob_effect",
+      "action": "set",
+      "effect": "minecraft:strength",
+      "level": 1,
+      "time": 140
+    }
+  ],
+  "fluid": {
+    "amount": 10,
+    "tag": "c:molten_pewter"
+  }
+}

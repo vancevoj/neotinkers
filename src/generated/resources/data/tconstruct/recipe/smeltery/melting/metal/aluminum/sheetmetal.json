@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:sheetmetals/aluminum"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:sheetmetals/aluminum",
+  "result": {
+    "amount": 90,
+    "tag": "c:molten_aluminum"
+  },
+  "temperature": 425,
+  "time": 47
+}

@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:emerald",
+  "text": [
+    {
+      "text": "Köylünün en iyi arkadaşı, köylülerin bunu eklerken görmesine izin verme! Bu senin şanslı tılsımın değil."
+    }
+  ],
+  "effects": [
+    "Temel dayanıklılığa bağlı olarak araç dayanıklılığı artırır",
+    "Koşullu hasarı, çıkarım hızını ve savurma direncini artırır",
+    "Tek seviye",
+    "1 yükseltme yuvası gerekir"
+  ]
+}

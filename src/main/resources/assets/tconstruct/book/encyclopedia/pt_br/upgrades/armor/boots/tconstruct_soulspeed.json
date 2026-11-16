@@ -1,0 +1,17 @@
+{
+  "modifier_id": "tconstruct:soulspeed",
+  "text": [
+    {
+      "text": "Concede +40,5% de velocidade na areia das almas , mais 10,5% adicionais por nível. Reduz a lentidão de andar na areia das almas."
+    },
+    {
+      "text": "As botas sofrerão dano ao longo do tempo quando este modificador estiver ativo.",
+      "paragraph": true
+    }
+  ],
+  "more_text_space": true,
+  "effects": [
+    "Máximo de 3 níveis",
+    "Requer 1 slot de melhoria por nível"
+  ]
+}

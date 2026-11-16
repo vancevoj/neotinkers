@@ -1,0 +1,29 @@
+{
+  "level_display": "tconstruct:single_level",
+  "modules": [
+    {
+      "type": "tconstruct:attribute",
+      "attribute": "tconstruct:generic.good_effect_duration_multiplier",
+      "each_level": 0.1,
+      "flat": 0.15,
+      "operation": "add_multiplied_base",
+      "slots": [
+        "mainhand",
+        "offhand",
+        "feet",
+        "legs",
+        "chest",
+        "head",
+        "body",
+        "saddle"
+      ]
+    },
+    {
+      "type": "tconstruct:reduce_effect_on_unequip",
+      "category": "beneficial",
+      "percent": {
+        "each_level": 0.2
+      }
+    }
+  ]
+}

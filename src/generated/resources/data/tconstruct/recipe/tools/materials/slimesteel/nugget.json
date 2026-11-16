@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": "#c:nuggets/slimesteel",
+  "material": "tconstruct:slimesteel",
+  "needed": 9,
+  "value": 1
+}

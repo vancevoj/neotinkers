@@ -1,0 +1,12 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "tconstruct:item/tinkers_chest",
+    "tints": [
+      {
+        "type": "minecraft:dye",
+        "default": -12552570
+      }
+    ]
+  }
+}

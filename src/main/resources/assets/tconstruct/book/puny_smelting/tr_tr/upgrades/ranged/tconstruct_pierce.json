@@ -1,0 +1,18 @@
+{
+  "modifier_id": "tconstruct:pierce",
+  "text": [
+    {
+      "text": "Araç kaktüsün gücünü, zırhın içinden saldırmayı, kazanır."
+    },
+    {
+      "text": "Şişleme ile karıştırılmamalıdır",
+      "paragraph": true
+    }
+  ],
+  "tool_filter": "tconstruct:modifiable/ranged",
+  "effects": [
+    "Oklar zırhın küçük bir kısmını geçersiz kılar",
+    "Çoklu seviyeler, etkisini her seviyede artırır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

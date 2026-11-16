@@ -1,0 +1,16 @@
+{
+  "modifier_id": "tconstruct:melee_protection",
+  "text": [
+    {
+      "text": "Saco de pancadas móvel."
+    }
+   
+  ],
+  "more_text_space": true,
+  "effects": [
+    "Diminui o dano em combate em geral", 
+    "Aumenta a velocidade de movimento ao usar escudos e arcos", 
+    "Múltiplos níveis, cada nível aumenta ainda mais os efeitos",
+    "Requer 1 slot de defesa por nível"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:respiration",
+  "text": [
+    {
+      "text": "Gerçi kim soluk alırken havaya gereksinim duyarki."
+    }
+  ],
+  "effects": [
+    "Su altında hava tüketimini azaltır", 
+    "Çoklu seviyeler, hava tüketimini her seviyede daha da azaltır",
+    "Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

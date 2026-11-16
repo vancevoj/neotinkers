@@ -1,0 +1,16 @@
+{
+  "modifier_id": "tconstruct:dragonborn",
+  "text": [
+    {
+      "text": "Dovah ko krif dilos ahrk qah."
+    },
+    {
+      "text": "Onarıcı, ejderha dilini okuyamıyor musun? Saçmalık, bu günlerde ne öğretiyorlar? Şöyle söylenir, Uçan ejderhalar ölümcül ve korumacıdırlar.", "paragraph": true
+    }
+  ],
+  "effects": [
+    "Havada iken korumayı ve saldırı hasarını artırır",
+    "Çoklu seviyeler, koruma ve hasarı her seviyede daha da artırır",
+    "Seviye başına 1 savunma yuvası gerekir"
+  ]
+}

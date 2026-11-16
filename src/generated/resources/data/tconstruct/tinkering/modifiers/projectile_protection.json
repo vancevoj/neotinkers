@@ -1,0 +1,27 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:max_armor_attribute",
+      "allow_broken": false,
+      "attribute": "minecraft:knockback_resistance",
+      "each_level": 0.05,
+      "held_tag": "tconstruct:modifiable/held",
+      "operation": "add_value"
+    },
+    {
+      "type": "tconstruct:protection",
+      "damage_source": {
+        "type": "mantle:and",
+        "predicates": [
+          "mantle:can_protect",
+          {
+            "type": "mantle:tag",
+            "tag": "tconstruct:protection/projectile"
+          }
+        ]
+      },
+      "each_level": 2.0
+    }
+  ]
+}

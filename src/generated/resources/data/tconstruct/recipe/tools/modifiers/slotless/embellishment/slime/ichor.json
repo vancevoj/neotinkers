@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "tconstruct:modifiable/embellishment/slime"
+    }
+  ],
+  "type": "tconstruct:swappable_modifier",
+  "allow_crystal": false,
+  "inputs": [
+    {
+      "ingredient": "tconstruct:ichor_congealed_slime"
+    },
+    {
+      "ingredient": "tconstruct:ichor_slime_ball"
+    },
+    {
+      "ingredient": "tconstruct:ichor_congealed_slime"
+    }
+  ],
+  "result": {
+    "name": "tconstruct:embellishment",
+    "value": "tconstruct:ichor"
+  },
+  "tools": "#tconstruct:modifiable/embellishment/slime",
+  "variant_formatter": "tconstruct:material"
+}

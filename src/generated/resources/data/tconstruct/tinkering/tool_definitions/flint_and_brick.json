@@ -1,0 +1,55 @@
+{
+  "modules": [
+    {
+      "type": "tconstruct:base_stats",
+      "stats": {
+        "tconstruct:durability": 100.0
+      }
+    },
+    {
+      "type": "tconstruct:modifier_slots",
+      "slots": {
+        "upgrades": 1
+      }
+    },
+    {
+      "type": "tconstruct:traits",
+      "traits": [
+        {
+          "level": 1,
+          "name": "tconstruct:firestarter"
+        },
+        {
+          "level": 1,
+          "name": "tconstruct:fiery"
+        },
+        {
+          "level": 1,
+          "name": "tconstruct:scorching"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:traits",
+      "hooks": [
+        "tconstruct:rebalanced_trait"
+      ],
+      "traits": [
+        {
+          "level": 1,
+          "name": "tconstruct:scorching"
+        }
+      ]
+    },
+    {
+      "type": "tconstruct:material_repair",
+      "material": "tconstruct:seared_stone",
+      "stat_type": "tconstruct:head"
+    },
+    {
+      "type": "tconstruct:material_repair",
+      "material": "tconstruct:scorched_stone",
+      "stat_type": "tconstruct:head"
+    }
+  ]
+}

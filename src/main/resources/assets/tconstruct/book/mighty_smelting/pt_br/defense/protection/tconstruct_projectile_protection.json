@@ -1,0 +1,15 @@
+{
+  "modifier_id": "tconstruct:projectile_protection",
+  "text": [
+    {
+      "text": "Isto não protegerá seus calcanhar das flechas, forçando-o a desistir de se aventurar e se tornar um guarda."
+    }
+  ],
+  "effects": [
+    "Diminui os danos causados por projéteis",
+    "Aumenta a resistência a repulsão",
+    "Múltiplos níveis, cada nível aumenta ainda mais os efeitos",
+    "Requer 1 espaço de defesa por nível"
+  ]
+}
+

@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:freezing",
+  "text": [
+    {
+      "text": "Elsa kıskanç olabilir."
+    }
+  ],
+  "tool_filter": "tconstruct:modifiable/melee",
+  "effects": [
+    "Saldırılan düşmanlar yavaşlar ve fazladan hasar alırlar",
+  	"Çoklu seviyeler, düşmanları yavaşlatması her seviyede uzar",
+  	"Seviye başına 1 yükseltme yuvası gerekir"
+  ]
+}

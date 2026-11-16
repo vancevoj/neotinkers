@@ -1,0 +1,60 @@
+{
+  "color": "FF893D14",
+  "fallbacks": [
+    "metal_contrast",
+    "contrast",
+    "metal"
+  ],
+  "generator": {
+    "supported_stats": [
+      "tconstruct:head",
+      "tconstruct:handle",
+      "tconstruct:binding",
+      "tconstruct:repair_kit",
+      "tconstruct:limb",
+      "tconstruct:grip",
+      "tconstruct:armor_plating",
+      "tconstruct:plating_helmet",
+      "tconstruct:plating_chestplate",
+      "tconstruct:plating_leggings",
+      "tconstruct:plating_boots",
+      "tconstruct:plating_shield",
+      "tconstruct:maille",
+      "tconstruct:armor_maille",
+      "tconstruct:ingot"
+    ],
+    "transformer": {
+      "type": "tconstruct:frames",
+      "frames": [
+        {
+          "type": "tconstruct:grey_to_sprite",
+          "palette": {
+            "000": "FF000000",
+            "025": "FF191919",
+            "026": "tconstruct:generator/fiery",
+            "102": "tconstruct:generator/fiery",
+            "140": "FF3C2323",
+            "178": "FF2D1B1B",
+            "216": "FF191313",
+            "255": "FF080606"
+          }
+        },
+        {
+          "type": "tconstruct:grey_to_sprite",
+          "palette": {
+            "000": "FF000000",
+            "025": "FF191919",
+            "026": "tconstruct:generator/fiery",
+            "102": "tconstruct:generator/fiery",
+            "140": "FF893D14",
+            "178": "FF773511",
+            "216": "FF662D09",
+            "255": "FF5D2603"
+          }
+        }
+      ],
+      "meta": "tconstruct:generator/fiery"
+    }
+  },
+  "luminosity": 15
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:glass_bottle"
+  },
+  "output": {
+    "id": "tconstruct:ichor_slime_bottle"
+  },
+  "reagent": {
+    "item": "tconstruct:ichor_congealed_slime"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "tconstruct:cinderslime_nugget",
+  "ingredients": [
+    "tconstruct:cinderslime_ingot"
+  ],
+  "result": {
+    "count": 9,
+    "id": "tconstruct:cinderslime_nugget"
+  }
+}

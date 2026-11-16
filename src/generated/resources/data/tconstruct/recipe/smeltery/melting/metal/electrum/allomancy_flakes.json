@@ -1,0 +1,21 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "value": "allomancy:electrum_flakes"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": {
+    "neoforge:ingredient_type": "mantle:item_name",
+    "items": [
+      "allomancy:electrum_flakes"
+    ]
+  },
+  "result": {
+    "amount": 30,
+    "tag": "c:molten_electrum"
+  },
+  "temperature": 760,
+  "time": 34
+}

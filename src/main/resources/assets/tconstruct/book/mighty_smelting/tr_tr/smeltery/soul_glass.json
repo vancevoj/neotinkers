@@ -1,0 +1,14 @@
+{
+  "title": "Kararmış Ruh Camı",
+  "item": "tconstruct:seared_soul_glass",
+  "text": [
+    {
+      "text": "Bazen bakmak yeterli değil, bazen kallama ocağındaki sıvıları hissetmek istiyorsun. Ruh camı ile birlikte içinden geçebileceğin bir pencere yapabilirsin!",
+      "paragraph": true
+    },
+	{
+      "text": "Cam kallama ocağının tabanında kullanılamaz.",
+      "paragraph": true
+    }
+  ]
+}

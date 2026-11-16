@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:storage_blocks/steeleaf"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:storage_blocks/steeleaf",
+  "result": {
+    "amount": 810,
+    "fluid": "tconstruct:molten_steeleaf"
+  },
+  "temperature": 934,
+  "time": 193
+}

@@ -1,0 +1,16 @@
+{
+  "type": "tconstruct:melting",
+  "byproducts": [
+    {
+      "amount": 40,
+      "tag": "c:molten_gold"
+    }
+  ],
+  "ingredient": "tconstruct:scorched_table",
+  "result": {
+    "amount": 1750,
+    "fluid": "tconstruct:scorched_stone"
+  },
+  "temperature": 500,
+  "time": 125
+}

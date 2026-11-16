@@ -1,0 +1,16 @@
+{
+  "constant": {
+    "__skull": {
+      "type": "tconstruct:slimeskull",
+      "skull_index": 0,
+      "slime_index": 1,
+      "texture": "tconstruct:item/tool/armor/slime/helmet/skull"
+    }
+  },
+  "modifiers": {
+    "tconstruct:fiery": {
+      "luminosity": 10,
+      "texture": "tconstruct:item/tool/armor/slime/helmet/modifiers/tconstruct_fiery"
+    }
+  }
+}

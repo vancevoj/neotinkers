@@ -1,0 +1,143 @@
+{
+  "type": "minecraft:tree",
+  "below_trunk_provider": "minecraft:soil_beneath_tree",
+  "decorators": [
+    {
+      "type": "tconstruct:leave_vines",
+      "probability": 0.125,
+      "vines": "tconstruct:ender_slime_vine"
+    },
+    {
+      "type": "minecraft:attached_to_leaves",
+      "block_provider": {
+        "type": "minecraft:randomized_int",
+        "property": "age",
+        "source": {
+          "id": "tconstruct:ender_slime_sapling",
+          "properties": {
+            "age": "0",
+            "hanging": "true",
+            "stage": "0",
+            "waterlogged": "false"
+          }
+        },
+        "values": {
+          "type": "minecraft:uniform",
+          "max_inclusive": 4,
+          "min_inclusive": 0
+        }
+      },
+      "directions": [
+        "down"
+      ],
+      "exclusion_radius_xz": 1,
+      "exclusion_radius_y": 0,
+      "probability": 0.14,
+      "required_empty_blocks": 2
+    }
+  ],
+  "foliage_placer": {
+    "type": "minecraft:random_spread_foliage_placer",
+    "foliage_height": 2,
+    "leaf_placement_attempts": 70,
+    "offset": 0,
+    "radius": 3
+  },
+  "foliage_provider": {
+    "id": "tconstruct:ender_slime_leaves",
+    "properties": {
+      "distance": "7",
+      "persistent": "false",
+      "waterlogged": "false"
+    }
+  },
+  "ignore_vines": true,
+  "minimum_size": {
+    "type": "minecraft:two_layers_feature_size",
+    "limit": 3,
+    "upper_size": 2
+  },
+  "root_placer": {
+    "type": "tconstruct:extra_root_variants",
+    "mangrove_root_placement": {
+      "can_grow_through": "#tconstruct:enderbark/roots_can_grow_through",
+      "max_root_length": 15,
+      "max_root_width": 8,
+      "muddy_roots_in": [
+        "tconstruct:earth_enderbark_roots",
+        "tconstruct:earth_congealed_slime"
+      ],
+      "muddy_roots_provider": {
+        "id": "tconstruct:earth_enderbark_roots"
+      },
+      "random_skew_chance": 0.2
+    },
+    "root_provider": {
+      "id": "tconstruct:enderbark_roots",
+      "properties": {
+        "waterlogged": "false"
+      }
+    },
+    "root_variants": [
+      {
+        "matches": [
+          "tconstruct:sky_enderbark_roots",
+          "tconstruct:sky_congealed_slime"
+        ],
+        "state_provider": {
+          "type": "minecraft:simple",
+          "state": "tconstruct:sky_enderbark_roots"
+        }
+      },
+      {
+        "matches": [
+          "tconstruct:ichor_enderbark_roots",
+          "tconstruct:ichor_congealed_slime"
+        ],
+        "state_provider": {
+          "type": "minecraft:simple",
+          "state": "tconstruct:ichor_enderbark_roots"
+        }
+      },
+      {
+        "matches": [
+          "tconstruct:ender_enderbark_roots",
+          "tconstruct:ender_congealed_slime"
+        ],
+        "state_provider": {
+          "type": "minecraft:simple",
+          "state": "tconstruct:ender_enderbark_roots"
+        }
+      }
+    ],
+    "trunk_offset_y": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 7,
+      "min_inclusive": 3
+    }
+  },
+  "trunk_placer": {
+    "type": "minecraft:upwards_branching_trunk_placer",
+    "base_height": 4,
+    "can_grow_through": "#tconstruct:enderbark/logs_can_grow_through",
+    "extra_branch_length": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 1,
+      "min_inclusive": 0
+    },
+    "extra_branch_steps": {
+      "type": "minecraft:uniform",
+      "max_inclusive": 6,
+      "min_inclusive": 1
+    },
+    "height_rand_a": 1,
+    "height_rand_b": 9,
+    "place_branch_per_log_probability": 0.5
+  },
+  "trunk_provider": {
+    "id": "tconstruct:enderbark_log",
+    "properties": {
+      "axis": "y"
+    }
+  }
+}

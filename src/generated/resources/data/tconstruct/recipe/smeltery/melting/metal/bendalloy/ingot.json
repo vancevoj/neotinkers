@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:ingots/bendalloy"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:ingots/bendalloy",
+  "result": {
+    "amount": 90,
+    "tag": "c:molten_bendalloy"
+  },
+  "temperature": 100,
+  "time": 33
+}

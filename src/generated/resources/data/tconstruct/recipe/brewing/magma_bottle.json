@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:glass_bottle"
+  },
+  "output": {
+    "id": "tconstruct:magma_bottle"
+  },
+  "reagent": {
+    "item": "minecraft:magma_block"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:attribute",
+      "attribute": "minecraft:attack_damage",
+      "each_level": 0.1,
+      "operation": "add_multiplied_total",
+      "slots": [
+        "feet",
+        "legs",
+        "chest",
+        "head"
+      ]
+    }
+  ]
+}

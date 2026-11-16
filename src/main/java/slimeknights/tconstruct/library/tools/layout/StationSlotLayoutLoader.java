@@ -1,0 +1,219 @@
+package slimeknights.tconstruct.library.tools.layout;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
+import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.JsonOps;
+import net.minecraft.resources.FileToIdConverter;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.ExtraCodecs;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.common.conditions.ICondition;
+import net.neoforged.neoforge.common.conditions.ICondition.IContext;
+import net.neoforged.neoforge.event.AddServerReloadListenersEvent;
+import net.neoforged.neoforge.event.OnDatapackSyncEvent;
+import slimeknights.mantle.util.JsonHelper;
+import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.common.network.TinkerNetwork;
+import slimeknights.tconstruct.library.recipe.partbuilder.Pattern;
+
+import javax.annotation.Nullable;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+/**
+ * Loader for tinker station slot layouts, loaded serverside as that makes it eaiser to modify with recipes and the filters are needed both sides
+ */
+@Log4j2
+public class StationSlotLayoutLoader extends SimpleJsonResourceReloadListener<JsonElement> {
+  public static final String FOLDER = "tinkering/station_layouts";
+  public static final Gson GSON = (new GsonBuilder())
+    .registerTypeHierarchyAdapter(Ingredient.class, new IngredientSerializer())
+    .registerTypeHierarchyAdapter(LayoutIcon.class, LayoutIcon.SERIALIZER)
+    .registerTypeAdapter(Pattern.class, Pattern.PARSER)
+    .setPrettyPrinting()
+    .disableHtmlEscaping()
+    .create();
+  private static final StationSlotLayoutLoader INSTANCE = new StationSlotLayoutLoader();
+  /** ID of this reload listener */
+  private static final Identifier LISTENER_ID = TConstruct.getResource("station_slot_layouts");
+  /**
+   * Registry aware ops for the reload in progress, used to parse ingredients and conditions. Tags in codecs only resolve through registry ops.
+   * Null outside a reload, in which case the built in registries are used.
+   */
+  @Nullable
+  private static DynamicOps<JsonElement> loadingOps = null;
+
+  /** Map of name to slot layout */
+  private Map<Identifier, StationSlotLayout> layoutMap = Collections.emptyMap();
+  /** List of layouts that must be loaded for the game to work properly */
+  private final List<Identifier> requiredLayouts = new ArrayList<>();
+
+  /** List of all slots in order */
+  @Getter
+  private List<StationSlotLayout> sortedSlots = Collections.emptyList();
+
+  /** Context for parsing conditions */
+  private StationSlotLayoutLoader() {
+    super(ExtraCodecs.JSON, FileToIdConverter.json(FOLDER));
+  }
+
+  /** Gets the JSON ops for parsing, registry aware during a reload */
+  private static DynamicOps<JsonElement> jsonOps() {
+    DynamicOps<JsonElement> ops = loadingOps;
+    return ops != null ? ops : JsonHelper.registryOps();
+  }
+
+  /** Sets the slots to the given collection from the packet */
+  public void setSlots(Collection<StationSlotLayout> slots) {
+    setSlots(slots.stream().collect(Collectors.toMap(StationSlotLayout::getName, Function.identity())));
+  }
+
+  /** Updates the slot layouts */
+  private void setSlots(Map<Identifier, StationSlotLayout> map) {
+    this.layoutMap = map;
+    this.sortedSlots = map.values().stream()
+                          .filter(layout -> !layout.isMain())
+                          .sorted(Comparator.comparingInt(StationSlotLayout::getSortIndex))
+                          .collect(Collectors.toList());
+  }
+
+  /**
+   * Reads the {@code conditions} array from the object and tests every condition against the loaded condition context.
+   * Replaces {@code CraftingHelper.processConditions}, which was removed in NeoForge 1.21 in favor of codec-based conditions.
+   * @param object  JSON object, may contain a {@code conditions} array
+   * @return  true if all conditions passed (or there were none)
+   */
+  private boolean processConditions(JsonObject object) {
+    if (!object.has("conditions")) {
+      return true;
+    }
+    List<ICondition> conditions = ICondition.LIST_CODEC.parse(jsonOps(), object.get("conditions"))
+                                                       .getOrThrow(JsonParseException::new);
+    // condition context is injected by NeoForge as this listener is added through AddServerReloadListenersEvent
+    IContext conditionContext = getContext();
+    for (ICondition condition : conditions) {
+      if (!condition.test(conditionContext)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  @Override
+  protected void apply(Map<Identifier,JsonElement> splashList, ResourceManager resourceManager, ProfilerFiller profiler) {
+    long time = System.nanoTime();
+    ImmutableMap.Builder<Identifier, StationSlotLayout> builder = ImmutableMap.builder();
+    // note layouts are parsed before item components are bound, so nothing here may create an item stack (icons are lazy)
+    loadingOps = getRegistryLookup().createSerializationContext(JsonOps.INSTANCE);
+    try {
+      for (Entry<Identifier,JsonElement> entry : splashList.entrySet()) {
+        Identifier key = entry.getKey();
+        JsonElement value = entry.getValue();
+        try {
+          // skip empty objects, allows disabling a slot at a lower datapack
+          JsonObject object = GsonHelper.convertToJsonObject(value, "station_layout");
+          if (!object.entrySet().isEmpty() && processConditions(object)) {
+            // just need a valid slot information
+            StationSlotLayout layout = GSON.fromJson(object, StationSlotLayout.class);
+            int size = layout.getInputSlots().size() + (layout.getToolSlot().isHidden() ? 0 : 1);
+            if (size < 2) {
+              throw new JsonParseException("Too few slots for layout " + key + ", must have at least 2");
+            }
+            layout.setName(key);
+            builder.put(key, layout);
+          }
+        } catch (Exception e) {
+          log.error("Failed to load station slot layout for name {}", key, e);
+        }
+      }
+    } finally {
+      loadingOps = null;
+    }
+    setSlots(builder.build());
+    log.info("Loaded {} station slot layouts in {} ms", layoutMap.size(), (System.nanoTime() - time) / 1000000f);
+    List<String> missing = requiredLayouts.stream().filter(name -> !layoutMap.containsKey(name)).map(Identifier::toString).collect(Collectors.toList());
+    if (!missing.isEmpty()) {
+      log.error("Failed to load the following required layouts: {}", String.join(", ", missing));
+    }
+  }
+
+  /** Gets a layout by name */
+  public StationSlotLayout get(Identifier name) {
+    return layoutMap.getOrDefault(name, StationSlotLayout.EMPTY);
+  }
+
+
+  /** Registers the name of a layout that should be loaded, if its missing that causes an error */
+  public void registerRequiredLayout(Identifier name) {
+    requiredLayouts.add(name);
+  }
+
+  /* Events */
+
+  /** Called on datapack sync to send the tool data to all players */
+  private void onDatapackSync(OnDatapackSyncEvent event) {
+    UpdateTinkerSlotLayoutsPacket packet = new UpdateTinkerSlotLayoutsPacket(layoutMap.values());
+    TinkerNetwork.getInstance().sendToPlayerList(event.getPlayer(), event.getPlayerList(), packet);
+  }
+
+  /** Adds the managers as datapack listeners */
+  private void addDataPackListeners(final AddServerReloadListenersEvent event) {
+    // the condition context and registries are injected into the listener by NeoForge
+    event.addListener(LISTENER_ID, this);
+  }
+
+
+  /* Static */
+
+  /** Gets the singleton instance of the loader */
+  public static StationSlotLayoutLoader getInstance() {
+    return INSTANCE;
+  }
+
+  /** Initializes the tool definition loader */
+  public static void init() {
+    NeoForge.EVENT_BUS.addListener(INSTANCE::addDataPackListeners);
+    NeoForge.EVENT_BUS.addListener(INSTANCE::onDatapackSync);
+  }
+
+  /** GSON serializer for ingredients */
+  private static class IngredientSerializer implements JsonSerializer<Ingredient>, JsonDeserializer<Ingredient> {
+    @Override
+    public Ingredient deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+      // 1.21: Ingredient#fromJson is gone, parse via the vanilla codec
+      // tags only resolve through registry ops, use the reload registries when loading
+      return Ingredient.CODEC.parse(jsonOps(), json).getOrThrow(JsonParseException::new);
+    }
+
+    @Override
+    public JsonElement serialize(Ingredient ingredient, Type typeOfSrc, JsonSerializationContext context) {
+      // 1.21: Ingredient#toJson is gone, encode via the vanilla codec. Registry ops keep tags as tags
+      return Ingredient.CODEC.encodeStart(JsonHelper.registryOps(), ingredient).getOrThrow(JsonParseException::new);
+    }
+  }
+}

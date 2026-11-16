@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": "minecraft:paper",
+  "material": "tconstruct:paper",
+  "needed": 1,
+  "value": 1
+}

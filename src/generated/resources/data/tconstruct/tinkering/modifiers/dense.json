@@ -1,0 +1,44 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:repair",
+      "formula": [
+        "$factor",
+        1.0,
+        0.025,
+        "$level",
+        "*",
+        11.0,
+        "$level",
+        "-",
+        "*",
+        "-",
+        "*"
+      ],
+      "modifier_level": {
+        "max": 5
+      }
+    },
+    {
+      "type": "tconstruct:repair",
+      "each_level": -0.05,
+      "flat": -0.5,
+      "modifier_level": {
+        "min": 6
+      }
+    },
+    {
+      "type": "tconstruct:reduce_tool_damage",
+      "formula": [
+        1.0,
+        1.0,
+        1.5,
+        "$level",
+        "^",
+        "/",
+        "-"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "tool": "tconstruct:vein_hammer",
+  "text": [
+    {
+      "text": "Damar çekici koca çıkarım aracıdır. Damarlardaki aynı türden blokları çıkarır."
+    },
+    {
+      "text": "\n"
+    },
+	{
+      "text": "Damardaki tüm cevherleri bir vuruşta almak için uygundur."
+    },
+	{
+      "text": "\n"
+    },
+    {
+      "text": "Sorumluluk Reddi: Thruul Sanayisi olarak kitlelerce damar çıkarma sahipliği için sorumlu değildir."
+    }
+  ],
+  "properties": [
+    "İleri madencilik aracı",
+    "Damar çıkarma",
+    "Taş ve cevherler üzerinde etkilidir",
+    "Fazladan delme hasarı"
+  ]
+}

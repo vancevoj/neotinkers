@@ -1,0 +1,11 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "tconstruct:item/modifier_crystal",
+    "tints": [
+      {
+        "type": "tconstruct:modifier_crystal"
+      }
+    ]
+  }
+}

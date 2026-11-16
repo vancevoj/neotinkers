@@ -1,0 +1,14 @@
+{
+  "title": "Değiş Tokuş",
+  "image": {
+    "file": "tconstruct:book/images/bartering.png",
+    "width": 128,
+    "height": 82
+  },
+  "text": [
+    {
+      "text": "Ne, şiddete başvurmayan bir tür müsün? Peki, bazı piglinlerin alazlı sıvıyla dolu fenerler taşıdığını gördüm, aydınlatma için kullandıklarını düşünüyorum. Bir ücret karşılığı onlardan ayrılabilirler.",
+      "paragraph": true
+    }
+  ]
+}

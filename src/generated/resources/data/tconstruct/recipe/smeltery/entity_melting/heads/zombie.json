@@ -1,0 +1,13 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": [
+    "minecraft:zombie_head",
+    "tconstruct:husk_head"
+  ],
+  "result": {
+    "amount": 90,
+    "tag": "c:molten_iron"
+  },
+  "temperature": 800,
+  "time": 60
+}

@@ -1,0 +1,12 @@
+{
+  "title": "Alaşımlayıcı",
+  "image": {
+    "file": "tconstruct:book/images/alloyer.png"
+  },
+  "text": [
+    {
+      "text": "Alaşım İleri!",
+      "paragraph": true
+    }
+	]
+}

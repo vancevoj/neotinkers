@@ -1,0 +1,19 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:nuggets/cadmium"
+    }
+  ],
+  "type": "tconstruct:casting_table",
+  "cast": "#tconstruct:casts/single_use/nugget",
+  "cast_consumed": true,
+  "cooling_time": 14,
+  "fluid": {
+    "amount": 10,
+    "tag": "c:molten_cadmium"
+  },
+  "result": {
+    "tag": "c:nuggets/cadmium"
+  }
+}

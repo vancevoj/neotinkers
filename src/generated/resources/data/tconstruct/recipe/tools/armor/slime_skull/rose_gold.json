@@ -1,0 +1,11 @@
+{
+  "type": "tconstruct:basin_tool_casting",
+  "cast": "tconstruct:piglin_brute_head",
+  "cast_purpose": "consumed_offset",
+  "extra_materials": [
+    "tconstruct:rose_gold"
+  ],
+  "fluid_swapping": false,
+  "item_cost": 5,
+  "result": "tconstruct:slime_helmet"
+}

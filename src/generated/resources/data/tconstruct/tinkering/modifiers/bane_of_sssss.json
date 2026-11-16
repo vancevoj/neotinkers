@@ -1,0 +1,51 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:conditional_melee_damage",
+      "each_level": 2.0,
+      "percent": false,
+      "target": {
+        "type": "mantle:or",
+        "predicates": [
+          {
+            "type": "mantle:mob_type",
+            "mobs": "minecraft:arthropod"
+          },
+          {
+            "type": "mantle:tag",
+            "tag": "c:creepers"
+          }
+        ]
+      }
+    },
+    {
+      "type": "tconstruct:weapon_mob_effect",
+      "effect": "minecraft:slowness",
+      "hooks": [
+        "tconstruct:melee_hit",
+        "tconstruct:monster_melee_hit"
+      ],
+      "level": {
+        "flat": 4.0
+      },
+      "target": {
+        "type": "mantle:or",
+        "predicates": [
+          {
+            "type": "mantle:mob_type",
+            "mobs": "minecraft:arthropod"
+          },
+          {
+            "type": "mantle:tag",
+            "tag": "c:creepers"
+          }
+        ]
+      },
+      "time": {
+        "flat": 20.0,
+        "random": 10.0
+      }
+    }
+  ]
+}

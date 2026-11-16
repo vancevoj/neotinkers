@@ -1,0 +1,19 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:max_armor_attribute",
+      "allow_broken": false,
+      "attribute": "tconstruct:generic.crouch_damage_multiplier",
+      "each_level": -0.1,
+      "held_tag": "tconstruct:modifiable/held",
+      "operation": "add_multiplied_base"
+    },
+    {
+      "type": "tconstruct:protection",
+      "damage_source": "mantle:can_protect",
+      "each_level": 2.5,
+      "wearing_entity": "mantle:crouching"
+    }
+  ]
+}

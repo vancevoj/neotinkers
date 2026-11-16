@@ -1,0 +1,164 @@
+package slimeknights.tconstruct.shared;
+
+import net.minecraft.advancements.Advancement;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.recipes.BrewingRecipeBuilder;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.crafting.Recipe;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.neoforge.data.event.GatherDataRegistryEntriesEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import slimeknights.mantle.registration.deferred.PotionDeferredRegister;
+import slimeknights.mantle.registration.deferred.PotionDeferredRegister.PotionType;
+import slimeknights.mantle.registration.object.EnumObject;
+import slimeknights.tconstruct.TConstruct;
+import slimeknights.tconstruct.common.TinkerEffect;
+import slimeknights.tconstruct.common.TinkerModule;
+import slimeknights.tconstruct.shared.block.SlimeType;
+import slimeknights.tconstruct.shared.effect.AntigravityEffect;
+import slimeknights.tconstruct.shared.effect.ReturningEffect;
+import slimeknights.tconstruct.tools.modifiers.effect.BleedingEffect;
+import slimeknights.tconstruct.tools.modifiers.effect.MagneticEffect;
+import slimeknights.tconstruct.tools.modifiers.effect.RepulsiveEffect;
+import slimeknights.tconstruct.tools.modifiers.traits.skull.SelfDestructiveModifier.SelfDestructiveEffect;
+import slimeknights.tconstruct.world.TinkerWorld;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+
+/** Handles registration for all status effects and potions in the mod */
+public class TinkerEffects extends TinkerModule {
+  private static final PotionDeferredRegister POTIONS = new PotionDeferredRegister(TConstruct.MOD_ID);
+
+  // slimy potions
+  public static final DeferredHolder<? super TinkerEffect, TinkerEffect> experienced = MOB_EFFECTS.register("experienced", () -> new TinkerEffect(MobEffectCategory.BENEFICIAL, 0x82c873, true).addAttributeModifier(TinkerAttributes.EXPERIENCE_MULTIPLIER, TConstruct.getResource("effect.experienced"), 0.25f, Operation.ADD_MULTIPLIED_BASE));
+  public static final DeferredHolder<? super TinkerEffect, TinkerEffect> ricochet = MOB_EFFECTS.register("ricochet", () -> new TinkerEffect(MobEffectCategory.NEUTRAL, 0x01cbcd, true).addAttributeModifier(TinkerAttributes.KNOCKBACK_MULTIPLIER, TConstruct.getResource("effect.ricochet"), 0.5f, Operation.ADD_MULTIPLIED_BASE));
+  public static final DeferredHolder<? super TinkerEffect, TinkerEffect> enderference = MOB_EFFECTS.register("enderference", () -> new TinkerEffect(MobEffectCategory.HARMFUL, 0xD37CFF, true));
+  /** Projectile persistent data key to allow ranged modifiers to hit endermen. */
+  public static final Identifier ENDERFERENCE_KEY = enderference.getId();
+
+  // slimy cakes
+  public static final DeferredHolder<? super TinkerEffect, TinkerEffect> bouncy = MOB_EFFECTS.register("bouncy", () -> new TinkerEffect(MobEffectCategory.BENEFICIAL, 0x71AC63, true).addAttributeModifier(TinkerAttributes.BOUNCY, TConstruct.getResource("effect.bouncy"), 1, Operation.ADD_VALUE));
+  public static final DeferredHolder<? super TinkerEffect, TinkerEffect> doubleJump = MOB_EFFECTS.register("double_jump", () -> new TinkerEffect(MobEffectCategory.BENEFICIAL, 0xA99B87, true).addAttributeModifier(TinkerAttributes.JUMP_COUNT, TConstruct.getResource("effect.double_jump"), 1, Operation.ADD_VALUE));
+  public static final DeferredHolder<? super AntigravityEffect, AntigravityEffect> antigravity = MOB_EFFECTS.register("antigravity", AntigravityEffect::new);
+  public static final DeferredHolder<? super ReturningEffect, ReturningEffect> returning = MOB_EFFECTS.register("returning", ReturningEffect::new);
+
+  // modifier effects
+  public static final DeferredHolder<? super BleedingEffect, BleedingEffect> bleeding = MOB_EFFECTS.register("bleeding", BleedingEffect::new);
+  public static final DeferredHolder<? super MagneticEffect, MagneticEffect> magnetic = MOB_EFFECTS.register("magnetic", MagneticEffect::new);
+  public static final DeferredHolder<? super TinkerEffect, TinkerEffect> selfDestructing = MOB_EFFECTS.register("self_destructing", SelfDestructiveEffect::new);
+  public static final DeferredHolder<? super RepulsiveEffect, RepulsiveEffect> repulsive = MOB_EFFECTS.register("repulsive", RepulsiveEffect::new);
+  public static final DeferredHolder<? super TinkerEffect, TinkerEffect> pierce = MOB_EFFECTS.register("pierce", () -> new TinkerEffect(MobEffectCategory.HARMFUL, 0xD1D37A, true).addAttributeModifier(Attributes.ARMOR, TConstruct.getResource("effect.pierce"), -1, Operation.ADD_VALUE));
+  // damage boost
+  public static final DeferredHolder<? super TinkerEffect, TinkerEffect> conductive = MOB_EFFECTS.register("conductive", () -> new TinkerEffect(MobEffectCategory.HARMFUL, 0xF2D500, true));
+  public static final DeferredHolder<? super TinkerEffect, TinkerEffect> venom = MOB_EFFECTS.register("venom", () -> new TinkerEffect(MobEffectCategory.HARMFUL, 0xA2935E, true));
+
+  // potions
+  public static final EnumObject<PotionType,Potion> experiencedPotion = POTIONS.registerTypes("experienced", experienced, 3 * 60 * 20, 0).withStrong().withLong().build();
+  public static final EnumObject<PotionType,Potion> ricochetPotion = POTIONS.registerTypes("ricochet", ricochet, 3 * 60 * 20, 0).withStrong().withLong().build();
+  public static final EnumObject<PotionType,Potion> levitationPotion = POTIONS.registerTypes("levitation", () -> MobEffects.LEVITATION.value(), 15 * 20, 0).withStrong().withLong(40 * 20, 0).build();
+  public static final EnumObject<PotionType,Potion> enderferencePotion = POTIONS.registerTypes("enderference", enderference, 90 * 20, 0).withLong().build();
+
+  public TinkerEffects() {
+    IEventBus bus = ModLoadingContext.get().getActiveContainer().getEventBus();
+    POTIONS.register(bus);
+    // 26.3: brewing is a datapack recipe type, the event registering brewing recipes in code is gone. The recipes are generated instead.
+    bus.addListener(GatherDataRegistryEntriesEvent.class, TinkerEffects::gatherRegistries);
+  }
+
+  /** Adds the brewing recipe provider to datagen */
+  private static void gatherRegistries(GatherDataRegistryEntriesEvent event) {
+    event.recipe(BrewingRecipes::new);
+  }
+
+  /** Wraps a potion in its registry holder */
+  private static Holder<Potion> holder(Potion potion) {
+    return BuiltInRegistries.POTION.wrapAsHolder(potion);
+  }
+
+  /** Datagen for the potion brewing recipes, as brewing recipes are data since 26.3 */
+  private static class BrewingRecipes extends RecipeProvider {
+    /** Containers vanilla brews potions in */
+    private static final Item[] CONTAINERS = { Items.POTION, Items.SPLASH_POTION, Items.LINGERING_POTION };
+
+    BrewingRecipes(BootstrapContext<Recipe<?>> recipes, BootstrapContext<Advancement> advancements) {
+      super(recipes, advancements, TConstruct.MOD_ID);
+    }
+
+    @Override
+    protected void buildRecipes() {
+      brewing(output, experiencedPotion,  Potions.AWKWARD, TinkerWorld.congealedSlime.get(SlimeType.EARTH).asItem());
+      brewing(output, ricochetPotion,     Potions.AWKWARD, TinkerWorld.congealedSlime.get(SlimeType.SKY).asItem());
+      brewing(output, levitationPotion,   Potions.AWKWARD, TinkerWorld.congealedSlime.get(SlimeType.ICHOR).asItem());
+      brewing(output, enderferencePotion, Potions.AWKWARD, TinkerWorld.congealedSlime.get(SlimeType.ENDER).asItem());
+    }
+
+    /** Registers recipes for brewing, longer and stronger potions for the given object */
+    private static void brewing(RecipeOutput output, EnumObject<PotionType,Potion> potion, Holder<Potion> base, Item reagent) {
+      Holder<Potion> normal = holder(potion.get(PotionType.NORMAL));
+      // base potion + custom ingredient -> normal potion, drinkable potions only like the old generic recipe form
+      BrewingRecipeBuilder.brewingMix(Items.POTION, base, reagent, normal).save(output);
+      List<Holder<Potion>> variants = new ArrayList<>();
+      variants.add(normal);
+      // longer and stronger work in all containers, like the old potion mixes
+      Potion longer = potion.getOrNull(PotionType.LONG);
+      if (longer != null) {
+        Holder<Potion> longHolder = holder(longer);
+        variants.add(longHolder);
+        for (Item container : CONTAINERS) {
+          BrewingRecipeBuilder.brewingMix(container, normal, Items.REDSTONE, longHolder).save(output);
+        }
+      }
+      Potion strong = potion.getOrNull(PotionType.STRONG);
+      if (strong != null) {
+        Holder<Potion> strongHolder = holder(strong);
+        variants.add(strongHolder);
+        for (Item container : CONTAINERS) {
+          BrewingRecipeBuilder.brewingMix(container, normal, Items.GLOWSTONE_DUST, strongHolder).save(output);
+        }
+      }
+      // vanilla only generates the splash and lingering transformations for its own potions, before they applied to any potion
+      for (Holder<Potion> variant : variants) {
+        BrewingRecipeBuilder.brewingContainerTransform(Items.POTION, variant, Items.GUNPOWDER, Items.SPLASH_POTION).save(output);
+        BrewingRecipeBuilder.brewingContainerTransform(Items.SPLASH_POTION, variant, Items.DRAGON_BREATH, Items.LINGERING_POTION).save(output);
+      }
+    }
+  }
+
+  /** Gets the enderference effect as a {@link Holder} of {@link net.minecraft.world.effect.MobEffect} for the 1.21 effect API */
+  private static Holder<net.minecraft.world.effect.MobEffect> enderferenceHolder() {
+    return BuiltInRegistries.MOB_EFFECT.wrapAsHolder(enderference.get());
+  }
+
+  /** Checks if the given entity can be hit considering enderman enderference */
+  public static boolean canHitWithProjectile(@Nullable LivingEntity living) {
+    return living == null || living.getType() != EntityTypes.ENDERMAN || living.hasEffect(enderferenceHolder());
+  }
+
+  /** Checks if the given entity needs special casing for enderference */
+  public static boolean needsEnderferenceOverride(@Nullable Entity entity) {
+    return entity != null && entity.getType() == EntityTypes.ENDERMAN && entity instanceof LivingEntity living && living.hasEffect(enderferenceHolder());
+  }
+
+  /** Checks if the given entity needs special casing for enderference */
+  public static boolean needsEnderferenceOverride(@Nullable LivingEntity living) {
+    return living != null && living.getType() == EntityTypes.ENDERMAN && living.hasEffect(enderferenceHolder());
+  }
+}

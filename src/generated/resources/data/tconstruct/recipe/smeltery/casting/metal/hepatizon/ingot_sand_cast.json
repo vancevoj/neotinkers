@@ -1,0 +1,13 @@
+{
+  "type": "tconstruct:casting_table",
+  "cast": "#tconstruct:casts/single_use/ingot",
+  "cast_consumed": true,
+  "cooling_time": 78,
+  "fluid": {
+    "amount": 90,
+    "tag": "c:molten_hepatizon"
+  },
+  "result": {
+    "tag": "c:ingots/hepatizon"
+  }
+}

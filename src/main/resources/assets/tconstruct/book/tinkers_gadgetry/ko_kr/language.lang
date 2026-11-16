@@ -1,0 +1,25 @@
+intro=소개
+
+gadgets=장치
+
+modifiers=특이한 수식어
+
+exploration=탐험
+exploration.necrotic_bones=영혼이 깃든 뼈
+
+exploration.skyslime_island=하늘슬라임 섬
+exploration.earthslime_island=대지슬라임 섬
+exploration.clay_island=점토 섬
+exploration.blood_island=핏빛 섬
+exploration.enderslime_island=엔더슬라임 섬
+
+exploration.skyslime_geode=하늘슬라임 정동
+exploration.earthslime_geode=대지슬라임 정동
+exploration.ichor_geode=이코르 정동
+exploration.enderslime_geode=엔더슬라임 정동
+
+armor=갑옷
+armor.subtext=다양한 몬스터의 부위와 슬라임을 혼합하면 흥미로운 갑옷이 만들어져, 방어적이지는 않지만, 강력한 능력을 지니고 있어.
+
+skull_materials=머리 재료
+skull_materials.subtext=이 머리 중 하나를 쇳물받이에 넣고 엔더슬라임을 넣으면, 해당 몬스터의 능력을 사용할 수 있는 투구를 만들 수 있어.

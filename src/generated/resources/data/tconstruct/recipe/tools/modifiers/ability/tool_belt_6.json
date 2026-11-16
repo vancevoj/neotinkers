@@ -1,0 +1,18 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": false,
+  "inputs": [
+    {
+      "ingredient": "minecraft:leather"
+    },
+    {
+      "ingredient": "#c:ingots/manyullyn"
+    },
+    {
+      "ingredient": "minecraft:leather"
+    }
+  ],
+  "level": 6,
+  "result": "tconstruct:tool_belt",
+  "tools": "#tconstruct:modifiable/armor/leggings"
+}

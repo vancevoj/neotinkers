@@ -1,0 +1,12 @@
+{
+  "description": {
+    "color": "#AF4CF6",
+    "translate": "trim_material.tconstruct.format",
+    "with": [
+      {
+        "translate": "material.tconstruct.enderslime"
+      }
+    ]
+  },
+  "palette_id": "tconstruct:trim/enderslime"
+}

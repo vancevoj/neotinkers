@@ -1,0 +1,13 @@
+{
+  "loader": "mantle:retextured",
+  "parent": "tconstruct:block/table/table",
+  "textures": {
+    "particle":  "tconstruct:block/table/modifier_workstation_top",
+    "top":       "tconstruct:block/table/modifier_workstation_top",
+    "side":      "tconstruct:block/table/modifier_workstation_side",
+    "leg":       "tconstruct:block/table/modifier_workstation_side",
+    "bottom":    "tconstruct:block/table/modifier_workstation_top",
+    "legBottom": "tconstruct:block/table/modifier_workstation_top"
+  },
+  "retextured": [ "leg", "legBottom" ]
+}

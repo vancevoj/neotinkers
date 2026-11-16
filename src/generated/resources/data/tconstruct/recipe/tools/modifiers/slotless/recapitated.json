@@ -1,0 +1,18 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "neoforge:ingredient_type": "neoforge:difference",
+      "base": "#minecraft:skulls",
+      "subtracted": "minecraft:dragon_head"
+    }
+  ],
+  "level": 1,
+  "result": "tconstruct:recapitated",
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:difference",
+    "base": "#tconstruct:modifiable/bonus_slots",
+    "subtracted": "#tconstruct:modifiable/skulls"
+  }
+}

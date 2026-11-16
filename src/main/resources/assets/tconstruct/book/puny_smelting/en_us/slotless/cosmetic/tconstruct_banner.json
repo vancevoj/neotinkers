@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:banner",
+  "text": [
+    {
+      "text": "Allows making ominous shields."
+    }
+  ],
+  "effects": [
+    "Decorates shields with banners",
+    "Apply again to swap design",
+    "Skyslime makes the background clear",
+    "Slotless"
+  ]
+}

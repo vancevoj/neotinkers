@@ -1,0 +1,10 @@
+{
+  "level_display": "tconstruct:pluses",
+  "modules": [
+    {
+      "type": "tconstruct:autosmelt",
+      "extra_drop_chance": 0.2,
+      "recipe_types": "minecraft:smelting"
+    }
+  ]
+}

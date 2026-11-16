@@ -1,0 +1,27 @@
+{
+  "level_display": "tconstruct:no_levels",
+  "modules": [
+    {
+      "type": "tconstruct:tool_action_transform",
+      "require_ground": false,
+      "sound": "minecraft:item.hoe.till",
+      "tool_action": "till"
+    },
+    {
+      "type": "tconstruct:tool_action_walk_transform",
+      "radius": {
+        "each_level": 1.0,
+        "flat": 0.5
+      },
+      "sound": "minecraft:item.hoe.till",
+      "tool_action": "till"
+    },
+    {
+      "type": "tconstruct:show_offhand",
+      "mode": "disallow_broken"
+    },
+    {
+      "type": "tconstruct:show_interaction_source"
+    }
+  ]
+}

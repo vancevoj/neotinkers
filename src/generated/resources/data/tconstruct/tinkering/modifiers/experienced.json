@@ -1,0 +1,34 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:volatile_float",
+      "each_level": 0.5,
+      "flag": "tconstruct:experience",
+      "hooks": [
+        "tconstruct:volatile_data",
+        "tconstruct:projectile_launch"
+      ]
+    },
+    {
+      "type": "tconstruct:attribute",
+      "attribute": "tconstruct:player.experience_multiplier",
+      "each_level": 0.25,
+      "operation": "add_multiplied_base",
+      "slots": [
+        "mainhand",
+        "offhand",
+        "feet",
+        "legs",
+        "chest",
+        "head",
+        "body",
+        "saddle"
+      ],
+      "tool": {
+        "type": "mantle:tag",
+        "tag": "tconstruct:modifiable/armor"
+      }
+    }
+  ]
+}

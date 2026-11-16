@@ -1,0 +1,37 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "check_trait_level": true,
+  "inputs": [
+    {
+      "neoforge:ingredient_type": "tconstruct:material",
+      "match": "tconstruct:bow_limb"
+    },
+    {
+      "ingredient": "#c:ingots/cinderslime"
+    },
+    {
+      "neoforge:ingredient_type": "tconstruct:material",
+      "match": "tconstruct:bow_grip"
+    }
+  ],
+  "level": 1,
+  "result": "tconstruct:throwing",
+  "slots": {
+    "abilities": 1
+  },
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:intersection",
+    "children": [
+      "#tconstruct:modifiable/durability",
+      "#tconstruct:modifiable/interactable/charge",
+      {
+        "neoforge:ingredient_type": "neoforge:compound",
+        "children": [
+          "#tconstruct:modifiable/melee/weapon",
+          "#tconstruct:modifiable/harvest"
+        ]
+      }
+    ]
+  }
+}

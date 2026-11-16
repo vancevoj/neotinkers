@@ -1,0 +1,28 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "check_trait_level": true,
+  "inputs": [
+    {
+      "ingredient": "#c:strings"
+    },
+    {
+      "ingredient": "minecraft:spyglass"
+    },
+    {
+      "ingredient": "#c:strings"
+    }
+  ],
+  "level": 1,
+  "result": "tconstruct:zoom",
+  "slots": {
+    "upgrades": 1
+  },
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:compound",
+    "children": [
+      "#tconstruct:modifiable/armor/helmets",
+      "#tconstruct:modifiable/interactable/charge"
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "loader": "tconstruct:tool",
+  "parent": "tconstruct:item/base/shield",
+  "textures": {
+    "cuirass": "tconstruct:item/tool/armor/travelers/shield/cuirass",
+    "wood":    "tconstruct:item/tool/armor/travelers/shield/wood"
+  },
+  "modifier_maps": ["tconstruct:travelers/shield"],
+  "modifier_roots": [ "tconstruct:item/tool/armor/travelers/shield/modifiers/" ],
+  "parts": [
+    { "name": "wood", "index": 0 },
+    { "name": "cuirass", "index": 1 }
+  ],
+  "overrides": [
+    {
+      "predicate": { "tconstruct:charging": 2 },
+      "model": "tconstruct:item/armor/travelers/shield_blocking"
+    },
+    {
+      "predicate": { "tconstruct:broken": 1 },
+      "model": "tconstruct:item/armor/travelers/shield_broken"
+    }
+  ]
+}

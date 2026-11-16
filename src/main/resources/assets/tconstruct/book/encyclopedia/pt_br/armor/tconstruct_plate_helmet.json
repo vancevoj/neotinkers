@@ -1,0 +1,13 @@
+{
+  "tool": "tconstruct:plate_helmet",
+  "text": [
+    { "text": "O Capacete de Placa é um capacete defensivo, com alta proteção, poucos slots de habilidade e muitos slots de defesa." }
+  ],
+  "properties": [
+    "Status controlados pelo material",
+    "2 Slots de Melhoria",
+    "3 Slots de Defesa",
+    "2 Atributos de Material"
+  ]
+}
+

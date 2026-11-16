@@ -1,0 +1,23 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "ingredient": "minecraft:leather"
+    },
+    {
+      "ingredient": "#minecraft:wool"
+    },
+    {
+      "ingredient": "minecraft:leather"
+    }
+  ],
+  "level": {
+    "max": 3
+  },
+  "result": "tconstruct:padded",
+  "slots": {
+    "upgrades": 1
+  },
+  "tools": "#tconstruct:modifiable/melee"
+}

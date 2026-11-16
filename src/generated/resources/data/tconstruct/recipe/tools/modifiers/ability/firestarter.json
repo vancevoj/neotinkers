@@ -1,0 +1,25 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "check_trait_level": true,
+  "inputs": [
+    {
+      "ingredient": "#c:ingots/steel"
+    },
+    {
+      "ingredient": "minecraft:flint"
+    }
+  ],
+  "level": 1,
+  "result": "tconstruct:firestarter",
+  "slots": {
+    "abilities": 1
+  },
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:intersection",
+    "children": [
+      "#tconstruct:modifiable/durability",
+      "#tconstruct:modifiable/interactable"
+    ]
+  }
+}

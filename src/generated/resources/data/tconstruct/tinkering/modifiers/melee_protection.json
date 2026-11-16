@@ -1,0 +1,32 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:max_armor_attribute",
+      "allow_broken": false,
+      "attribute": "tconstruct:player.use_item_speed",
+      "each_level": 0.05,
+      "held_tag": "tconstruct:modifiable/held",
+      "operation": "add_value",
+      "tooltip_style": "percent"
+    },
+    {
+      "type": "tconstruct:protection",
+      "damage_source": {
+        "type": "mantle:and",
+        "predicates": [
+          "mantle:can_protect",
+          {
+            "type": "mantle:tag",
+            "tag": "tconstruct:protection/melee"
+          },
+          {
+            "type": "mantle:inverted",
+            "inverted_type": "mantle:is_indirect"
+          }
+        ]
+      },
+      "each_level": 2.0
+    }
+  ]
+}

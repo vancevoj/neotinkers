@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:gilded",
+  "text": [
+    {
+      "text": "Bu 2 al 1 öde özeli!"
+    }
+  ],
+  "effects": [
+    "1 yetenek yuvasını 2 yükseltme yuvasıyla değiş tokuş eder",
+    "Çoklu seviyeler",
+    "Seviye başına 1 yetenek yuvası gerekir"
+  ]
+}

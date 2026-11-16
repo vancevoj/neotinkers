@@ -1,0 +1,12 @@
+{
+  "level_display": "tconstruct:no_levels",
+  "modules": [
+    {
+      "type": "tconstruct:banner"
+    }
+  ],
+  "priority": 25,
+  "show_in_tooltips": [
+    "tinker_station"
+  ]
+}

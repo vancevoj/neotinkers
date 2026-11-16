@@ -1,0 +1,29 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "ingredient": "minecraft:shulker_shell"
+    },
+    {
+      "ingredient": "#c:ingots/iron"
+    },
+    {
+      "ingredient": "minecraft:shulker_shell"
+    },
+    {
+      "ingredient": "minecraft:leather"
+    },
+    {
+      "ingredient": "minecraft:leather"
+    }
+  ],
+  "level": {
+    "max": 2
+  },
+  "result": "tconstruct:pockets",
+  "slots": {
+    "abilities": 1
+  },
+  "tools": "#tconstruct:modifiable/armor/leggings"
+}

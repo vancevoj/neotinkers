@@ -1,0 +1,12 @@
+{
+  "description": {
+    "color": "#2376DD",
+    "translate": "trim_material.tconstruct.format",
+    "with": [
+      {
+        "translate": "material.tconstruct.cobalt"
+      }
+    ]
+  },
+  "palette_id": "tconstruct:trim/cobalt"
+}

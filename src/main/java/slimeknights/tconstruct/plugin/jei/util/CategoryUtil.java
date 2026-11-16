@@ -1,0 +1,135 @@
+package slimeknights.tconstruct.plugin.jei.util;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.neoforge.NeoForgeTypes;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
+import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
+import mezz.jei.api.gui.ingredient.IRecipeSlotRichTooltipCallback;
+import mezz.jei.api.recipe.IFocus;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
+import net.neoforged.neoforge.fluids.FluidStack;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
+/** Helpers for setting up JEI recipe categories. */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class CategoryUtil {
+  /** Same as {@link #drawMultipleFluids(IRecipeLayoutBuilder, Function, int, int, int, int, List, int, Function, Function, Consumer)} but with an empty consumer. */
+  public static <T> int drawMultipleFluids(IRecipeLayoutBuilder builder, Function<T,RecipeIngredientRole> role, int x, int y, int totalWidth, int height, List<T> fluids, int minAmount, Function<T,List<FluidStack>> mapper, Function<T,IRecipeSlotRichTooltipCallback> tooltip) {
+    return drawMultipleFluids(builder, role, x, y, totalWidth, height, fluids, minAmount, mapper, tooltip, slot -> {});
+  }
+
+  /**
+   * Draws a variable number of fluids.
+   * @param builder      Builder
+   * @param role         Role of the fluids in the recipe
+   * @param x            X start
+   * @param y            Y start
+   * @param totalWidth   Total width
+   * @param height       Tank height
+   * @param fluids       List of fluids to draw
+   * @param minAmount    Minimum tank size
+   * @param mapper       Logic to get a fluid list from the object
+   * @param tooltip      Tooltip callback
+   * @param slotConsumer Function called for each slot, useful for focus links.
+   * @param <T> Object type
+   * @return Max amount based on fluids
+   */
+  public static <T> int drawMultipleFluids(IRecipeLayoutBuilder builder, Function<T,RecipeIngredientRole> role, int x, int y, int totalWidth, int height, List<T> fluids, int minAmount, Function<T,List<FluidStack>> mapper, Function<T,IRecipeSlotRichTooltipCallback> tooltip, Consumer<IRecipeSlotBuilder> slotConsumer) {
+    int count = fluids.size();
+    int maxAmount = minAmount;
+    if (count > 0) {
+      // first, find maximum used amount in the recipe so relations are correct
+      for (T ingredient : fluids) {
+        for (FluidStack input : mapper.apply(ingredient)) {
+          if (input.getAmount() > maxAmount) {
+            maxAmount = input.getAmount();
+          }
+        }
+      }
+      // next, draw all fluids but the last
+      int width = totalWidth / count;
+      int last = count - 1;
+      for (int i = 0; i < last; i++) {
+        int fluidX = x + i * width;
+        T ingredient = fluids.get(i);
+        slotConsumer.accept(builder.addSlot(role.apply(ingredient), fluidX, y)
+          .addRichTooltipCallback(tooltip.apply(ingredient))
+          .setFluidRenderer(maxAmount, false, width, height)
+          .addIngredients(NeoForgeTypes.FLUID_STACK, mapper.apply(ingredient)));
+      }
+      // for the last, the width is the full remaining width
+      int fluidX = x + last * width;
+      T ingredient = fluids.get(last);
+      slotConsumer.accept(builder.addSlot(role.apply(ingredient), fluidX, y)
+        .addRichTooltipCallback(tooltip.apply(ingredient))
+        .setFluidRenderer(maxAmount, false, totalWidth - (width * last), height)
+        .addIngredients(NeoForgeTypes.FLUID_STACK, mapper.apply(ingredient)));
+    }
+    return maxAmount;
+  }
+
+  /** Finds the slot with the given name, or null if the slot is missing */
+  @Nullable
+  public static IRecipeSlotDrawable findSlot(List<IRecipeSlotDrawable> slots, String name) {
+    for (IRecipeSlotDrawable slot : slots) {
+      if (slot.getSlotName().orElse("").equals(name)) {
+        return slot;
+      }
+    }
+    return null;
+  }
+
+  /** Filters the slot list to only those starting with the given prefix */
+  public static List<IRecipeSlotDrawable> filterSlots(List<IRecipeSlotDrawable> slots, String prefix) {
+    return slots.stream().filter(slot -> slot.getSlotName().orElse("").startsWith(prefix)).toList();
+  }
+
+  /** Gets the current result item focus, or {@link ItemStack#EMPTY} if the focus is absent. */
+  public static ItemStack getResultItemFocus(IFocusGroup focuses) {
+    IFocus<ItemStack> focus = focuses.getFocuses(VanillaTypes.ITEM_STACK, RecipeIngredientRole.OUTPUT).findFirst().orElse(null);
+    if (focus != null) {
+      return focus.getTypedValue().getIngredient();
+    }
+    return ItemStack.EMPTY;
+  }
+
+  /**
+   * Creates a slot display for a list of display stacks, used for {@link mezz.jei.api.recipe.category.extensions.vanilla.crafting.ICraftingCategoryExtension#getIngredients(net.minecraft.world.item.crafting.RecipeHolder)}
+   * on recipes that compute their display stacks.
+   * @param stacks  Stacks to display, may be empty
+   * @return  Slot display for the stacks
+   */
+  public static SlotDisplay displayOf(List<ItemStack> stacks) {
+    List<SlotDisplay> displays = stacks.stream()
+      .filter(stack -> !stack.isEmpty())
+      .<SlotDisplay>map(stack -> new SlotDisplay.ItemStackSlotDisplay(ItemStackTemplate.fromNonEmptyStack(stack)))
+      .toList();
+    return switch (displays.size()) {
+      case 0 -> SlotDisplay.Empty.INSTANCE;
+      case 1 -> displays.getFirst();
+      default -> new SlotDisplay.Composite(displays);
+    };
+  }
+
+  /** Gets the width and height of the grid for a shapeless recipe in a {@link mezz.jei.api.recipe.category.extensions.vanilla.crafting.ICraftingCategoryExtension} */
+  public static int getShapelessSize(int total) {
+    if (total > 4) {
+      return 3;
+    } else if (total > 1) {
+      return 2;
+    } else {
+      return 1;
+    }
+  }
+}

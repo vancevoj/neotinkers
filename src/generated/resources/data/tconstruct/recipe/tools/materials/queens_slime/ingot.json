@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:material",
+  "ingredient": "#c:ingots/queens_slime",
+  "material": "tconstruct:queens_slime",
+  "needed": 1,
+  "value": 1
+}

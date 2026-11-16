@@ -1,0 +1,58 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "condition": {
+                "type": "minecraft:any_of",
+                "terms": [
+                  {
+                    "type": "neoforge:can_item_perform_ability",
+                    "ability": "shears_dig"
+                  },
+                  "minecraft:tool/can_silk_touch"
+                ]
+              },
+              "name": "tconstruct:ender_slime_leaves"
+            },
+            {
+              "type": "minecraft:item",
+              "condition": {
+                "type": "minecraft:table_bonus",
+                "chances": [
+                  0.02,
+                  0.022222223,
+                  0.025,
+                  0.033333335,
+                  0.1
+                ],
+                "enchantment": "minecraft:fortune"
+              },
+              "modifier": [
+                {
+                  "type": "minecraft:set_count",
+                  "count": {
+                    "type": "minecraft:uniform",
+                    "max": 2,
+                    "min": 1
+                  }
+                },
+                {
+                  "type": "minecraft:explosion_decay"
+                }
+              ],
+              "name": "tconstruct:ender_slime_ball"
+            }
+          ]
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "tconstruct:blocks/ender_slime_leaves"
+}

@@ -1,0 +1,17 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "tconstruct:melting/electrum/tools_costing_2"
+    }
+  ],
+  "type": "tconstruct:damagable_melting",
+  "ingredient": "#tconstruct:melting/electrum/tools_costing_2",
+  "result": {
+    "amount": 180,
+    "tag": "c:molten_electrum",
+    "unit_size": 10
+  },
+  "temperature": 760,
+  "time": 83
+}

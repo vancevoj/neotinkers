@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:knockback",
+  "text": [
+    {
+      "text": "Pare de gastar energia correndo — faça seus inimigos gastarem energia voltando até você."
+    }
+  ],
+  "tool_filter": "tconstruct:modifiable/melee",
+  "effects": [
+    "Empurra os inimigos ao atingi-los",
+    "Múltiplos níveis, aumenta a força da repulsão por nível",
+    "Requer 1 slot de melhoria por nível"
+  ]
+}

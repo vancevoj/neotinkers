@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": "#c:chests/wooden",
+    "l": "#c:gems/lapis",
+    "p": "tconstruct:pattern",
+    "w": "#minecraft:planks"
+  },
+  "pattern": [
+    " p ",
+    "lCl",
+    "lwl"
+  ],
+  "result": {
+    "id": "tconstruct:tinkers_chest"
+  }
+}

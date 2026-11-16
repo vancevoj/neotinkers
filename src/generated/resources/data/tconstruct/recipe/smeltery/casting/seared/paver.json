@@ -1,0 +1,11 @@
+{
+  "type": "tconstruct:casting_basin",
+  "cast": "minecraft:smooth_stone",
+  "cast_consumed": true,
+  "cooling_time": 113,
+  "fluid": {
+    "amount": 500,
+    "tag": "tconstruct:molten_clay"
+  },
+  "result": "tconstruct:seared_paver"
+}

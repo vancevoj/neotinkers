@@ -1,0 +1,11 @@
+{
+  "type": "tconstruct:casting_basin",
+  "cast": "tconstruct:enderbark_roots",
+  "cast_consumed": true,
+  "cooling_time": 103,
+  "fluid": {
+    "amount": 1000,
+    "tag": "c:slime"
+  },
+  "result": "tconstruct:earth_enderbark_roots"
+}

@@ -1,0 +1,13 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:ingots/invar"
+    }
+  ],
+  "type": "tconstruct:material",
+  "ingredient": "#c:ingots/invar",
+  "material": "tconstruct:invar",
+  "needed": 1,
+  "value": 1
+}

@@ -1,0 +1,13 @@
+{
+  "modifier_id": "tconstruct:bouncy",
+  "text": [
+    {
+      "text": "Dünya senin trambolinin."
+    }
+  ],
+  "effects": [
+    "İnmede sek",
+    "Tek seviye",
+    "1 yetenek yuvası gerekir"
+  ]
+}

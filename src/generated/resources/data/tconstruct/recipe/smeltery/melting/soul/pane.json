@@ -1,0 +1,10 @@
+{
+  "type": "tconstruct:melting",
+  "ingredient": "tconstruct:soul_glass_pane",
+  "result": {
+    "amount": 250,
+    "fluid": "tconstruct:liquid_soul"
+  },
+  "temperature": 400,
+  "time": 23
+}

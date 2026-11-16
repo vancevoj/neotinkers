@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "tconstruct:netherite_ingot",
+  "key": {
+    "#": "#c:nuggets/netherite",
+    "*": "tconstruct:netherite_nugget"
+  },
+  "pattern": [
+    "###",
+    "#*#",
+    "###"
+  ],
+  "result": {
+    "id": "minecraft:netherite_ingot"
+  }
+}

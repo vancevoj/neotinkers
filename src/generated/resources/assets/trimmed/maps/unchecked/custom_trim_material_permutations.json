@@ -1,0 +1,20 @@
+{
+  "pairs": {
+    "tconstruct:palettes/trim/amethyst_bronze": "tconstruct_amethyst_bronze",
+    "tconstruct:palettes/trim/cinderslime": "tconstruct_cinderslime",
+    "tconstruct:palettes/trim/cobalt": "tconstruct_cobalt",
+    "tconstruct:palettes/trim/earthslime": "tconstruct_earthslime",
+    "tconstruct:palettes/trim/enderslime": "tconstruct_enderslime",
+    "tconstruct:palettes/trim/hepatizon": "tconstruct_hepatizon",
+    "tconstruct:palettes/trim/ichor": "tconstruct_ichor",
+    "tconstruct:palettes/trim/knightmetal": "tconstruct_knightmetal",
+    "tconstruct:palettes/trim/knightslime": "tconstruct_knightslime",
+    "tconstruct:palettes/trim/manyullyn": "tconstruct_manyullyn",
+    "tconstruct:palettes/trim/pig_iron": "tconstruct_pig_iron",
+    "tconstruct:palettes/trim/queens_slime": "tconstruct_queens_slime",
+    "tconstruct:palettes/trim/rose_gold": "tconstruct_rose_gold",
+    "tconstruct:palettes/trim/skyslime": "tconstruct_skyslime",
+    "tconstruct:palettes/trim/slimesteel": "tconstruct_slimesteel",
+    "tconstruct:palettes/trim/steel": "tconstruct_steel"
+  }
+}

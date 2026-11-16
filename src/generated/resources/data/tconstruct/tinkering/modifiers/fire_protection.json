@@ -1,0 +1,24 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:enchantment_ignoring_protection",
+      "level": 1,
+      "name": "minecraft:fire_protection"
+    },
+    {
+      "type": "tconstruct:protection",
+      "damage_source": {
+        "type": "mantle:and",
+        "predicates": [
+          "mantle:can_protect",
+          {
+            "type": "mantle:tag",
+            "tag": "tconstruct:protection/fire"
+          }
+        ]
+      },
+      "each_level": 3.0
+    }
+  ]
+}

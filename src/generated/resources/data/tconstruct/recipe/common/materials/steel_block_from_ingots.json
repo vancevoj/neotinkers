@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "tconstruct:steel_block",
+  "key": {
+    "#": "#c:ingots/steel",
+    "*": "tconstruct:steel_ingot"
+  },
+  "pattern": [
+    "###",
+    "#*#",
+    "###"
+  ],
+  "result": {
+    "id": "tconstruct:steel_block"
+  }
+}

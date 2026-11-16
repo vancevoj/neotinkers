@@ -1,0 +1,26 @@
+{
+  "color": "FFE9EAEB",
+  "fallbacks": [
+    "primitive"
+  ],
+  "generator": {
+    "supported_stats": [
+      "tconstruct:fletching"
+    ],
+    "transformer": {
+      "type": "tconstruct:recolor_sprite",
+      "color_mapping": {
+        "type": "tconstruct:grey_to_color",
+        "palette": {
+          "000": "FF000000",
+          "063": "FF878787",
+          "102": "FFAEAEAE",
+          "140": "FFC1C1C1",
+          "178": "FFD6D6D6",
+          "216": "FFE9EAEB",
+          "255": "FFFCFCF2"
+        }
+      }
+    }
+  }
+}

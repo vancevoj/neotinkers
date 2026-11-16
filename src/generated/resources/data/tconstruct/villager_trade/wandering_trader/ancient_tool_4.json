@@ -1,0 +1,16 @@
+{
+  "given_item_modifier": {
+    "type": "tconstruct:ancient_tool_trade",
+    "index": 4
+  },
+  "gives": {
+    "id": "tconstruct:pickaxe"
+  },
+  "max_uses": 1,
+  "reputation_discount": 1.0,
+  "wants": {
+    "count": 0,
+    "id": "minecraft:emerald"
+  },
+  "xp": 15
+}

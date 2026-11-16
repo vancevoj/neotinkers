@@ -1,0 +1,7 @@
+{
+  "type": "tconstruct:item_part_builder",
+  "pattern": "tconstruct:bow_limb",
+  "pattern_item": "#tconstruct:casts/sand",
+  "result": "tconstruct:bow_limb_sand_cast",
+  "title_key": "tconstruct:sand_cast"
+}

@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:lightspeed",
+  "text": [
+    {
+      "text": "A luz flui através da sua ferramenta e a ajuda a minerar mais rapidamente."
+    }
+  ],
+  "tool_filter": "tconstruct:modifiable/harvest",
+  "effects": [
+    "Minera blocos bem iluminados mais rapidamente",
+    "Múltiplos níveis, aumenta a velocidade ainda mais a cada nível",
+    "Requer 1 slot de melhoria por nível"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "modifier_id": "tconstruct:antiaquatic",
+  "text": [
+    {
+      "text": "Concede +2 de dano, por nível, contra criaturas aquáticas."
+    }
+  ],
+  "more_text_space": true,
+  "effects": [
+    "Pode aplicar níveis progressivamente",
+    "Máximo de 5 níveis",
+    "Requer 1 slot de melhoria por nível"
+  ]
+}

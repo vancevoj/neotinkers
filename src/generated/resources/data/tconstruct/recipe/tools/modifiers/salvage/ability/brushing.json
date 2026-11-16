@@ -1,0 +1,14 @@
+{
+  "type": "tconstruct:modifier_salvage",
+  "modifier": "tconstruct:brushing",
+  "slots": {
+    "abilities": 1
+  },
+  "tools": {
+    "neoforge:ingredient_type": "neoforge:intersection",
+    "children": [
+      "#tconstruct:modifiable/durability",
+      "#tconstruct:modifiable/interactable/right"
+    ]
+  }
+}

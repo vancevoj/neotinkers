@@ -1,0 +1,12 @@
+{
+  "description": {
+    "color": "#01CD4E",
+    "translate": "trim_material.tconstruct.format",
+    "with": [
+      {
+        "translate": "material.tconstruct.earthslime"
+      }
+    ]
+  },
+  "palette_id": "tconstruct:trim/earthslime"
+}

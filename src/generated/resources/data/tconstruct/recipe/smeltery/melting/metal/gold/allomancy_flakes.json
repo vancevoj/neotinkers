@@ -1,0 +1,21 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "value": "allomancy:gold_flakes"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": {
+    "neoforge:ingredient_type": "mantle:item_name",
+    "items": [
+      "allomancy:gold_flakes"
+    ]
+  },
+  "result": {
+    "amount": 30,
+    "tag": "c:molten_gold"
+  },
+  "temperature": 700,
+  "time": 33
+}

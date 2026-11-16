@@ -1,0 +1,37 @@
+{
+  "level_display": "tconstruct:default",
+  "modules": [
+    {
+      "type": "tconstruct:attribute",
+      "attribute": "minecraft:block_interaction_range",
+      "each_level": 1.0,
+      "operation": "add_value",
+      "slots": [
+        "mainhand",
+        "offhand",
+        "feet",
+        "legs",
+        "chest",
+        "head",
+        "body",
+        "saddle"
+      ]
+    },
+    {
+      "type": "tconstruct:attribute",
+      "attribute": "minecraft:entity_interaction_range",
+      "each_level": 1.0,
+      "operation": "add_value",
+      "slots": [
+        "mainhand",
+        "offhand",
+        "feet",
+        "legs",
+        "chest",
+        "head",
+        "body",
+        "saddle"
+      ]
+    }
+  ]
+}

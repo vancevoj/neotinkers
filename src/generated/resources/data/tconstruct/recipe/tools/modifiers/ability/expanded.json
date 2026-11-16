@@ -1,0 +1,26 @@
+{
+  "type": "tconstruct:modifier",
+  "allow_crystal": true,
+  "inputs": [
+    {
+      "ingredient": "minecraft:piston"
+    },
+    {
+      "ingredient": "#c:ingots/amethyst_bronze"
+    },
+    {
+      "ingredient": "minecraft:piston"
+    },
+    {
+      "ingredient": "#c:slimeball/ichor"
+    },
+    {
+      "ingredient": "#c:slimeball/ichor"
+    }
+  ],
+  "result": "tconstruct:expanded",
+  "slots": {
+    "abilities": 1
+  },
+  "tools": "#tconstruct:modifiable/aoe"
+}

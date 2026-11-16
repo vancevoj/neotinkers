@@ -1,0 +1,31 @@
+{
+  "level_display": "tconstruct:no_levels",
+  "modules": [
+    {
+      "type": "tconstruct:block_damage",
+      "damage_source": {
+        "type": "mantle:damage_type",
+        "name": "minecraft:hot_floor"
+      }
+    },
+    {
+      "type": "tconstruct:replace_fluid",
+      "radius": {
+        "each_level": 1.0,
+        "flat": 2.0
+      },
+      "replace": [
+        {
+          "block": "minecraft:frosted_ice",
+          "target": {
+            "type": "mantle:block_properties",
+            "block": "minecraft:water",
+            "properties": {
+              "level": "0"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

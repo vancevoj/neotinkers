@@ -1,0 +1,28 @@
+{
+  "perStat": {
+    "tconstruct:ammo": [
+      {
+        "level": 1,
+        "name": "tconstruct:rebound"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:bounce"
+      }
+    ],
+    "tconstruct:slime": [
+      {
+        "level": 1,
+        "name": "tconstruct:godspeed"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:overslime"
+      },
+      {
+        "level": 1,
+        "name": "tconstruct:overslime_friend"
+      }
+    ]
+  }
+}

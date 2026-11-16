@@ -1,0 +1,40 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "minecraft:range_dispatch",
+      "entries": [
+        {
+          "model": {
+            "type": "tconstruct:tool",
+            "model": "tconstruct:item/tool/javelin/blocking"
+          },
+          "threshold": 2.0
+        }
+      ],
+      "fallback": {
+        "type": "minecraft:range_dispatch",
+        "entries": [
+          {
+            "model": {
+              "type": "tconstruct:tool",
+              "model": "tconstruct:item/tool/javelin/throwing"
+            },
+            "threshold": 1.75
+          }
+        ],
+        "fallback": {
+          "type": "tconstruct:tool",
+          "model": "tconstruct:item/javelin"
+        },
+        "property": "tconstruct:charging"
+      },
+      "property": "tconstruct:charging"
+    },
+    "on_true": {
+      "type": "tconstruct:tool",
+      "model": "tconstruct:item/tool/javelin/broken"
+    },
+    "property": "tconstruct:broken"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "modifier_id": "tconstruct:netherite",
+  "text": [
+    {
+      "text": "A força do Nether flui intensamente através de sua ferramenta."
+    },
+    {
+      "text": "Tanto que a ferramenta não pode ser danificada por fatores externos como lava.",
+      "paragraph": true
+    }
+  ],
+  "effects": [
+    "Aumenta a durabilidade, dano de ataque, velocidade de mineração, robustez e resistência a repulsão",
+    "Nível único",
+    "Requer 1 slot de melhoria"
+  ]
+}

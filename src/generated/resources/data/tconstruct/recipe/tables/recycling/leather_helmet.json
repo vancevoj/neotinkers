@@ -1,0 +1,11 @@
+{
+  "type": "tconstruct:part_builder_recycling",
+  "pattern": "tconstruct:venom_bottle",
+  "results": {
+    "tconstruct:maille": {
+      "count": 5,
+      "item": "minecraft:leather"
+    }
+  },
+  "tool": "minecraft:leather_helmet"
+}

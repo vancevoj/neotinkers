@@ -1,0 +1,34 @@
+{
+  "color": "FF14B485",
+  "fallbacks": [
+    "vine",
+    "primitive",
+    "cloth"
+  ],
+  "generator": {
+    "supported_stats": [
+      "tconstruct:binding",
+      "tconstruct:bowstring",
+      "tconstruct:cuirass",
+      "tconstruct:armor_cuirass",
+      "tconstruct:repair_kit",
+      "tconstruct:laces",
+      "tconstruct:slimesuit_overlay"
+    ],
+    "transformer": {
+      "type": "tconstruct:recolor_sprite",
+      "color_mapping": {
+        "type": "tconstruct:grey_to_color",
+        "palette": {
+          "000": "FF000000",
+          "063": "FF13544E",
+          "102": "FF16615B",
+          "140": "FF167E86",
+          "178": "FF119B85",
+          "216": "FF14B485",
+          "255": "FF18CC96"
+        }
+      }
+    }
+  }
+}

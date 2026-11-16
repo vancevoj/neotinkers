@@ -1,0 +1,16 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "mantle:tag_filled",
+      "tag": "c:sheetmetals/electrum"
+    }
+  ],
+  "type": "tconstruct:melting",
+  "ingredient": "#c:sheetmetals/electrum",
+  "result": {
+    "amount": 90,
+    "tag": "c:molten_electrum"
+  },
+  "temperature": 760,
+  "time": 59
+}
