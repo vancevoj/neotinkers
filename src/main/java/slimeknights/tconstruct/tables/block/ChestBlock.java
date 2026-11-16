@@ -3,9 +3,11 @@ package slimeknights.tconstruct.tables.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -21,6 +23,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.transfer.ResourceHandler;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemUtil;
 import slimeknights.tconstruct.tables.block.entity.chest.AbstractChestBlockEntity;
@@ -95,6 +98,21 @@ public class ChestBlock extends TabbedTableBlock {
 
     // fall through to opening the GUI
     return InteractionResult.TRY_WITH_EMPTY_HAND;
+  }
+
+  @Override
+  public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    // chests keeping their inventory in the dropped item lose it in creative as no loot is generated
+    // so like a shulker box, drop the same item as the loot table when a creative player breaks a non-empty chest
+    if (!dropsItems && !level.isClientSide() && player.preventsBlockDrops() && level instanceof ServerLevel serverLevel
+        && level.getBlockEntity(pos) instanceof AbstractChestBlockEntity chest && !ResourceHandlerUtil.isEmpty(chest.getItemHandler())) {
+      for (ItemStack stack : Block.getDrops(state, serverLevel, pos, chest)) {
+        ItemEntity itemEntity = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
+        itemEntity.setDefaultPickUpDelay();
+        level.addFreshEntity(itemEntity);
+      }
+    }
+    return super.playerWillDestroy(level, pos, state, player);
   }
 
   @Override
