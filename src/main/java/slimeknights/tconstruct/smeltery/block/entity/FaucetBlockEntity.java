@@ -308,12 +308,43 @@ public class FaucetBlockEntity extends MantleBlockEntity {
           output.insert(resource, filled, transaction);
           transaction.commit();
         }
+      } else if (returnDrained()) {
+        // the target stopped accepting while we still held fluid, for instance another faucet filled it (#32).
+        // the fluid went back to the source, so stop cleanly like doTransfer does when nothing can move
+        stopPouring = false;
+        if (lastRedstoneState) {
+          drained = FluidStack.EMPTY;
+          faucetState = FaucetState.POWERED;
+          syncToClient(FluidStack.EMPTY, true);
+        } else {
+          reset();
+        }
       }
+      // otherwise the source is full, keep the rest and try again next tick
     }
     else {
-      // output got lost. all liquid buffered is lost.
+      // output got lost, give what we hold back to the source rather than voiding it
+      returnDrained();
       reset();
     }
+  }
+
+  /**
+   * Gives fluid the faucet still holds back to the tank it came from.
+   * @return  True if the faucet holds nothing anymore
+   */
+  private boolean returnDrained() {
+    if (!drained.isEmpty()) {
+      ResourceHandler<FluidResource> input = getInputHandler();
+      if (input != null) {
+        try (Transaction transaction = Transaction.openRoot()) {
+          int returned = input.insert(FluidResource.of(drained), drained.getAmount(), transaction);
+          transaction.commit();
+          drained.shrink(returned);
+        }
+      }
+    }
+    return drained.isEmpty();
   }
 
   /**
