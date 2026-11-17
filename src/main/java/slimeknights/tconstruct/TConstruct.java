@@ -14,6 +14,7 @@ import net.neoforged.neoforge.data.event.GatherDataRegistryEntriesEvent;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -67,6 +68,7 @@ import slimeknights.tconstruct.tables.TinkerTables;
 import slimeknights.tconstruct.tools.TinkerModifiers;
 import slimeknights.tconstruct.tools.TinkerToolParts;
 import slimeknights.tconstruct.tools.TinkerTools;
+import slimeknights.tconstruct.tools.logic.ToolEvents;
 import slimeknights.tconstruct.tools.data.material.TrimMaterialProvider;
 import slimeknights.tconstruct.world.TinkerStructures;
 import slimeknights.tconstruct.world.TinkerWorld;
@@ -105,6 +107,9 @@ public class TConstruct {
     TinkerDataCapability.register(bus);
     PersistentDataCapability.register(bus);
     EntityModifierCapability.register(bus);
+
+    // the Tinkers tool block break handler runs after every other mod's, so register it once loading completes (#34)
+    bus.addListener(FMLLoadCompleteEvent.class, event -> event.enqueueWork(ToolEvents::registerBlockBreakHandler));
 
     // initialize modules, done this way rather than with annotations to give us control over the order
     // base

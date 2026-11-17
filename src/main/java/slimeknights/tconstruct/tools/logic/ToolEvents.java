@@ -43,6 +43,7 @@ import net.neoforged.neoforge.event.entity.living.LivingEvent.LivingVisibilityEv
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.bus.api.EventPriority;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
@@ -114,12 +115,20 @@ public class ToolEvents {
   private static final ThreadLocal<Boolean> BREAKING = ThreadLocal.withInitial(() -> Boolean.FALSE);
 
   /**
+   * Registers {@link #onBlockBreak} once every mod has loaded, at the lowest priority and skipping canceled breaks.
+   * Tinkers breaks the block itself there and cancels the event, so every other mod listening for block breaks
+   * (protection mods, vein miners such as OreExcavation) has to see the break first (#34).
+   */
+  public static void registerBlockBreakHandler() {
+    NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, false, BreakBlockEvent.class, ToolEvents::onBlockBreak);
+  }
+
+  /**
    * NeoForge 1.21 removed {@code IForgeItem#onBlockStartBreak}, the hook Tinkers used to trigger AOE/expanded
    * block breaking (hammer, broad axe, vein miner, etc.). {@link BreakBlockEvent} is the game-bus
    * replacement: it fires server-side just before the block is removed and can be canceled to take over breaking.
    * This re-wires the orphaned {@link ToolHarvestLogic#handleBlockBreak}, restoring all AOE mining tools.
    */
-  @SubscribeEvent
   static void onBlockBreak(BreakBlockEvent event) {
     // server only (handleBlockBreak also guards this, but skip the work entirely on the client)
     if (!(event.getPlayer() instanceof ServerPlayer player) || player.level().isClientSide()) {
