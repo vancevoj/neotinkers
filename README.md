@@ -36,4 +36,5 @@ Needs NeoForge 26.3.0.103 or newer and Java 25.
 
 Neo Tinkers' is a port of [Tinkers' Construct](https://github.com/SlimeKnights/TinkersConstruct) by SlimeKnights and is released under the same MIT License as the original. See [LICENSE](LICENSE) for the full text.
 
-Copyright (c) 2022 SlimeKnights
+Copyright (c) 2022 SlimeKnights\
+Copyright (c) 2026 vancevoj / Neo Tinkers'
