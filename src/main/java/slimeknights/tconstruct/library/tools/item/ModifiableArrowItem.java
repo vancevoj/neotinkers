@@ -65,7 +65,7 @@ public class ModifiableArrowItem extends ArrowItem implements IModifiableDisplay
 
   @Override
   public AbstractArrow createArrow(Level level, ItemStack stack, LivingEntity shooter, @Nullable ItemStack weapon) {
-    ModifiableArrow arrow = new ModifiableArrow(level, shooter);
+    ModifiableArrow arrow = new ModifiableArrow(level, shooter, weapon);
     arrow.onCreate(stack, shooter);
     return arrow;
   }
