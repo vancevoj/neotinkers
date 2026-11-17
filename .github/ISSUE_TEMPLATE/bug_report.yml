@@ -1,5 +1,5 @@
 name: Bug Report
-description: Report a bug in Neo Tinkers
+description: "Report a bug in Neo Tinkers'"
 labels: ["bug"]
 body:
   - type: markdown
@@ -18,7 +18,7 @@ body:
   - type: input
     id: neotinkers-version
     attributes:
-      label: Neo Tinkers version
+      label: "Neo Tinkers' version"
       description: From the mods list or the jar name.
       placeholder: "v1.21"
     validations:
@@ -27,7 +27,7 @@ body:
     id: neomantle-version
     attributes:
       label: Neo Mantle version
-      description: Neo Tinkers requires Neo Mantle. Which version is installed?
+      description: "Neo Tinkers' requires Neo Mantle. Which version is installed?"
       placeholder: "v1.21"
     validations:
       required: true
@@ -76,5 +76,5 @@ body:
       options:
         - label: I searched existing issues and this isn't a duplicate
           required: true
-        - label: I'm on the latest version of Neo Tinkers and Neo Mantle
+        - label: "I'm on the latest version of Neo Tinkers' and Neo Mantle"
           required: true
