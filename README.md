@@ -8,18 +8,16 @@ Full content credit for the mod goes to SlimeKnights. I take no credit for any o
 
 ## Download
 
-Pick your Minecraft version and download **both jars** (Neo Tinkers' and Neo Mantle) from that version only. Jars from different versions do not mix. The links always give you the newest full release.
+Pick your Minecraft version and download **both jars** (Neo Tinkers' and Neo Mantle). Each link opens the newest release; grab the jar listed for your version (not the `-sources` one). Jars from different versions do not mix.
 
 ### Minecraft 1.21.1
 
 Needs NeoForge 21.1 and Java 21.
 
-| Mod | Download |
-|---|---|
-| **Neo Tinkers'** | [NeoTinkers-1.21.1.jar](https://github.com/vancevoj/neotinkers/releases/latest/download/NeoTinkers-1.21.1.jar) |
-| **Neo Mantle** (required) | [NeoMantle-1.21.1.jar](https://github.com/vancevoj/neomantle/releases/latest/download/NeoMantle-1.21.1.jar) |
-
-Release notes: [Neo Tinkers' latest](https://github.com/vancevoj/neotinkers/releases/latest), [Neo Mantle latest](https://github.com/vancevoj/neomantle/releases/latest)
+| Mod | Download | Grab this jar |
+|---|---|---|
+| **Neo Tinkers'** | [Latest release](https://github.com/vancevoj/neotinkers/releases/latest) | `NeoTinkers-1.21.1-...jar` |
+| **Neo Mantle** (required) | [Latest release](https://github.com/vancevoj/neomantle/releases/latest) | `NeoMantle-1.21.1-...jar` |
 
 <br>
 
@@ -27,9 +25,7 @@ Release notes: [Neo Tinkers' latest](https://github.com/vancevoj/neotinkers/rele
 
 Needs NeoForge 26.3.0.103 or newer and Java 25.
 
-| Mod | Download |
-|---|---|
-| **Neo Tinkers'** | [NeoTinkers-26.3.jar](https://github.com/vancevoj/neotinkers/releases/latest/download/NeoTinkers-26.3.jar) |
-| **Neo Mantle** (required) | [NeoMantle-26.3.jar](https://github.com/vancevoj/neomantle/releases/latest/download/NeoMantle-26.3.jar) |
-
-Release notes: [Neo Tinkers' latest](https://github.com/vancevoj/neotinkers/releases/latest), [Neo Mantle latest](https://github.com/vancevoj/neomantle/releases/latest)
+| Mod | Download | Grab this jar |
+|---|---|---|
+| **Neo Tinkers'** | [Latest release](https://github.com/vancevoj/neotinkers/releases/latest) | `NeoTinkers-26.3-...jar` |
+| **Neo Mantle** (required) | [Latest release](https://github.com/vancevoj/neomantle/releases/latest) | `NeoMantle-26.3-...jar` |
