@@ -59,7 +59,15 @@ public class ModifiableArrow extends AbstractArrow implements ToolProjectile, Re
   }
 
   public ModifiableArrow(Level level, LivingEntity shooter) {
-    super(TinkerTools.materialArrow.get(), shooter, level, ItemStack.EMPTY, null);
+    this(level, shooter, null);
+  }
+
+  /**
+   * Creates an arrow fired by the given shooter
+   * @param weapon  Weapon firing the arrow. Passed on to vanilla so the weapon's enchantment effects, such as flame, apply to this arrow.
+   */
+  public ModifiableArrow(Level level, LivingEntity shooter, @Nullable ItemStack weapon) {
+    super(TinkerTools.materialArrow.get(), shooter, level, ItemStack.EMPTY, weapon == null || weapon.isEmpty() ? null : weapon);
   }
 
 
@@ -67,12 +75,14 @@ public class ModifiableArrow extends AbstractArrow implements ToolProjectile, Re
 
   @Override
   protected ItemStack getDefaultPickupItem() {
-    return stack.copy();
+    // vanilla calls this from a field initializer in AbstractArrow, before our own fields are set, so stack can still be null (#33).
+    // vanilla also saves this stack and cannot save an empty one, so fall back to a plain arrow until we have a real stack
+    return stack == null || stack.isEmpty() ? new ItemStack(TinkerTools.arrow) : stack.copy();
   }
 
   @Override
   public ItemStack getPickupItem() {
-    return stack.copy();
+    return stack == null ? ItemStack.EMPTY : stack.copy();
   }
 
   /** Updates the stack on the arrow */
@@ -80,6 +90,8 @@ public class ModifiableArrow extends AbstractArrow implements ToolProjectile, Re
     this.stack = stack;
     this.entityData.set(STACK, stack);
     this.reclaim = ModifierUtil.checkVolatileFlag(stack, IndestructibleItemEntity.INDESTRUCTIBLE_ENTITY);
+    // keep vanilla's pickup stack in sync, it is what vanilla saves and copies on dimension changes (#33)
+    this.setPickupItemStack(getDefaultPickupItem());
   }
 
   /** Gets the tool instance, ensuring its created */
