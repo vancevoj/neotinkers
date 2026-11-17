@@ -57,6 +57,23 @@ public interface EnchantmentModifierHook {
   }
 
   /**
+   * Checks if the queried enchantment is the given enchantment by comparing registry keys, so the queried holder is never resolved.
+   * Other mods may query with a holder that cannot resolve, such as a NeoForge {@code DeferredHolder} for the datapack driven
+   * enchantment registry, where {@link Holder#value()} throws. Vanilla only compares holders when looking up levels, so we do the same.
+   * @param query        Enchantment holder passed in by the caller
+   * @param enchantment  Enchantment holder from the modifier
+   * @return  True if both refer to the same enchantment
+   */
+  static boolean isEnchantment(Holder<Enchantment> query, Holder<Enchantment> enchantment) {
+    if (query == enchantment) {
+      return true;
+    }
+    return enchantment.unwrapKey()
+      .map(key -> query.is(key))
+      .orElseGet(() -> query.isBound() && enchantment.isBound() && query.value() == enchantment.value());
+  }
+
+  /**
    * Gets the enchantment level for the given tool
    * @param stack        Item stack instance
    * @param enchantment  Enchantment to query
@@ -165,7 +182,7 @@ public interface EnchantmentModifierHook {
 
     @Override
     default int updateEnchantmentLevel(IToolStackView tool, ModifierEntry modifier, Holder<Enchantment> enchantment, int level) {
-      if (enchantment.value() == getEnchantment(tool, modifier).value()) {
+      if (EnchantmentModifierHook.isEnchantment(enchantment, getEnchantment(tool, modifier))) {
         level += getEnchantmentLevel(tool, modifier);
       }
       return level;

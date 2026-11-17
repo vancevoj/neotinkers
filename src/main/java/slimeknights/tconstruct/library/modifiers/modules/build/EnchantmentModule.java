@@ -169,7 +169,7 @@ public interface EnchantmentModule extends ModifierModule, LevelingIntModule, Co
 
     @Override
     public int updateEnchantmentLevel(IToolStackView tool, ModifierEntry modifier, Holder<Enchantment> enchantment, int level) {
-      if (enchantment.value() == this.enchantment().value() && condition().matches(tool, modifier)) {
+      if (EnchantmentModifierHook.isEnchantment(enchantment, this.enchantment()) && condition().matches(tool, modifier)) {
         level += getLevel(modifier);
       }
       return level;
@@ -265,7 +265,7 @@ public interface EnchantmentModule extends ModifierModule, LevelingIntModule, Co
 
     @Override
     public int updateEnchantmentLevel(IToolStackView tool, ModifierEntry modifier, Holder<Enchantment> enchantment, int level) {
-      if (enchantment.value() == this.enchantment().value() && tool.getPersistentData().getBoolean(conditionFlag)) {
+      if (EnchantmentModifierHook.isEnchantment(enchantment, this.enchantment()) && tool.getPersistentData().getBoolean(conditionFlag)) {
         level += getLevel(modifier);
       }
       return level;
