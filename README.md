@@ -29,3 +29,11 @@ Needs NeoForge 26.3.0.103 or newer and Java 25.
 |---|---|---|
 | **Neo Tinkers'** | [Latest release](https://github.com/vancevoj/neotinkers/releases/latest) | `NeoTinkers-26.3-...jar` |
 | **Neo Mantle** (required) | [Latest release](https://github.com/vancevoj/neomantle/releases/latest) | `NeoMantle-26.3-...jar` |
+
+<br>
+
+## License
+
+Neo Tinkers' is a port of [Tinkers' Construct](https://github.com/SlimeKnights/TinkersConstruct) by SlimeKnights and is released under the same MIT License as the original. See [LICENSE](LICENSE) for the full text.
+
+Copyright (c) 2022 SlimeKnights
