@@ -8,18 +8,18 @@ Full content credit for the mod goes to SlimeKnights. I take no credit for any o
 
 ## Download
 
-Pick your Minecraft version and download **both jars** (Neo Tinkers' and Neo Mantle) from that version only. Jars from different versions do not mix.
+Pick your Minecraft version and download **both jars** (Neo Tinkers' and Neo Mantle) from that version only. Jars from different versions do not mix. The links always give you the newest full release.
 
 ### Minecraft 1.21.1
 
 Needs NeoForge 21.1 and Java 21.
 
-| Mod | Version | Download |
-|---|---|---|
-| **Neo Tinkers'** | v1.31 | [NeoTinkers-1.21.1-3.12.1-v1.31.jar](https://github.com/vancevoj/neotinkers/releases/download/v1.31/NeoTinkers-1.21.1-3.12.1-v1.31.jar) |
-| **Neo Mantle** (required) | v1.28 | [NeoMantle-1.21.1-1.21.0-v1.28.jar](https://github.com/vancevoj/neomantle/releases/download/v1.28/NeoMantle-1.21.1-1.21.0-v1.28.jar) |
+| Mod | Download |
+|---|---|
+| **Neo Tinkers'** | [NeoTinkers-1.21.1.jar](https://github.com/vancevoj/neotinkers/releases/latest/download/NeoTinkers-1.21.1.jar) |
+| **Neo Mantle** (required) | [NeoMantle-1.21.1.jar](https://github.com/vancevoj/neomantle/releases/latest/download/NeoMantle-1.21.1.jar) |
 
-Release notes: [Neo Tinkers' v1.31](https://github.com/vancevoj/neotinkers/releases/tag/v1.31), [Neo Mantle v1.28](https://github.com/vancevoj/neomantle/releases/tag/v1.28)
+Release notes: [Neo Tinkers' latest](https://github.com/vancevoj/neotinkers/releases/latest), [Neo Mantle latest](https://github.com/vancevoj/neomantle/releases/latest)
 
 <br>
 
@@ -27,9 +27,9 @@ Release notes: [Neo Tinkers' v1.31](https://github.com/vancevoj/neotinkers/relea
 
 Needs NeoForge 26.3.0.103 or newer and Java 25.
 
-| Mod | Version | Download |
-|---|---|---|
-| **Neo Tinkers'** | v1.31 | [NeoTinkers-26.3-3.12.1-v1.31.jar](https://github.com/vancevoj/neotinkers/releases/download/v1.31-26.3/NeoTinkers-26.3-3.12.1-v1.31.jar) |
-| **Neo Mantle** (required) | v1.28 | [NeoMantle-26.3-1.21.0-v1.28.jar](https://github.com/vancevoj/neomantle/releases/download/v1.28-26.3/NeoMantle-26.3-1.21.0-v1.28.jar) |
+| Mod | Download |
+|---|---|
+| **Neo Tinkers'** | [NeoTinkers-26.3.jar](https://github.com/vancevoj/neotinkers/releases/latest/download/NeoTinkers-26.3.jar) |
+| **Neo Mantle** (required) | [NeoMantle-26.3.jar](https://github.com/vancevoj/neomantle/releases/latest/download/NeoMantle-26.3.jar) |
 
-Release notes: [Neo Tinkers' v1.31 for 26.3](https://github.com/vancevoj/neotinkers/releases/tag/v1.31-26.3), [Neo Mantle v1.28 for 26.3](https://github.com/vancevoj/neomantle/releases/tag/v1.28-26.3)
+Release notes: [Neo Tinkers' latest](https://github.com/vancevoj/neotinkers/releases/latest), [Neo Mantle latest](https://github.com/vancevoj/neomantle/releases/latest)
